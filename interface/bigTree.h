@@ -38,7 +38,7 @@ public :
    std::vector<float>   *mothers_py;
    std::vector<float>   *mothers_pz;
    std::vector<float>   *mothers_e;
-   std::vector<Long64_t> *mothers_trgSeparateMatch;
+   //   std::vector<Long64_t> *mothers_trgSeparateMatch;
    std::vector<float>   *daughters_px;
    std::vector<float>   *daughters_py;
    std::vector<float>   *daughters_pz;
@@ -161,7 +161,7 @@ public :
    std::vector<float>   *photonPtSumOutsideSignalCone;
    std::vector<int>     *daughters_decayModeFindingNewDMs;
    std::vector<float>   *daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits;
-   std::vector<float>   *daughters_byIsolationMVArun2v1DBoldDMwLTraw;
+   //   std::vector<float>   *daughters_byIsolationMVArun2v1DBoldDMwLTraw;
    std::vector<float>   *daughters_byIsolationMVA3oldDMwoLTraw;
    std::vector<float>   *daughters_byIsolationMVA3oldDMwLTraw;
    std::vector<float>   *daughters_byIsolationMVA3newDMwoLTraw;
@@ -188,7 +188,7 @@ public :
    std::vector<Long64_t> *daughters_L3FilterFiredLast;
    std::vector<float>   *daughters_HLTpt;
    std::vector<bool>    *daughters_isL1IsoTau28Matched;
-   Int_t stage2_tauN;
+   /* Int_t stage2_tauN;
    std::vector<Float_t> *stage2_tauEt;
    std::vector<Float_t> *stage2_tauEta;
    std::vector<Float_t> *stage2_tauPhi;
@@ -225,7 +225,7 @@ public :
    std::vector<short int> *stage2_muonIso;
    std::vector<short int> *stage2_muonQual;
    std::vector<short int> *stage2_muonTfMuonIdx;
-   std::vector<short int> *stage2_muonBx;
+   std::vector<short int> *stage2_muonBx;*/
    Int_t           JetsNumber;
    std::vector<float>   *jets_px;
    std::vector<float>   *jets_py;
@@ -295,7 +295,7 @@ public :
    TBranch        *b_mothers_py;   //!
    TBranch        *b_mothers_pz;   //!
    TBranch        *b_mothers_e;   //!
-   TBranch        *b_mothers_trgSeparateMatch; //!
+   //   TBranch        *b_mothers_trgSeparateMatch; //!
    TBranch        *b_daughters_px;   //!
    TBranch        *b_daughters_py;   //!
    TBranch        *b_daughters_pz;   //!
@@ -413,7 +413,7 @@ public :
    TBranch        *b_photonPtSumOutsideSignalCone;   //!
    TBranch        *b_daughters_decayModeFindingNewDMs;   //!
    TBranch        *b_daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits;   //!
-   TBranch        *b_daughters_byIsolationMVArun2v1DBoldDMwLTraw; //!
+   //   TBranch        *b_daughters_byIsolationMVArun2v1DBoldDMwLTraw; //!
    TBranch        *b_daughters_byIsolationMVA3oldDMwoLTraw;   //!
    TBranch        *b_daughters_byIsolationMVA3oldDMwLTraw;   //!
    TBranch        *b_daughters_byIsolationMVA3newDMwoLTraw;   //!
@@ -440,7 +440,7 @@ public :
    TBranch        *b_daughters_L3FilterFiredLast;   //!
    TBranch        *b_daughters_HLTpt;   //!
    TBranch        *b_daughters_isL1IsoTau28Matched; //!
-   TBranch        *b_Stage2tausNumber;   //!                                                                                                                 
+   /*   TBranch        *b_Stage2tausNumber;   //!                                                                                                                 
    TBranch        *b_stage2_tauEt;   //!                                                                                                                                         
    TBranch        *b_stage2_tauEta;   //!                                                                                                                                                                         
    TBranch        *b_stage2_tauPhi;   //!                                                                                                                                                                          
@@ -477,7 +477,7 @@ public :
    TBranch        *b_stage2_muonIso;   //!                                                                                                                                                                          
    TBranch        *b_stage2_muonQual;   //!                                                                                                                                                                         
    TBranch        *b_stage2_muonTfMuonIdx;   //!                                                                                                                                                                    
-   TBranch        *b_stage2_muonBx;   //!               
+   TBranch        *b_stage2_muonBx;   //!*/               
  TBranch        *b_JetsNumber;   //!
    TBranch        *b_jets_px;   //!
    TBranch        *b_jets_py;   //!
@@ -549,7 +549,7 @@ public :
        mothers_py = 0;
        mothers_pz = 0;
        mothers_e = 0;
-      mothers_trgSeparateMatch = 0;
+       // mothers_trgSeparateMatch = 0;
        daughters_px = 0;
        daughters_py = 0;
        daughters_pz = 0;
@@ -661,7 +661,7 @@ public :
        photonPtSumOutsideSignalCone = 0;
        daughters_decayModeFindingNewDMs = 0;
        daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits = 0;
-       daughters_byIsolationMVArun2v1DBoldDMwLTraw = 0;
+       //       daughters_byIsolationMVArun2v1DBoldDMwLTraw = 0;
        daughters_byIsolationMVA3oldDMwoLTraw = 0;
        daughters_byIsolationMVA3oldDMwLTraw = 0;
        daughters_byIsolationMVA3newDMwoLTraw = 0;
@@ -688,7 +688,7 @@ public :
        daughters_L3FilterFiredLast = 0;
        daughters_HLTpt = 0;
        daughters_isL1IsoTau28Matched = 0;
-       stage2_tauEt = 0;
+       /*       stage2_tauEt = 0;
        stage2_tauEta = 0;
        stage2_tauPhi = 0;
        stage2_tauIEt = 0;
@@ -722,7 +722,7 @@ public :
        stage2_muonIso = 0;
        stage2_muonQual = 0;
        stage2_muonTfMuonIdx = 0;      
-       jets_px = 0;
+       */  jets_px = 0;
        jets_py = 0;
        jets_pz = 0;
        jets_e = 0;
@@ -788,7 +788,7 @@ public :
        fChain->SetBranchAddress("mothers_py", &mothers_py, &b_mothers_py);
        fChain->SetBranchAddress("mothers_pz", &mothers_pz, &b_mothers_pz);
        fChain->SetBranchAddress("mothers_e", &mothers_e, &b_mothers_e);
-       fChain->SetBranchAddress("mothers_trgSeparateMatch", &mothers_trgSeparateMatch, &b_mothers_trgSeparateMatch);
+       //       fChain->SetBranchAddress("mothers_trgSeparateMatch", &mothers_trgSeparateMatch, &b_mothers_trgSeparateMatch);
        fChain->SetBranchAddress("daughters_px", &daughters_px, &b_daughters_px);
        fChain->SetBranchAddress("daughters_py", &daughters_py, &b_daughters_py);
        fChain->SetBranchAddress("daughters_pz", &daughters_pz, &b_daughters_pz);
@@ -875,7 +875,7 @@ public :
        fChain->SetBranchAddress("photonPtSumOutsideSignalCone", &photonPtSumOutsideSignalCone, &b_photonPtSumOutsideSignalCone);
        fChain->SetBranchAddress("daughters_decayModeFindingNewDMs", &daughters_decayModeFindingNewDMs, &b_daughters_decayModeFindingNewDMs);
        fChain->SetBranchAddress("daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits", &daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits, &b_daughters_byCombinedIsolationDeltaBetaCorrRaw3Hits);
-       fChain->SetBranchAddress("daughters_byIsolationMVArun2v1DBoldDMwLTraw", &daughters_byIsolationMVArun2v1DBoldDMwLTraw, &b_daughters_byIsolationMVArun2v1DBoldDMwLTraw);
+       //       fChain->SetBranchAddress("daughters_byIsolationMVArun2v1DBoldDMwLTraw", &daughters_byIsolationMVArun2v1DBoldDMwLTraw, &b_daughters_byIsolationMVArun2v1DBoldDMwLTraw);
        fChain->SetBranchAddress("daughters_byIsolationMVA3oldDMwoLTraw", &daughters_byIsolationMVA3oldDMwoLTraw, &b_daughters_byIsolationMVA3oldDMwoLTraw);
        fChain->SetBranchAddress("daughters_byIsolationMVA3oldDMwLTraw", &daughters_byIsolationMVA3oldDMwLTraw, &b_daughters_byIsolationMVA3oldDMwLTraw);
        fChain->SetBranchAddress("daughters_byIsolationMVA3newDMwoLTraw", &daughters_byIsolationMVA3newDMwoLTraw, &b_daughters_byIsolationMVA3newDMwoLTraw);
@@ -902,7 +902,7 @@ public :
        fChain->SetBranchAddress("daughters_L3FilterFiredLast", &daughters_L3FilterFiredLast, &b_daughters_L3FilterFiredLast);
        fChain->SetBranchAddress("daughters_HLTpt", &daughters_HLTpt, &b_daughters_HLTpt);
        fChain->SetBranchAddress("daughters_isL1IsoTau28Matched", &daughters_isL1IsoTau28Matched, &b_daughters_isL1IsoTau28Matched);
-       fChain->SetBranchAddress("stage2_tauN", &stage2_tauN, &b_Stage2tausNumber);
+       /*   fChain->SetBranchAddress("stage2_tauN", &stage2_tauN, &b_Stage2tausNumber);
        fChain->SetBranchAddress("stage2_tauEt", &stage2_tauEt, &b_stage2_tauEt);
        fChain->SetBranchAddress("stage2_tauEta", &stage2_tauEta, &b_stage2_tauEta);
        fChain->SetBranchAddress("stage2_tauPhi", &stage2_tauPhi, &b_stage2_tauPhi);
@@ -939,7 +939,7 @@ public :
        fChain->SetBranchAddress("stage2_muonIso", &stage2_muonIso, &b_stage2_muonIso);
        fChain->SetBranchAddress("stage2_muonQual", &stage2_muonQual, &b_stage2_muonQual);
        fChain->SetBranchAddress("stage2_muonTfMuonIdx", &stage2_muonTfMuonIdx, &b_stage2_muonTfMuonIdx);
-       fChain->SetBranchAddress("stage2_muonBx", &stage2_muonBx, &b_stage2_muonBx);
+       fChain->SetBranchAddress("stage2_muonBx", &stage2_muonBx, &b_stage2_muonBx);*/
        fChain->SetBranchAddress("JetsNumber", &JetsNumber, &b_JetsNumber);
        fChain->SetBranchAddress("jets_px", &jets_px, &b_jets_px);
        fChain->SetBranchAddress("jets_py", &jets_py, &b_jets_py);

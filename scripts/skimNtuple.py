@@ -153,7 +153,7 @@ if __name__ == "__main__":
 #    skimmer = './bin/skimNtuple.exe'
     # skimmer = 'skimNtupleInclusive_Luca.exe'
     skimmer = 'skimNtuple.exe'
-
+    
     if opt.config == 'none' :
         print 'config file missing, exiting'
         sys.exit (1)

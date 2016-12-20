@@ -112,7 +112,7 @@ struct smallTree
       m_dau2_flav  = -1. ;
 
       
-      m_stage2_jet1Et = -1.;
+      /* m_stage2_jet1Et = -1.;
       m_stage2_jet1Eta = -1.;
       m_stage2_jet1Phi = -1.;
     
@@ -139,22 +139,26 @@ struct smallTree
       m_stage2_tau1Et = -1.;
       m_stage2_tau1Eta = -1.;
       m_stage2_tau1Phi = -1.;
-      
+      m_stage2_tau1Iso = -1.;
+
       m_stage2_tau2Et = -1.;
       m_stage2_tau2Eta = -1.;
       m_stage2_tau2Phi = -1.;
+      m_stage2_tau2Iso = -1.;
       
       m_stage2_tau3Et = -1.;
       m_stage2_tau3Eta = -1.;
       m_stage2_tau3Phi = -1.;
+      m_stage2_tau3Iso = -1.;
       
       m_stage2_tau4Et = -1.;
       m_stage2_tau4Eta = -1.;
       m_stage2_tau4Phi = -1.;
+      m_stage2_tau4Iso = -1.;
 
       m_Bjet2matchesStage2jet1 =-1;
       m_Lepton2matchesStage2tau1 =-1;
-      
+      */
       m_bjet1_pt  = -1. ;
       m_bjet1_eta  = -1. ;
       m_bjet1_phi  = -1. ;
@@ -175,12 +179,12 @@ struct smallTree
       m_bjet2_pt_raw  = -1. ;
       m_bjet2_hasgenjet = false ;
 
-      m_DeltaRmin_stage2jet_bjet1= -1. ;
+      /* m_DeltaRmin_stage2jet_bjet1= -1. ;
       m_DeltaRmin_stage2jet_bjet2= -1. ;
 
       m_DeltaRmin_stage2tau_tau1= -1. ;
       m_DeltaRmin_stage2tau_tau2= -1. ;
-      
+      */
       m_nfatjets = -1;
       m_fatjet_pt = -1. ;
       m_fatjet_eta  = -1. ;
@@ -431,7 +435,7 @@ struct smallTree
       m_smallT->Branch ("dau2_e", &m_dau2_e, "dau2_e/F") ;
       m_smallT->Branch ("dau2_flav", &m_dau2_flav, "dau2_flav/F") ;
 
-      m_smallT->Branch("stage2_jet1Et",&m_stage2_jet1Et,"stage2_jet1Et/F");
+      /*  m_smallT->Branch("stage2_jet1Et",&m_stage2_jet1Et,"stage2_jet1Et/F");
       m_smallT->Branch("stage2_jet1Eta",&m_stage2_jet1Eta,"stage2_jet1Eta/F");
       m_smallT->Branch("stage2_jet1Phi",&m_stage2_jet1Phi,"stage2_jet1Phi/F");
 
@@ -458,22 +462,26 @@ struct smallTree
       m_smallT->Branch("stage2_tau1Et",&m_stage2_tau1Et,"stage2_tau1Et/F");
       m_smallT->Branch("stage2_tau1Eta",&m_stage2_tau1Eta,"stage2_tau1Eta/F");
       m_smallT->Branch("stage2_tau1Phi",&m_stage2_tau1Phi,"stage2_tau1Phi/F");
+      m_smallT->Branch("stage2_tau1Iso",&m_stage2_tau1Iso,"stage2_tau1Iso/I");
 
       m_smallT->Branch("stage2_tau2Et",&m_stage2_tau2Et,"stage2_tau2Et/F");
       m_smallT->Branch("stage2_tau2Eta",&m_stage2_tau2Eta,"stage2_tau2Eta/F");
       m_smallT->Branch("stage2_tau2Phi",&m_stage2_tau2Phi,"stage2_tau2Phi/F");
+      m_smallT->Branch("stage2_tau2Iso",&m_stage2_tau2Iso,"stage2_tau2Iso/I");
 
       m_smallT->Branch("stage2_tau3Et",&m_stage2_tau3Et,"stage2_tau3Et/F");
       m_smallT->Branch("stage2_tau3Eta",&m_stage2_tau3Eta,"stage2_tau3Eta/F");
       m_smallT->Branch("stage2_tau3Phi",&m_stage2_tau3Phi,"stage2_tau3Phi/F");
-      
+      m_smallT->Branch("stage2_tau3Iso",&m_stage2_tau3Iso,"stage2_tau3Iso/I");
+
       m_smallT->Branch("stage2_tau4Et",&m_stage2_tau4Et,"stage2_tau4Et/F");
       m_smallT->Branch("stage2_tau4Eta",&m_stage2_tau4Eta,"stage2_tau4Eta/F");
       m_smallT->Branch("stage2_tau4Phi",&m_stage2_tau4Phi,"stage2_tau4Phi/F");
+      m_smallT->Branch("stage2_tau4Iso",&m_stage2_tau4Iso,"stage2_tau4Iso/I");
 
       m_smallT->Branch("Bjet2matchesStage2jet1",&m_Bjet2matchesStage2jet1,"Bjet2matchesStage2jet1/I");
       m_smallT->Branch("Lepton2matchesStage2tau1",&m_Lepton2matchesStage2tau1,"Lepton2matchesStage2tau1/I");
-
+      */
       m_smallT->Branch ("bjet1_pt", &m_bjet1_pt, "bjet1_pt/F") ;
       m_smallT->Branch ("bjet1_eta", &m_bjet1_eta, "bjet1_eta/F") ;
       m_smallT->Branch ("bjet1_phi", &m_bjet1_phi, "bjet1_phi/F") ;
@@ -494,12 +502,12 @@ struct smallTree
       m_smallT->Branch ("bjet2_pt_raw", &m_bjet2_pt_raw, "bjet2_pt_raw/F") ;
       m_smallT->Branch ("bjet2_hasgenjet", &m_bjet2_hasgenjet, "bjet2_hasgenjet/O") ;
 
-      m_smallT->Branch ("DeltaRmin_stage2jet_bjet1", &m_DeltaRmin_stage2jet_bjet1, "DeltaRmin_stage2jet_bjet1/F") ;
+      /*      m_smallT->Branch ("DeltaRmin_stage2jet_bjet1", &m_DeltaRmin_stage2jet_bjet1, "DeltaRmin_stage2jet_bjet1/F") ;
       m_smallT->Branch ("DeltaRmin_stage2jet_bjet2", &m_DeltaRmin_stage2jet_bjet2, "DeltaRmin_stage2jet_bjet2/F") ;
       
       m_smallT->Branch ("DeltaRmin_stage2tau_tau1", &m_DeltaRmin_stage2tau_tau1, "DeltaRmin_stage2tau_tau1/F") ;
       m_smallT->Branch ("DeltaRmin_stage2tau_tau2", &m_DeltaRmin_stage2tau_tau2, "DeltaRmin_stage2tau_tau2/F") ;
-      
+      */
       
       m_smallT->Branch ("nfatjets", &m_nfatjets, "nfatjets/I");
       m_smallT->Branch ("fatjet_pt", &m_fatjet_pt, "fatjet_pt/F");
@@ -716,7 +724,7 @@ struct smallTree
   Float_t m_mT2 ;
 
   //stage2 jets
-
+  /*
   Float_t m_stage2_jet1Et;
   Float_t m_stage2_jet1Eta;
   Float_t m_stage2_jet1Phi;
@@ -748,25 +756,29 @@ struct smallTree
   Float_t m_stage2_tau1Et;
   Float_t m_stage2_tau1Eta;
   Float_t m_stage2_tau1Phi;
+  Int_t m_stage2_tau1Iso;
 
   Float_t m_stage2_tau2Et;
   Float_t m_stage2_tau2Eta;
   Float_t m_stage2_tau2Phi;
-
+  Int_t m_stage2_tau2Iso;
+  
   Float_t m_stage2_tau3Et;
   Float_t m_stage2_tau3Eta;
   Float_t m_stage2_tau3Phi;
+  Int_t m_stage2_tau3Iso;
 
   Float_t m_stage2_tau4Et;
   Float_t m_stage2_tau4Eta;
   Float_t m_stage2_tau4Phi;
+  Int_t m_stage2_tau4Iso;
 
 Float_t m_DeltaRmin_stage2tau_tau1;
 Float_t m_DeltaRmin_stage2tau_tau2;
 
   Int_t m_Bjet2matchesStage2jet1;
   Int_t m_Lepton2matchesStage2tau1;
-
+  */
   // the largest pT daughter visible candidate
   Float_t m_dau1_iso ;
   Int_t   m_dau1_MVAiso; // for taus only

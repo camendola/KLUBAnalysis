@@ -1,12 +1,12 @@
-OUTDIRR="Samples2016_31Ott_DYForNewSample"
-AMESSAGE="Only DY - stitched and inclusive. NoutPartons is added to check efficiency in our event selection. "
+OUTDIRR="SelectionsForCombination"
+AMESSAGE="test selections"
 
 source /opt/exp_soft/cms/t3/t3setup
-mkdir /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
+mkdir /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/
 mkdir $OUTDIRR
-touch /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
-echo $AMESSAGE > /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
-cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
+touch /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/README.txt
+echo $AMESSAGE > /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/README.txt
+cp /home/llr/cms/amendola/CMSSW_7_4_3/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/
 
 
 # source /opt/exp_soft/cms/t3/t3setup
@@ -263,12 +263,13 @@ cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh
 # # # # DY - only inclusive sample for njets distribution test on selected events
 # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Inclusive   -i inputFiles/Files80X_22Giu/1_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1.txt  -x 6025.2 
 
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_1jet   -i inputFiles/Files80X_22Giu/2_DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.203829
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_2jet   -i inputFiles/Files80X_22Giu/3_DY2JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0674381
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_3jet   -i inputFiles/Files80X_22Giu/4_DY3JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0204619
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_4jet   -i inputFiles/Files80X_22Giu/5_DY4JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0111032
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Bjet   -i inputFiles/Files80X_22Giu/6_DYBJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0141199
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_BBjet   -i inputFiles/Files80X_22Giu/7_DYBBJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v2.txt  -x 6025.2 -y 0.00233089
+./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/backgroundForCombination   -i inputFiles/Files80X_22Giu/1_TT_TUNE_TestFiles.txt
+
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_2jet   -i inputFiles/Files80X_22Giu/3_DY2JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0674381
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_3jet   -i inputFiles/Files80X_22Giu/4_DY3JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0204619
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_4jet   -i inputFiles/Files80X_22Giu/5_DY4JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0111032
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Bjet   -i inputFiles/Files80X_22Giu/6_DYBJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0141199
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_BBjet   -i inputFiles/Files80X_22Giu/7_DYBBJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v2.txt  -x 6025.2 -y 0.00233089
 
 #### TEST OF DY WITH ITS SF
 # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016_DYSFbtag.cfg  -n 200 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY   -i inputFiles/Files80X_22Giu/DY_allNjetAndBJet.txt              -g True -x 6025.2 
