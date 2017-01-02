@@ -39,7 +39,7 @@ void convert(int i_split=0, bool isMC=true){
   TString dir_in;
   TString dir_out;
   TString file;    
-  TString infile;    
+TString infileName;    
 
   
   vector<TString> list;
@@ -57,11 +57,14 @@ void convert(int i_split=0, bool isMC=true){
   int i_min=i_split*100;
   if(i_split==0) i_min++;
   int i_max=(i_split+1)*100;
-  if(i_split==90) i_max=111;
+  if(i_split==91) i_max=112;
   
     
   for(int i=i_min;i<i_max;i++){
-    cout<<dir_in+Form("HTauTauAnalysis_%i.root",i)<<endl;
+    infileName = dir_in+Form("HTauTauAnalysis_%i.root",i);  
+    cout<<infileName<<endl;
+    TFile *infile = TFile::Open(Form("%s",infileName.Data()),"read");
+    if (infile == NULL) continue;  
     list.push_back(dir_in+Form("HTauTauAnalysis_%i.root",i));
   }
   
@@ -71,8 +74,7 @@ void convert(int i_split=0, bool isMC=true){
   
   file+=Form("_%i",i_split);
   file+=".root";
-  infile = dir_in;
-  infile+=Form("HTauTauAnalysis_%i.root",i_min);
+  
   
   
    TChain * tree = new TChain("HTauTauTree/HTauTauTree");
@@ -94,13 +96,6 @@ void convert(int i_split=0, bool isMC=true){
   TFile* f_new = TFile::Open(dir_out+file,"RECREATE");
   
   
-  
-  f_new = TFile::Open(dir_out+file,"RECREATE");
-  
-  
-  
-  
-    
   
   
   TTree* tree_new=tree->GetTree()->CloneTree(0);
@@ -1054,11 +1049,8 @@ void convert(int i_split=0, bool isMC=true){
       std::cout << ">>> Event # " << i << " / " << nentries << " entries" << std::endl; 
     } 
     tree->GetEntry(i);
-
     tree_new->Fill();
-
   }
-  
   f_new->cd();
   tree_new->Write();
   f_new->Close();

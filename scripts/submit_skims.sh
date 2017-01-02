@@ -1,269 +1,47 @@
-OUTDIRR="SelectionsForCombination"
+OUTDIRR="TestSelections"
 AMESSAGE="test selections"
 
 source /opt/exp_soft/cms/t3/t3setup
-mkdir /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/
+mkdir /data_CMS/cms/amendola/$OUTDIRR/
 mkdir $OUTDIRR
-touch /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/README.txt
-echo $AMESSAGE > /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/README.txt
-cp /home/llr/cms/amendola/CMSSW_7_4_3/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/
+touch /data_CMS/cms/amendola/$OUTDIRR/README.txt
+echo $AMESSAGE > /data_CMS/cms/amendola/$OUTDIRR/README.txt
+cp /home/llr/cms/amendola/CMSSW_7_4_3/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/amendola/$OUTDIRR/
 
 
-# source /opt/exp_soft/cms/t3/t3setup
-# mkdir /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
-# mkdir $OUTDIRR
-# touch /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
-# echo $AMESSAGE > /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
-# cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
+#BEG=0
+#END=10
+#inputfilelistFolder="inputFiles/Files80X_22Giu"
+#for x in $(seq $BEG $END); do
+#    inputfilelist=
+#    len=${#x} 
+#    if [ $len -eq 1 ]; then
+#	inputfilelist="$inputfilelistFolder/1_TT_files_00$x"
+#    elif [ $len -eq 2 ]; then
+#        inputfilelist="$inputfilelistFolder/1_TT_files_0$x"
+#    elif [ $len -eq 3 ]; then
+#        inputfilelist="$inputfilelistFolder/1_TT_files_$x"
+#    fi
+#    echo $inputfilelist
+#    i=0
+#    while read line; do
+#	inputfiles[$i]=$line
+#	echo inputfiles[$i] 
+#	i=$(( $i+1 ))
+#    done <$inputfilelist
+#    i=$(( $i-1 ))
+#    haddInput=""
+#    for ii in $(seq 0 $i); do
+#	haddInput="$haddInput $inputfiles"
+#    done
+#    echo $haddInput
+#    ./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/$OUTDIRR/inputFiles$x   -i inputFiles/Files80X_22Giu/$inputfile
+#done
+
+inputfile='list.txt'
+./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/$OUTDIRR/inputFiles$x   -i inputFiles/$inputfile
 
 
-### DATA - Silver JSOn - 5 Gennaio 2016
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim.cfg  -n 40 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleMuon_RunD        -i inputFiles/76Xsamples/Full_SingleMu_RunD.txt
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim.cfg  -n 80 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_Tau_RunD               -i inputFiles/76Xsamples/6_Tau__Run2015D-16Dec2015-v1.txt
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim.cfg  -n 40 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleElectron_RunD    -i inputFiles/76Xsamples/Full_SingleEle_RunD.txt
-
-# ### NB: different skimmer cfg for run C (different trigger paths)
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim_runC.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleMuon_RunC        -i inputFiles/76Xsamples/3_SingleMuon__Run2015C_25ns-16Dec2015-v1.txt
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim_runC.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_Tau_RunC               -i inputFiles/76Xsamples/1_Tau__Run2015C_25ns-16Dec2015-v1.txt
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim_runC.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleElectron_RunC    -i inputFiles/76Xsamples/1_SingleElectron__Run2015C_25ns-16Dec2015-v1.txt
-
-
-# # # ### MC samples - Silver JSON (noHFMET) - 5 Gennaio 2016
-# # # # DY - stitch
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Inclusive   -i inputFiles/76Xsamples/38_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt              -g True -x 6025.2 -y 0.961214096 -z 100
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_100_200     -i inputFiles/76Xsamples/43_DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 -y 0.028478039
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_200_400     -i inputFiles/76Xsamples/44_DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 -y 0.008733401
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_400_600     -i inputFiles/76Xsamples/45_DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 -y 0.001122983
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_600_Inf     -i inputFiles/76Xsamples/46_DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 -y 0.00045148
-
-# # # # DY - stitch - jet binned!!
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Inclusive   -i inputFiles/76Xsamples/38_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt              -g True -x 6025.2 
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_1j          -i inputFiles/76Xsamples/39_DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_2j          -i inputFiles/76Xsamples/2_DY2JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -g True -x 6025.2 
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_3j          -i inputFiles/76Xsamples/41_DY3JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_4j          -i inputFiles/76Xsamples/42_DY4JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -g True -x 6025.2 
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 200 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Inclusive   -i inputFiles/76Xsamples/DY_njets_merged.txt              -g True -x 6025.2 
-
-# # # # WJets - stitch
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 50 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WJets_Inclusive   -i inputFiles/76Xsamples/30_WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt              -x 61526.7 -y 0.965405 -z 100
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WJets_100_200     -i inputFiles/76Xsamples/32_WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 61526.7 -y 0.0265338
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WJets_200_400     -i inputFiles/76Xsamples/33_WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 61526.7 -y 0.00709607
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WJets_400_600     -i inputFiles/76Xsamples/34_WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 61526.7 -y 0.000964885
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WJets_600_Inf     -i inputFiles/76Xsamples/35_WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 61526.7 -y 0.00037029
-
-# # # # Others - non stitched
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 250 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT     -i inputFiles/76Xsamples/TT_merged_inclusive.txt   -x 831.76 -t True
-
-# # # # HH signal new xsec 13TeV and analytical values of the ratios 
-# # python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HHLambda1         -i inputFiles/76Xsamples/HH_Lambda1.txt        -x 0.002729241983
-# # python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HHLambda20        -i inputFiles/76Xsamples/HH_Lambda20.txt       -x 0.245931995088
-# # python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HHLambdam4        -i inputFiles/76Xsamples/HH_Lambdam4.txt       -x 0.03370613849  
-# # python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HHLambda2dot46    -i inputFiles/76Xsamples/HH_Lambda2dot46.txt   -x 0.00114891262213  
-
-# # # # HH signal CLUSTERED SAMPLES with xsection of 10 pb
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_SM    -i inputFiles/76Xsamples/18_GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_box   -i inputFiles/76Xsamples/19_GluGluToHHTo2B2Tau_node_box_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_2     -i inputFiles/76Xsamples/10_GluGluToHHTo2B2Tau_node_2_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_3     -i inputFiles/76Xsamples/11_GluGluToHHTo2B2Tau_node_3_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_4     -i inputFiles/76Xsamples/12_GluGluToHHTo2B2Tau_node_4_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_5     -i inputFiles/76Xsamples/13_GluGluToHHTo2B2Tau_node_5_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_6     -i inputFiles/76Xsamples/14_GluGluToHHTo2B2Tau_node_6_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_7     -i inputFiles/76Xsamples/15_GluGluToHHTo2B2Tau_node_7_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_8     -i inputFiles/76Xsamples/16_GluGluToHHTo2B2Tau_node_8_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_9     -i inputFiles/76Xsamples/17_GluGluToHHTo2B2Tau_node_9_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt    -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_10    -i inputFiles/76Xsamples/6_GluGluToHHTo2B2Tau_node_10_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_11    -i inputFiles/76Xsamples/7_GluGluToHHTo2B2Tau_node_11_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_12    -i inputFiles/76Xsamples/8_GluGluToHHTo2B2Tau_node_12_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -x 10.0  
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_Node_13    -i inputFiles/76Xsamples/9_GluGluToHHTo2B2Tau_node_13_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -x 10.0  
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_0    -i inputFiles/76Xsamples/HH_all_nodes_0.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_0.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_1    -i inputFiles/76Xsamples/HH_all_nodes_1.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_1.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_2    -i inputFiles/76Xsamples/HH_all_nodes_2.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_2.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_3    -i inputFiles/76Xsamples/HH_all_nodes_3.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_3.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_4    -i inputFiles/76Xsamples/HH_all_nodes_4.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_4.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_5    -i inputFiles/76Xsamples/HH_all_nodes_5.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_5.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_6    -i inputFiles/76Xsamples/HH_all_nodes_6.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_6.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_7    -i inputFiles/76Xsamples/HH_all_nodes_7.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_7.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_8    -i inputFiles/76Xsamples/HH_all_nodes_8.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_8.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_9    -i inputFiles/76Xsamples/HH_all_nodes_9.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_9.root
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_10    -i inputFiles/76Xsamples/HH_all_nodes_10.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_10.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_11    -i inputFiles/76Xsamples/HH_all_nodes_11.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_11.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_12    -i inputFiles/76Xsamples/HH_all_nodes_12.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_12.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_13    -i inputFiles/76Xsamples/HH_all_nodes_13.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_13.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_14    -i inputFiles/76Xsamples/HH_all_nodes_14.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_14.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_15    -i inputFiles/76Xsamples/HH_all_nodes_15.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_15.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_16    -i inputFiles/76Xsamples/HH_all_nodes_16.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_16.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_17    -i inputFiles/76Xsamples/HH_all_nodes_17.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_17.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_18    -i inputFiles/76Xsamples/HH_all_nodes_18.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_18.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_19    -i inputFiles/76Xsamples/HH_all_nodes_19.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_19.root
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_20    -i inputFiles/76Xsamples/HH_all_nodes_20.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_20.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_21    -i inputFiles/76Xsamples/HH_all_nodes_21.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_21.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_22    -i inputFiles/76Xsamples/HH_all_nodes_22.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_22.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_23    -i inputFiles/76Xsamples/HH_all_nodes_23.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_23.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_24    -i inputFiles/76Xsamples/HH_all_nodes_24.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_24.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_25    -i inputFiles/76Xsamples/HH_all_nodes_25.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_25.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_26    -i inputFiles/76Xsamples/HH_all_nodes_26.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_26.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_27    -i inputFiles/76Xsamples/HH_all_nodes_27.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_27.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_28    -i inputFiles/76Xsamples/HH_all_nodes_28.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_28.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_29    -i inputFiles/76Xsamples/HH_all_nodes_29.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_29.root
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_30    -i inputFiles/76Xsamples/HH_all_nodes_30.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_30.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_31    -i inputFiles/76Xsamples/HH_all_nodes_31.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_31.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_32    -i inputFiles/76Xsamples/HH_all_nodes_32.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_32.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_33    -i inputFiles/76Xsamples/HH_all_nodes_33.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_33.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_34    -i inputFiles/76Xsamples/HH_all_nodes_34.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_34.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_35    -i inputFiles/76Xsamples/HH_all_nodes_35.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_35.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_36    -i inputFiles/76Xsamples/HH_all_nodes_36.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_36.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_37    -i inputFiles/76Xsamples/HH_all_nodes_37.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_37.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_38    -i inputFiles/76Xsamples/HH_all_nodes_38.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_38.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_39    -i inputFiles/76Xsamples/HH_all_nodes_39.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_39.root
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_40    -i inputFiles/76Xsamples/HH_all_nodes_40.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_40.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_41    -i inputFiles/76Xsamples/HH_all_nodes_41.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_41.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_42    -i inputFiles/76Xsamples/HH_all_nodes_42.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_42.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_43    -i inputFiles/76Xsamples/HH_all_nodes_43.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_43.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_44    -i inputFiles/76Xsamples/HH_all_nodes_44.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_44.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_45    -i inputFiles/76Xsamples/HH_all_nodes_45.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_45.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_46    -i inputFiles/76Xsamples/HH_all_nodes_46.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_46.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_47    -i inputFiles/76Xsamples/HH_all_nodes_47.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_47.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_48    -i inputFiles/76Xsamples/HH_all_nodes_48.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_48.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_49    -i inputFiles/76Xsamples/HH_all_nodes_49.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_49.root
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_50    -i inputFiles/76Xsamples/HH_all_nodes_50.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_50.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_rew_51    -i inputFiles/76Xsamples/HH_all_nodes_51.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/map_51.root
-
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-250   -i inputFiles/76Xsamples/1_GluGluToRadionToHHTo2B2Tau_M-250_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-260   -i inputFiles/76Xsamples/2_GluGluToRadionToHHTo2B2Tau_M-260_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-270   -i inputFiles/76Xsamples/3_GluGluToRadionToHHTo2B2Tau_M-270_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-280   -i inputFiles/76Xsamples/1_GluGluToRadionToHHTo2B2Tau_M-280_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-300   -i inputFiles/76Xsamples/5_GluGluToRadionToHHTo2B2Tau_M-300_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-320   -i inputFiles/76Xsamples/6_GluGluToRadionToHHTo2B2Tau_M-320_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-340   -i inputFiles/76Xsamples/7_GluGluToRadionToHHTo2B2Tau_M-340_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-350   -i inputFiles/76Xsamples/8_GluGluToRadionToHHTo2B2Tau_M-350_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-400   -i inputFiles/76Xsamples/9_GluGluToRadionToHHTo2B2Tau_M-400_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-450   -i inputFiles/76Xsamples/2_GluGluToRadionToHHTo2B2Tau_M-450_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-500   -i inputFiles/76Xsamples/11_GluGluToRadionToHHTo2B2Tau_M-500_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-550   -i inputFiles/76Xsamples/12_GluGluToRadionToHHTo2B2Tau_M-550_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-600   -i inputFiles/76Xsamples/13_GluGluToRadionToHHTo2B2Tau_M-600_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-650   -i inputFiles/76Xsamples/14_GluGluToRadionToHHTo2B2Tau_M-650_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-700   -i inputFiles/76Xsamples/15_GluGluToRadionToHHTo2B2Tau_M-700_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-800   -i inputFiles/76Xsamples/16_GluGluToRadionToHHTo2B2Tau_M-800_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_GluGluToRadionToHHTo2B2Tau_M-900   -i inputFiles/76Xsamples/17_GluGluToRadionToHHTo2B2Tau_M-900_narrow_13TeV-madgraph__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt  -x 10.0
-
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_ST_tW_antitop_5f_inclusiveDecays   -i inputFiles/76Xsamples/26_ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt   -x 35.6
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_ST_tW_top_5f_inclusiveDecays       -i inputFiles/76Xsamples/27_ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt       -x 35.6
-
-
-
-# ## NB: there is one sample available: 22_WZJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt
-# ## to be used with mll > 30 , xsec = 5.26 , corresponds to WZ > 3lv??
-
-
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WWToLNuQQ      -i inputFiles/76Xsamples/20_WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt -x 49.997
-# ## python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WWTo2L2Nu      -i inputFiles/76Xsamples/ -x 12.178
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WZTo2L2Q       -i inputFiles/76Xsamples/21_WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt -x 5.595
-# # python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WZTo3LNu       -i inputFiles/76Xsamples/39_WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8__RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v1.txt -x 4.42965
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 50 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WZTo1L3Nu      -i inputFiles/76Xsamples/4_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt -x 3.05
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 50 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_WZTo1L1Nu2Q    -i inputFiles/76Xsamples/5_WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt -x 10.71
-# # python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_ZZTo2L2Nu      -i inputFiles/76Xsamples/33_ZZTo2L2Nu_13TeV_powheg_pythia8__RunIISpring15MiniAODv2-74X_mcRun2_asymptotic_v2-v2.txt -x 0.564
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_ZZTo2L2Q       -i inputFiles/76Xsamples/18_ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt -x 3.22
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_ZZTo4L         -i inputFiles/76Xsamples/19_ZZTo4L_13TeV-amcatnloFXFX-pythia8__RunIIFall15MiniAODv2-PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1.txt -x 1.212
-
-
-# ############# HH rew 4 Xanda
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_0    -i inputFiles/reweightForXanda/cluster_0_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_0_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_1    -i inputFiles/reweightForXanda/cluster_1_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_1_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_2    -i inputFiles/reweightForXanda/cluster_2_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_2_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_3    -i inputFiles/reweightForXanda/cluster_3_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_3_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_4    -i inputFiles/reweightForXanda/cluster_4_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_4_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_5    -i inputFiles/reweightForXanda/cluster_5_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_5_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_6    -i inputFiles/reweightForXanda/cluster_6_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_6_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_7    -i inputFiles/reweightForXanda/cluster_7_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_7_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_8    -i inputFiles/reweightForXanda/cluster_8_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_8_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_9    -i inputFiles/reweightForXanda/cluster_9_forXanda.txt             -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_9_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_10    -i inputFiles/reweightForXanda/cluster_10_forXanda.txt            -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_10_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_cluster_11    -i inputFiles/reweightForXanda/cluster_11_forXanda.txt            -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_cluster_11_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum1_outlier_0    -i inputFiles/reweightForXanda/clusNum1_outlier_0_forXanda.txt    -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum1_outlier_0_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum1_outlier_1    -i inputFiles/reweightForXanda/clusNum1_outlier_1_forXanda.txt    -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum1_outlier_1_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum1_outlier_2    -i inputFiles/reweightForXanda/clusNum1_outlier_2_forXanda.txt    -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum1_outlier_2_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum1_outlier_3    -i inputFiles/reweightForXanda/clusNum1_outlier_3_forXanda.txt    -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum1_outlier_3_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum1_outlier_4    -i inputFiles/reweightForXanda/clusNum1_outlier_4_forXanda.txt    -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum1_outlier_4_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum1_outlier_5    -i inputFiles/reweightForXanda/clusNum1_outlier_5_forXanda.txt    -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum1_outlier_5_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum10_outlier_0    -i inputFiles/reweightForXanda/clusNum10_outlier_0_forXanda.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum10_outlier_0_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum10_outlier_1    -i inputFiles/reweightForXanda/clusNum10_outlier_1_forXanda.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum10_outlier_1_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum10_outlier_2    -i inputFiles/reweightForXanda/clusNum10_outlier_2_forXanda.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum10_outlier_2_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum10_outlier_3    -i inputFiles/reweightForXanda/clusNum10_outlier_3_forXanda.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum10_outlier_3_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum10_outlier_4    -i inputFiles/reweightForXanda/clusNum10_outlier_4_forXanda.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum10_outlier_4_forXanda.root
-# python scripts/skimNtuple.py -s True -c  config/skim.cfg  -n 20 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_clusNum10_outlier_5    -i inputFiles/reweightForXanda/clusNum10_outlier_5_forXanda.txt   -x 10.0  -w /home/llr/cms/cadamuro/CleanKLUB/CMSSW_7_4_7/src/KLUBAnalysis/studies/HHNodesReweight/outMap_clusNum10_outlier_5_forXanda.root
-
-################## TEST OF MVA MET
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_PFMET_GluGluToRadionToHHTo2B2Tau_M-300   -i inputFiles/MVAMETCheck/Radion300_PFMET.txt  -x 10.0
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_PFMET_GluGluToRadionToHHTo2B2Tau_M-600   -i inputFiles/MVAMETCheck/Radion600_PFMET.txt  -x 10.0
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_PFMET_GluGluToRadionToHHTo2B2Tau_M-900   -i inputFiles/MVAMETCheck/Radion900_PFMET.txt  -x 10.0
-
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_MVAMETNoRecoil_GluGluToRadionToHHTo2B2Tau_M-300   -i inputFiles/MVAMETCheck/Radion300_MVAMETNoRecoil.txt  -x 10.0
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_MVAMETNoRecoil_GluGluToRadionToHHTo2B2Tau_M-600   -i inputFiles/MVAMETCheck/Radion600_MVAMETNoRecoil.txt  -x 10.0
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_MVAMETNoRecoil_GluGluToRadionToHHTo2B2Tau_M-900   -i inputFiles/MVAMETCheck/Radion900_MVAMETNoRecoil.txt  -x 10.0
-
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_MVAMETWithRecoil_GluGluToRadionToHHTo2B2Tau_M-300   -i inputFiles/MVAMETCheck/Radion300_MVAMETWithRecoil.txt  -x 10.0
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_MVAMETWithRecoil_GluGluToRadionToHHTo2B2Tau_M-600   -i inputFiles/MVAMETCheck/Radion600_MVAMETWithRecoil.txt  -x 10.0
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 10 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_MVAMETWithRecoil_GluGluToRadionToHHTo2B2Tau_M-900   -i inputFiles/MVAMETCheck/Radion900_MVAMETWithRecoil.txt  -x 10.0
-
-# python scripts/skimNtuple.py -T $OUTDIRR -s False -c  config/skim_Luca.cfg  -n 250 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT     -i inputFiles/BoostedJets/TTBar_76X.txt   -x 831.76 -t True
-
-################### 2016 Data - 27 Mag
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim_Luca_2016Data.cfg  -n 40 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleMuon        -i inputFiles/Data2016_27Mag/1_SingleMuon__Run2016B-PromptReco-v2.txt
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim_Luca_2016Data.cfg  -n 80 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_Tau               -i inputFiles/Data2016_27Mag/3_Tau__Run2016B-PromptReco-v2.txt
-# python scripts/skimNtuple.py -d True  -s True -c  config/skim_Luca_2016Data.cfg  -n 40 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleElectron    -i inputFiles/Data2016_27Mag/2_SingleElectron__Run2016B-PromptReco-v2.txt
-
-
-################### FOR PAS and AN - 22 Giu 2016
-
-# DATA
-
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2016.cfg  -n 40 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleMuon_4fb        -i inputFiles/Files80X_22Giu/SingleMu_UpTo22Giu.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2016.cfg  -n 80 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleElectron_4fb    -i inputFiles/Files80X_22Giu/SingleEle_UpTo22Giu.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2016.cfg  -n 40 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_Tau_4fb               -i inputFiles/Files80X_22Giu/Tau_UpTo22Giu.txt
-
-
-# ## FIXME: for files up to 22 Giu, SingleMuon has 4 jobs failed and needs to be updated as soone as they finish!
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2016.cfg  -n 40 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleMuon        -i inputFiles/Files80X_22Giu/SingleMu_UpTo20LugNOL1.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2016.cfg  -n 80 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_SingleElectron    -i inputFiles/Files80X_22Giu/SingleEle_UpTo20LugNOL1.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2016.cfg  -n 80 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_Tau               -i inputFiles/Files80X_22Giu/Tau_UpTo20LugNOL1.txt
-
-# # TT x section: 831.76 for inclusive sample, W->had 67,60% , W->l nu 3*10,8% = 32,4% (sum over all leptons)
-# # hh = 45.7%
-# # ll = 10.5%
-# # hl = 21.9% (x2 for permutation t-tbar, but different samples here)
-# # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_fullyHad            -i inputFiles/Files80X_22Giu/TT_fullyHad.txt      -x 380.1143 -t True -b 1
-# # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_semilepT            -i inputFiles/Files80X_22Giu/TT_semiLeptT.txt     -x 182.1554 -t True -b 2
-# # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_semilepTbar         -i inputFiles/Files80X_22Giu/TT_semiLeptTbar.txt  -x 182.1554 -t True -b 3
-# # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_fullyLep            -i inputFiles/Files80X_22Giu/TT_fullyLept.txt     -x 87.3348  -t True -b 4
-
-# # TT x section: 831.76 for inclusive sample, W->had 67,60% , W->l nu 3*10,8% = 32,4% (sum over all leptons)
-# # hh = 45.7%
-# # ll = 10.5%
-# # hl = 21.9% (x2 for permutation t-tbar, but different samples here)
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 180 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_fullyHad            -i inputFiles/Files80X_22Giu/TT_powheg_fullyHad.txt    -x 380.1143 -t True -b 1
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 350 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_semiLep             -i inputFiles/Files80X_22Giu/TT_powheg_semiLep.txt     -x 364.3108 -t True -b 5
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 350 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_fullyLep            -i inputFiles/Files80X_22Giu/TT_powheg_fullyLep.txt    -x 87.3348  -t True -b 4
-
-## TT inclusive , no stitching, for BDT training
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 350 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_inclusive            -i inputFiles/Files80X_22Giu/1_TT_TuneCUETP8M1_13TeV-powheg-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1.txt    -x 831.76  -t True -b 0
-
-
-# # # # DY - merge of all jet binned sample + b jet binned sample
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 200 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY   -i inputFiles/Files80X_22Giu/DY_allNjetAndBJet.txt              -g True -x 6025.2 
-
-# # # # DY - only inclusive sample for njets distribution test on selected events
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_Inclusive   -i inputFiles/Files80X_22Giu/1_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1.txt  -x 6025.2 
-
-./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/test_submit_to_tier3/$OUTDIRR/backgroundForCombination   -i inputFiles/Files80X_22Giu/1_TT_TUNE_TestFiles.txt
 
 #python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_2jet   -i inputFiles/Files80X_22Giu/3_DY2JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0674381
 #python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_DY_3jet   -i inputFiles/Files80X_22Giu/4_DY3JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8__RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1.txt    -x 6025.2 -y 0.0204619
