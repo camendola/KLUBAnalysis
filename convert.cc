@@ -6,7 +6,7 @@
 #include <TH1F.h>
 #include <TH2F.h>
 #include <TProfile.h>
-
+#include <CommonTools/UtilAlgos/interface/TFileService.h>
 
 #include <iostream>
 #include <TLegend.h>
@@ -57,21 +57,18 @@ TString infileName;
   int i_min=i_split*100;
   if(i_split==0) i_min++;
   int i_max=(i_split+1)*100;
-  if(i_split==91) i_max=112;
+  
   
     
   for(int i=i_min;i<i_max;i++){
     infileName = dir_in+Form("HTauTauAnalysis_%i.root",i);  
     cout<<infileName<<endl;
     TFile *infile = TFile::Open(Form("%s",infileName.Data()),"read");
-    if (infile == NULL) continue;  
-    list.push_back(dir_in+Form("HTauTauAnalysis_%i.root",i));
+    if (infile != NULL)  list.push_back(dir_in+Form("HTauTauAnalysis_%i.root",i));
+    
   }
   
-  
-  
-
-  
+   
   file+=Form("_%i",i_split);
   file+=".root";
   
@@ -80,8 +77,8 @@ TString infileName;
    TChain * tree = new TChain("HTauTauTree/HTauTauTree");
   int nFiles = list.size();
  
-   for(int i=0;i<nFiles;i++)
-     //  for(int i=0;i<10;i++)
+  //for(int i=0;i<nFiles;i++)
+   for(int i=0;i<10;i++)
     {
       tree->Add(list[i]);
     }
@@ -97,11 +94,15 @@ TString infileName;
   
   
   
-  
   TTree* tree_new=tree->GetTree()->CloneTree(0);
   tree_new=new TTree("HTauTauTree","HTauTauTree");
-    
   
+  // only to make the skimmer work
+  /*  static const int ntauIds = 30;
+  static const int nbins = 30;
+  TH1F* hCounter = new TH1F("Counters","Counters",nbins,0,nbins);
+  TH1F* hTauIDs = new TH1F("TauIDs","TauIDs",ntauIds,0,ntauIds);    
+  */
   // Declaration of leaf types
    ULong64_t       EventNumber;
    Int_t           RunNumber;
