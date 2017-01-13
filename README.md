@@ -150,14 +150,14 @@ Usage for large amount of input files (FIXME):
 ```
 # split the <input>.txt file list in smaller files <file>_0000, <file>_0001 ...
 split -a 4 -l 100 -d <input>.txt <file>
-# produce hadd .root files from each file list and
+# produce hadd .root files from each file list
 ./scripts/haddNtuples.sh
 # skimmer
 ./scripts/submit_skims.sh
-# produce .root files containing the information for each selection --- missing some script to make it more automatic
+# produce .root files containing the information for each selection
 root 
-.L selEvents.cc+
-selEvents(<fileNumber>)
+.x selEventsAll.cxx
 .q
-# --- missing a script to hadd the ouptuts
+# hadd the outputs to total_sel.root
+./scripts/haddFinal.sh
 ```
