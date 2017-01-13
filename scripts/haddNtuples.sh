@@ -29,3 +29,6 @@ for x in $(seq $BEG $END); do
     haddInput="hadd -f /data_CMS/cms/amendola/$OUTDIRR/hadd_ntuples/total_HTauTauAnalysis_$x.root ${inputfiles[*]}"
     $haddInput
 done
+rm /data_CMS/cms/amendola/$OUTDIRR/hadd_ntuples/TT_list.txt
+ls /data_CMS/cms/amendola/$OUTDIRR/hadd_ntuples/ > TT_list.txt
+cp /data_CMS/cms/amendola/$OUTDIRR/hadd_ntuples/list.txt ../inputFiles/

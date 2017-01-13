@@ -2,6 +2,7 @@
 
 repo for the h->tautau/h->hh analysis within the LLR framework
 
+
 ## Installing
 ``` 
 cd /data_CMS/cms/govoni/CMSSW_7_4_3/src
@@ -139,4 +140,24 @@ The TMVATraining.cpp executable uses the TMVATrainingClass to interface to the T
 The MVA info is then added to the SKIM tree with:
 ```
 ./bin/addTMVA.exe config/addTMVA.cfg 
+```
+
+## About this branch
+
+This branch is  meant to be in synch with the state of the analysis at Moriond 2016.
+The extra codes with respect to the master are used to keep track of the events passing the selections used in the HH->bbtautau analysis (config/analysis_*Tau.cut, #2016# lines).
+Usage for large amount of input files (FIXME):
+```
+# split the <input>.txt file list in smaller files <file>_0000, <file>_0001 ...
+split -a 4 -l 100 -d <input>.txt <file>
+# produce hadd .root files from each file list and
+./scripts/haddNtuples.sh
+# skimmer
+./scripts/submit_skims.sh
+# produce .root files containing the information for each selection --- missing some script to make it more automatic
+root 
+.L selEvents.cc+
+selEvents(<fileNumber>)
+.q
+# --- missing a script to hadd the ouptuts
 ```
