@@ -14,7 +14,6 @@ struct smallTree
     {
       init () ;
     }
-
   int Fill () 
     {
       return m_smallT->Fill () ;

@@ -8,38 +8,8 @@ touch /data_CMS/cms/amendola/$OUTDIRR/README.txt
 echo $AMESSAGE > /data_CMS/cms/amendola/$OUTDIRR/README.txt
 cp /home/llr/cms/amendola/CMSSW_7_4_3/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/amendola/$OUTDIRR/
 
-
-#BEG=0
-#END=10
-#inputfilelistFolder="inputFiles/Files80X_22Giu"
-#for x in $(seq $BEG $END); do
-#    inputfilelist=
-#    len=${#x} 
-#    if [ $len -eq 1 ]; then
-#	inputfilelist="$inputfilelistFolder/1_TT_files_00$x"
-#    elif [ $len -eq 2 ]; then
-#        inputfilelist="$inputfilelistFolder/1_TT_files_0$x"
-#    elif [ $len -eq 3 ]; then
-#        inputfilelist="$inputfilelistFolder/1_TT_files_$x"
-#    fi
-#    echo $inputfilelist
-#    i=0
-#    while read line; do
-#	inputfiles[$i]=$line
-#	echo inputfiles[$i] 
-#	i=$(( $i+1 ))
-#    done <$inputfilelist
-#    i=$(( $i-1 ))
-#    haddInput=""
-#    for ii in $(seq 0 $i); do
-#	haddInput="$haddInput $inputfiles"
-#    done
-#    echo $haddInput
-#    ./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/$OUTDIRR/inputFiles$x   -i inputFiles/Files80X_22Giu/$inputfile
-#done
-
-inputfile='list.txt'
-./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/$OUTDIRR/inputFiles$x   -i inputFiles/$inputfile
+inputfile='TT_list.txt'
+./scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50 -k False -o /data_CMS/cms/amendola/$OUTDIRR/skimmed   -i inputFiles/$inputfile
 
 
 

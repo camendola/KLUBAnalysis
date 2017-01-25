@@ -506,6 +506,7 @@ int main (int argc, char** argv)
   // input and output setup
   // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
   TChain * bigChain = new TChain ("HTauTauTree/HTauTauTree") ;
+  //TChain * bigChain = new TChain ("HTauTauTree") ; //for converted ntuples
   appendFromFileList (bigChain, inputFile);
   bigTree theBigTree (bigChain) ;
 
@@ -526,9 +527,9 @@ int main (int argc, char** argv)
 
   // ------------------------------
 
-  TH1F* hTriggers = getFirstFileHisto (inputFile);
-  TH1F* hTauIDS = getFirstFileHisto (inputFile,false);
-  triggerReader trigReader (hTriggers);
+  TH1F* hTriggers = getFirstFileHisto (inputFile); //comment for ntuples converted
+  TH1F* hTauIDS = getFirstFileHisto (inputFile,false); //comment for ntuples converted
+  triggerReader trigReader (hTriggers); //comment for ntuples converted
   trigReader.addTauTauTrigs (trigTauTau);
   trigReader.addMuTauTrigs  (trigMuTau);
   trigReader.addEleTauTrigs (trigEleTau);
@@ -538,7 +539,7 @@ int main (int argc, char** argv)
 
   // ------------------------------
 
-  OfflineProducerHelper oph (hTriggers, hTauIDS) ;
+    OfflineProducerHelper oph (hTriggers, hTauIDS) ; //comment for ntuples converted
 
   // ------------------------------
 
