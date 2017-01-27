@@ -13,16 +13,21 @@
 
 
 
-void selEvents(int i_split){
+void selEvents(int num){
   //TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyHad/";
   // TString dir_out="/data_CMS/cms/amendola/TestSelections/TT_background/fullyHad/";
 
-   TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyLep/";
+
+  //  TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_semiLep/";
+  //TString dir_out="/data_CMS/cms/amendola/TestSelections/TT_background/semiLep/";
+
+  TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyLep/";
   TString dir_out="/data_CMS/cms/amendola/TestSelections/TT_background/fullyLep/";
+
   TString filename;    
   TString outfilename;    
 
-  filename=dir_in+Form("output_%i.root",i_split);
+  filename=dir_in+Form("output_%i.root",num);
   cout<<filename<<endl;
   TFile *file = TFile::Open(Form("%s",filename.Data()),"read");
   
@@ -30,7 +35,7 @@ void selEvents(int i_split){
   tree->ls();  
   //myclass theTree(tree); 
   newClass theTree(tree); 
-  outfilename = dir_out+Form("output_%d_sel",i_split);
+  outfilename = dir_out+Form("output_%d_sel",num);
   TFile *fileNew = TFile::Open(Form("%s.root",outfilename.Data()),"recreate");
   TTree *treeNew = new TTree ("HTauTauTreeSelections","HTauTauTreeSelections");
 
