@@ -144,20 +144,17 @@ The MVA info is then added to the SKIM tree with:
 
 ## About this branch
 
-This branch is  meant to be in synch with the state of the analysis at Moriond 2016.
-The extra codes with respect to the master are used to keep track of the events passing the selections used in the HH->bbtautau analysis (config/analysis_*Tau.cut, #2016# lines).
-Usage for large amount of input files (FIXME):
+
+The extra codes with respect to the master branch are used to keep track of the events passing the selections used in the HH->bbtautau analysis.
+
+Usage for skimmed ntuples: 
 ```
-# split the <input>.txt file list in smaller files <file>_0000, <file>_0001 ...
-split -a 4 -l 100 -d <input>.txt <file>
-# produce hadd .root files from each file list
-./scripts/haddNtuples.sh
-# skimmer
-./scripts/submit_skims.sh
-# produce .root files containing the information for each selection
+cmsenv
 root 
 .x selEventsAll.cxx
 .q
-# hadd the outputs to total_sel.root
 ./scripts/haddFinal.sh
+./makeSelectionsTxt.py
 ```
+
+
