@@ -8,7 +8,8 @@ from array import *
 DIR = '/data_CMS/cms/amendola/TestSelections/TT_background/'
 
 #CATEGORIES = ['fullyHad', 'fullyLep', 'semiLep']
-CATEGORIES = ['fullyHad']
+#CATEGORIES = ['fullyHad']
+CATEGORIES = ['fullyLep','semiLep']
 pairType = ['tautau','mutau','etau']
 base = ['1b1jMcut','2b0jMcut']
 region = ['SR','SStight']
@@ -79,7 +80,7 @@ for cat in CATEGORIES:
                if selection[x] == 1:
                     doWrite = 1
           if doWrite == 1:
-               print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+             #  print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
                fOut.write(EventNumber+'\t'+RunNumber+'\t'+lumi+'\t')
                for x in selection:
                     string = str(selection[x])
@@ -88,29 +89,25 @@ for cat in CATEGORIES:
      fIn.Close()
      fOut.close()
 
-toSort = open(DIR+cat+"/"+cat+"_SelectedEvents_unsorted.txt","r")
+     toSort = open(DIR+cat+"/"+cat+"_SelectedEvents_unsorted.txt","r")
 
-all_lines = toSort.readlines()
+     all_lines = toSort.readlines()
+     
+     head = [line for line in all_lines if line.startswith("E")]
+     print head
+     some_lines = [line for line in all_lines if not line.startswith("E")]
+     def get_nEvent(line):
+          numbers = [int(s) for s in line.split() if s.isdigit()]
+          event = numbers[0]
+          return int(event)     
+     some_lines = sorted(some_lines, key=get_nEvent)
+     for line in head:
+          fOutSort.write(line)
+     for line in some_lines:
+          #print line
+          fOutSort.write(line)
 
-head = [line for line in all_lines if line.startswith("E")]
-print head
-some_lines = [line for line in all_lines if not line.startswith("E")]
-def get_nEvent(line):
-     numbers = [int(s) for s in line.split() if s.isdigit()]
-     event = numbers[0]
-     return int(event)     
-some_lines = sorted(some_lines, key=get_nEvent)
-for line in head:
-     fOutSort.write(line)
-for line in some_lines:
-     print line
-     fOutSort.write(line)
-
-
-
-
-
-toSort.close()
-fOutSort.close()
+     toSort.close()
+     fOutSort.close()
 
 
