@@ -17,8 +17,8 @@ void selEventsAll(){
   ifstream filelist;
   string line;
   string flag = "output_";
-  //  filelist.open("/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_semiLep/goodfiles.txt", ios::in);
-  filelist.open("/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyLep/goodfiles.txt", ios::in);
+  //   filelist.open("/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_semiLep/goodfiles.txt", ios::in);
+    filelist.open("/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyLep/goodfiles.txt", ios::in);
   int num = 0;
   string num_string;
   //    int i  = 0;
@@ -28,13 +28,15 @@ void selEventsAll(){
       while (std::getline(filelist,line))
 	{
 	  //i++;
-	  //	    cout<<" line "<< i<<endl;
-	  num_string = mid_num_str(line);
-	  //cout<<num_string<<endl;
-	  num = atoi(num_string.c_str()); 
-	  //cout<<num<<endl;
-	  
-	  gROOT->ProcessLine(Form("selEvents(%d)",num));
+	  if(line.size()>2){
+	    //	    cout<<" line "<< i<<endl;
+	    num_string = mid_num_str(line);
+	    //cout<<num_string<<endl;
+	    num = atoi(num_string.c_str()); 
+	    //cout<<num<<endl;
+	    
+	    gROOT->ProcessLine(Form("selEvents(%d)",num));
+	  }
 	}  
       filelist.close();
     }

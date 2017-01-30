@@ -20,10 +20,10 @@ void selEvents(int num){
 
   //  TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_semiLep/";
   //TString dir_out="/data_CMS/cms/amendola/TestSelections/TT_background/semiLep/";
-
-  TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyLep/";
-  TString dir_out="/data_CMS/cms/amendola/TestSelections/TT_background/fullyLep/";
-
+  
+    TString dir_in="/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_10Gen/SKIM_TT_fullyLep/";
+   TString dir_out="/data_CMS/cms/amendola/TestSelections/TT_background/fullyLep/";
+  
   TString filename;    
   TString outfilename;    
 
