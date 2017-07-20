@@ -1,0 +1,3 @@
+/data_CMS/cms/amendola/LLRHTauTauNtuples/HiggsTauTauOutput_ggRadionToHHTo2b2Tau_500_-1Events_0Skipped/HTauTauAnalysis_0.root
+/data_CMS/cms/amendola/LLRHTauTauNtuples/HiggsTauTauOutput_ggRadionToHHTo2b2Tau_500_-1Events_0Skipped/HTauTauAnalysis_1.root
+/data_CMS/cms/amendola/LLRHTauTauNtuples/HiggsTauTauOutput_ggRadionToHHTo2b2Tau_500_-1Events_0Skipped/HTauTauAnalysis_2.root

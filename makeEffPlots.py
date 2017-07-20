@@ -1,6 +1,17 @@
+#!/usr/bin/python 
 from ROOT import *
 from array import *
 from math import fabs,sqrt
+
+
+DIR= '/data_CMS/cms/amendola/SkimmedNtuples/skim_HHTo2b2Tau_M500_btomu/'
+
+FILEIN = 'output_0.root'
+FILEOUT = 'effPlots500btomu.root'
+
+FILEIN = DIR+FILEIN
+FILEOUT = DIR+FILEOUT
+
 
 class PlotSet:
     def __init__(self, name):
@@ -134,8 +145,22 @@ Plots = PlotSet("Plots")
 Plots.addPlot('Et_bjet1',15,0,300)
 Plots.addPlot('Et_bjet2',15,0,300)
 Plots.addPlot('Et_bjet',15,0,300)
+Plots.addPlot('Et_bjet_nomuon',15,0,300)
+Plots.addPlot('Et_bjet_nomuon_noBoosted1',15,0,300)
+Plots.addPlot('Et_bjet_nomuon_noBoosted1d5',15,0,300)
+Plots.addPlot('Et_bjet_nomuon_noBoosted1d5_notau',15,0,300)
 Plots.addPlot('Et_bjet_Dr05',15,0,300)
+Plots.addPlot('Et_bjet_Dr05_nomuon',15,0,300)
+Plots.addPlot('Et_bjet_Dr05_nomuon_noBoosted1',15,0,300)
+Plots.addPlot('Et_bjet_Dr05_nomuon_noBoosted1d5',15,0,300)
+Plots.addPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau05',15,0,300)
+Plots.addPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau1',15,0,300)
 
+Plots.addPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau05',15,0,300)
+Plots.addPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau1',15,0,300)
+
+
+Plots.addPlot('Et_bjet_btomuon',15,0,300)
 
 
 Plots.addPlot('Et_bjet_cut1',15,0,300)
@@ -171,10 +196,11 @@ Plots.addPlot('MergedJets_Hpt',15,0,500)
 
 
 #### 
-fIn   = TFile.Open('skim_stage2_TauTauPt20_250GeV/output.root')
+fIn   = TFile.Open(FILEIN)
+if not fIn.IsZombie(): print ('File '+FILEIN+' opened')
 tIn   = fIn.Get('HTauTauTree')
 nEvt  = tIn.GetEntries()
-optXXplots = Plots
+
 
 seeds = 10
 
@@ -199,10 +225,42 @@ for ev in range(0, nEvt):
     PtTau2 = tIn.dau2_pt
     ditau_deltaR =  tIn.ditau_deltaR
     tauH_pt = tIn.tauH_pt
+    DeltaRmin_stage2jet_bjet1=tIn.DeltaRmin_stage2jet_bjet1
+    DeltaRmin_stage2jet_bjet2=tIn.DeltaRmin_stage2jet_bjet2
+    DeltaRmin_stage2muon_bjet1=tIn.DeltaRmin_stage2muon_bjet1
+    DeltaRmin_stage2muon_bjet2=tIn.DeltaRmin_stage2muon_bjet2
+    deltaMin_b1tau = tIn.b1tau_deltaRmin
+    deltaMin_b2tau = tIn.b2tau_deltaRmin
+    deltaMin_b1gentau = tIn.b1gentau_deltaRmin
+    deltaMin_b2gentau = tIn.b2gentau_deltaRmin
+    deltaMin_b1tau = tIn.b1tau_deltaRmin
+    deltaMin_b2tau = tIn.b2tau_deltaRmin
+    genmuon1_Pt = tIn.genmuon1_Pt
+    genmuon2_Pt = tIn.genmuon2_Pt
+    Et_L1muon1 = tIn.stage2_muon1Et
+    Et_L1muon2 = tIn.stage2_muon2Et
     
     #conditions
-    passes1      = tIn.DeltaRmin_stage2jet_bjet1 < 1
-    passes2      = tIn.DeltaRmin_stage2jet_bjet2 < 1
+    passes1      = DeltaRmin_stage2jet_bjet1 < 1
+    passes2      = DeltaRmin_stage2jet_bjet2 < 1
+    passes1Delta05      = DeltaRmin_stage2jet_bjet1 < 0.5
+    passes2Delta05      = DeltaRmin_stage2jet_bjet2 < 0.5
+    passes1Delta05to1   = DeltaRmin_stage2jet_bjet1 > 0.5 and passes1
+    passes2Delta05to1   = DeltaRmin_stage2jet_bjet2 > 0.5 and passes2
+    jetBoosted1 = dib_deltaR<1
+    jetBoosted1d5 = dib_deltaR<1.5
+
+    B1isGenTau05 = deltaMin_b1gentau < 0.5
+    B2isGenTau05 = deltaMin_b2gentau < 0.5
+    B1isGenTau1 = deltaMin_b1gentau < 1
+    B2isGenTau1 = deltaMin_b2gentau < 1
+
+    B1isTau05 = deltaMin_b1tau < 0.5
+    B2isTau05 = deltaMin_b2tau < 0.5
+    B1isTau1 = deltaMin_b1tau < 1
+    B2isTau1 = deltaMin_b2tau < 1
+
+
     isJetMerged =  tIn.Bjet2matchesStage2jet1==1
 
     cut1_jet1 = tIn.stage2_jet1Et>36
@@ -223,7 +281,12 @@ for ev in range(0, nEvt):
     ISO1 =tIn.dau1_MVAiso >=3
     ISO2 =tIn.dau2_MVAiso >=3
     PassIsOS =tIn.isOS==1   
-    
+
+    isMuon1             = DeltaRmin_stage2muon_bjet1 < 0.5 and DeltaRmin_stage2muon_bjet1 > 0. and Et_L1muon1> 0.
+    isMuon2             = DeltaRmin_stage2muon_bjet2 < 0.5 and DeltaRmin_stage2muon_bjet2 > 0. and Et_L1muon2> 0.
+
+    b1tomu = tIn.bjet1toMuon
+    b2tomu = tIn.bjet2toMuon
     isTauMerged =  tIn.Lepton2matchesStage2tau1==1
     TauTau40 = PtTau1>0 and PtTau2>0
     isL1tau1ISO = tIn.stage2_tau1Iso ==1
@@ -231,7 +294,7 @@ for ev in range(0, nEvt):
     L1seedEtaTau2 = fabs(tIn.stage2_tau2Eta) <2.1
     isL1tau2ISO = tIn.stage2_tau2Iso ==1 
     areL1tausISO = isL1tau1ISO and isL1tau2ISO  
-#FIXME fai na lista se no ci vogliono 10 anni
+    #FIXME fai na lista se no ci vogliono 10 anni
     L1seed1 = L1seedEtaTau1 and L1seedEtaTau2 and  areL1tausISO and (tIn.stage2_tau1Et > 28) and (tIn.stage2_tau2Et > 28)
     L1seed2 = L1seedEtaTau1 and L1seedEtaTau2 and  areL1tausISO and (tIn.stage2_tau1Et > 30) and (tIn.stage2_tau2Et > 30)
     L1seed3 = L1seedEtaTau1 and L1seedEtaTau2 and  areL1tausISO and (tIn.stage2_tau1Et > 32) and (tIn.stage2_tau2Et > 32)
@@ -244,98 +307,174 @@ for ev in range(0, nEvt):
     L1seedOR = L1seed1 or L1seed2 or L1seed3 or L1seed4 or L1seed5 or L1seed6 or L1seed7 or L1seed8 or L1seed9    
 
     
-
+    ## DeltaR<1
     #fill plots
-    optXXplots.getPlot('Et_bjet1',False).Fill(Et_bjet1)
-    if (passes1): optXXplots.getPlot('Et_bjet1',True).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet2',False).Fill(Et_bjet2)
-    if (passes2): optXXplots.getPlot('Et_bjet2',True).Fill(Et_bjet2)
-    
-    optXXplots.getPlot('Et_bjet_Dr05',False).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet_Dr05',False).Fill(Et_bjet2)
-    if (tIn.DeltaRmin_stage2jet_bjet1 < 0.5): optXXplots.getPlot('Et_bjet_Dr05',True).Fill(Et_bjet1)
-    if (tIn.DeltaRmin_stage2jet_bjet2 < 0.5): optXXplots.getPlot('Et_bjet_Dr05',True).Fill(Et_bjet2)
+    Plots.getPlot('Et_bjet1',False).Fill(Et_bjet1)
+    if (passes1): Plots.getPlot('Et_bjet1',True).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet2',False).Fill(Et_bjet2)
+    if (passes2): Plots.getPlot('Et_bjet2',True).Fill(Et_bjet2)
 
-    optXXplots.getPlot('Et_bjet',False).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet',False).Fill(Et_bjet2)
-    if (passes1): optXXplots.getPlot('Et_bjet',True).Fill(Et_bjet1)
-    if (passes2): optXXplots.getPlot('Et_bjet',True).Fill(Et_bjet2)
+    Plots.getPlot('Et_bjet',False).Fill(Et_bjet1)
+    if (passes1): Plots.getPlot('Et_bjet',True).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet',False).Fill(Et_bjet2)
+    if (passes2): Plots.getPlot('Et_bjet',True).Fill(Et_bjet2)
 
-    
+   
+    if not (isMuon1): Plots.getPlot('Et_bjet_nomuon',False).Fill(Et_bjet1)
+    if not (isMuon2): Plots.getPlot('Et_bjet_nomuon',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1): Plots.getPlot('Et_bjet_nomuon',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2): Plots.getPlot('Et_bjet_nomuon',True).Fill(Et_bjet2)
 
-    optXXplots.getPlot('Pt_bjet1',False).Fill(Pt_bjet1)
-    if (passes1): optXXplots.getPlot('Pt_bjet1',True).Fill(Pt_bjet1)
-    optXXplots.getPlot('Pt_bjet2',False).Fill(Pt_bjet2)
-    if (passes2): optXXplots.getPlot('Pt_bjet2',True).Fill(Pt_bjet2)
+    if not (isMuon1) and not (jetBoosted1): Plots.getPlot('Et_bjet_nomuon_noBoosted1',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1): Plots.getPlot('Et_bjet_nomuon_noBoosted1',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1) and not (jetBoosted1): Plots.getPlot('Et_bjet_nomuon_noBoosted1',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2) and not (jetBoosted1): Plots.getPlot('Et_bjet_nomuon_noBoosted1',True).Fill(Et_bjet2)
+
+    if not (isMuon1) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5',True).Fill(Et_bjet2)
     
-    optXXplots.getPlot('Pt_bjet',False).Fill(Pt_bjet1)
-    optXXplots.getPlot('Pt_bjet',False).Fill(Pt_bjet2)
-    if (passes1): optXXplots.getPlot('Pt_bjet',True).Fill(Pt_bjet1)
-    if (passes2): optXXplots.getPlot('Pt_bjet',True).Fill(Pt_bjet2)
+    if not (isMuon1) and not (jetBoosted1d5) and not (B1isTau05): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5_notau',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1d5) and not (B2isTau05): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5_notau',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1) and not (jetBoosted1d5) and not (B1isTau05): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5_notau',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2) and not (jetBoosted1d5) and not (B2isTau05): Plots.getPlot('Et_bjet_nomuon_noBoosted1d5_notau',True).Fill(Et_bjet2)
+
+
+    Plots.getPlot('Pt_bjet1',False).Fill(Pt_bjet1)
+    if (passes1): Plots.getPlot('Pt_bjet1',True).Fill(Pt_bjet1)
+    Plots.getPlot('Pt_bjet2',False).Fill(Pt_bjet2)
+    if (passes2): Plots.getPlot('Pt_bjet2',True).Fill(Pt_bjet2)
+    
+    Plots.getPlot('Pt_bjet',False).Fill(Pt_bjet1)
+    Plots.getPlot('Pt_bjet',False).Fill(Pt_bjet2)
+    if (passes1): Plots.getPlot('Pt_bjet',True).Fill(Pt_bjet1)
+    if (passes2): Plots.getPlot('Pt_bjet',True).Fill(Pt_bjet2)
 
     
    
-    optXXplots.getPlot('Et_bjet_cut1',False).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet_cut1',False).Fill(Et_bjet2)
-    if (passes1 and cut1_jet1): optXXplots.getPlot('Et_bjet_cut1',True).Fill(Et_bjet1)
-    if (passes2 and isJetMerged and cut1_jet1): optXXplots.getPlot('Et_bjet_cut1',True).Fill(Et_bjet2)
-    if (passes2 and cut1_jet2) and not (isJetMerged): optXXplots.getPlot('Et_bjet_cut1',True).Fill(Et_bjet2)
+    Plots.getPlot('Et_bjet_cut1',False).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet_cut1',False).Fill(Et_bjet2)
+    if (passes1 and cut1_jet1): Plots.getPlot('Et_bjet_cut1',True).Fill(Et_bjet1)
+    if (passes2 and isJetMerged and cut1_jet1): Plots.getPlot('Et_bjet_cut1',True).Fill(Et_bjet2)
+    if (passes2 and cut1_jet2) and not (isJetMerged): Plots.getPlot('Et_bjet_cut1',True).Fill(Et_bjet2)
     
-    optXXplots.getPlot('Et_bjet_cut2',False).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet_cut2',False).Fill(Et_bjet2)
-    if (passes1 and cut2_jet1): optXXplots.getPlot('Et_bjet_cut2',True).Fill(Et_bjet1)
-    if (passes2 and isJetMerged and cut2_jet1): optXXplots.getPlot('Et_bjet_cut2',True).Fill(Et_bjet2)
-    if (passes2 and cut2_jet2) and not (isJetMerged): optXXplots.getPlot('Et_bjet_cut2',True).Fill(Et_bjet2)
+    Plots.getPlot('Et_bjet_cut2',False).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet_cut2',False).Fill(Et_bjet2)
+    if (passes1 and cut2_jet1): Plots.getPlot('Et_bjet_cut2',True).Fill(Et_bjet1)
+    if (passes2 and isJetMerged and cut2_jet1): Plots.getPlot('Et_bjet_cut2',True).Fill(Et_bjet2)
+    if (passes2 and cut2_jet2) and not (isJetMerged): Plots.getPlot('Et_bjet_cut2',True).Fill(Et_bjet2)
 
-    optXXplots.getPlot('Et_bjet_cut3',False).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet_cut3',False).Fill(Et_bjet2)
-    if (passes1 and cut3_jet1): optXXplots.getPlot('Et_bjet_cut3',True).Fill(Et_bjet1)
-    if (passes2 and isJetMerged and cut3_jet1): optXXplots.getPlot('Et_bjet_cut3',True).Fill(Et_bjet2)
-    if (passes2 and cut3_jet2) and not (isJetMerged): optXXplots.getPlot('Et_bjet_cut3',True).Fill(Et_bjet2)
-
-
-    optXXplots.getPlot('Et_bjet_cut4',False).Fill(Et_bjet1)
-    optXXplots.getPlot('Et_bjet_cut4',False).Fill(Et_bjet2)
-    if (passes1 and cut4_jet1): optXXplots.getPlot('Et_bjet_cut4',True).Fill(Et_bjet1)
-    if (passes2 and isJetMerged and cut4_jet1): optXXplots.getPlot('Et_bjet_cut4',True).Fill(Et_bjet2)
-    if (passes2 and cut4_jet2) and not (isJetMerged): optXXplots.getPlot('Et_bjet_cut4',True).Fill(Et_bjet2)
-
-    
-    
+    Plots.getPlot('Et_bjet_cut3',False).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet_cut3',False).Fill(Et_bjet2)
+    if (passes1 and cut3_jet1): Plots.getPlot('Et_bjet_cut3',True).Fill(Et_bjet1)
+    if (passes2 and isJetMerged and cut3_jet1): Plots.getPlot('Et_bjet_cut3',True).Fill(Et_bjet2)
+    if (passes2 and cut3_jet2) and not (isJetMerged): Plots.getPlot('Et_bjet_cut3',True).Fill(Et_bjet2)
 
 
-    optXXplots.getPlot('MergedJets_dR',False).Fill(dib_deltaR)
-    if (isJetMerged): optXXplots.getPlot('MergedJets_dR',True).Fill(dib_deltaR)
-
-    optXXplots.getPlot('MergedJets_Hpt',False).Fill(bH_pt)
-    if (isJetMerged): optXXplots.getPlot('MergedJets_Hpt',True).Fill(bH_pt)
-
+    Plots.getPlot('Et_bjet_cut4',False).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet_cut4',False).Fill(Et_bjet2)
+    if (passes1 and cut4_jet1): Plots.getPlot('Et_bjet_cut4',True).Fill(Et_bjet1)
+    if (passes2 and isJetMerged and cut4_jet1): Plots.getPlot('Et_bjet_cut4',True).Fill(Et_bjet2)
+    if (passes2 and cut4_jet2) and not (isJetMerged): Plots.getPlot('Et_bjet_cut4',True).Fill(Et_bjet2)
 
     
+    
 
-    if (isTau1 and PassIsOS): optXXplots.getPlot('PtTau1',False).Fill(PtTau1)
-    if (passes1tau and isTau1 and PassIsOS): optXXplots.getPlot('PtTau1',True).Fill(PtTau1)
-    if (isTau2 and PassIsOS): optXXplots.getPlot('PtTau2',False).Fill(PtTau2)
-    if (passes2tau and isTau2 and PassIsOS): optXXplots.getPlot('PtTau2',True).Fill(PtTau2)
+
+    Plots.getPlot('MergedJets_dR',False).Fill(dib_deltaR)
+    if (isJetMerged): Plots.getPlot('MergedJets_dR',True).Fill(dib_deltaR)
+
+    Plots.getPlot('MergedJets_Hpt',False).Fill(bH_pt)
+    if (isJetMerged): Plots.getPlot('MergedJets_Hpt',True).Fill(bH_pt)
+
+
+    
+
+    if (isTau1 and PassIsOS): Plots.getPlot('PtTau1',False).Fill(PtTau1)
+    if (passes1tau and isTau1 and PassIsOS): Plots.getPlot('PtTau1',True).Fill(PtTau1)
+    if (isTau2 and PassIsOS): Plots.getPlot('PtTau2',False).Fill(PtTau2)
+    if (passes2tau and isTau2 and PassIsOS): Plots.getPlot('PtTau2',True).Fill(PtTau2)
    
-    if (isTau1 and PassIsOS): optXXplots.getPlot('PtTau',False).Fill(PtTau1)
-    if (isTau2 and PassIsOS): optXXplots.getPlot('PtTau',False).Fill(PtTau2)
-    if (passes1tau and isTau1 and PassIsOS): optXXplots.getPlot('PtTau',True).Fill(PtTau1)
-    if (passes2tau and isTau2 and PassIsOS): optXXplots.getPlot('PtTau',True).Fill(PtTau2)
+    if (isTau1 and PassIsOS): Plots.getPlot('PtTau',False).Fill(PtTau1)
+    if (isTau2 and PassIsOS): Plots.getPlot('PtTau',False).Fill(PtTau2)
+    if (passes1tau and isTau1 and PassIsOS): Plots.getPlot('PtTau',True).Fill(PtTau1)
+    if (passes2tau and isTau2 and PassIsOS): Plots.getPlot('PtTau',True).Fill(PtTau2)
 
 
-    if (isTau1 and PassIsOS and passes1tau and passes2tau): optXXplots.getPlot('L1eff_DoubleIsoTau28er_PtTau',False).Fill(PtTau1,PtTau2)
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seed1): optXXplots.getPlot('L1eff_DoubleIsoTau28er_PtTau',True).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau and passes2tau): Plots.getPlot('L1eff_DoubleIsoTau28er_PtTau',False).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seed1): Plots.getPlot('L1eff_DoubleIsoTau28er_PtTau',True).Fill(PtTau1,PtTau2)
 
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau): optXXplots.getPlot('L1eff_DoubleIsoTau36er_PtTau',False).Fill(PtTau1,PtTau2)
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seed7): optXXplots.getPlot('L1eff_DoubleIsoTau36er_PtTau',True).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau): Plots.getPlot('L1eff_DoubleIsoTau36er_PtTau',False).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seed7): Plots.getPlot('L1eff_DoubleIsoTau36er_PtTau',True).Fill(PtTau1,PtTau2)
 
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau): optXXplots.getPlot('L1eff_DoubleTau50er_PtTau',False).Fill(PtTau1,PtTau2)
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seed9): optXXplots.getPlot('L1eff_DoubleTau50er_PtTau',True).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau): Plots.getPlot('L1eff_DoubleTau50er_PtTau',False).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seed9): Plots.getPlot('L1eff_DoubleTau50er_PtTau',True).Fill(PtTau1,PtTau2)
 
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau): optXXplots.getPlot('L1eff_OR_PtTau',False).Fill(PtTau1,PtTau2)
-    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seedOR): optXXplots.getPlot('L1eff_OR_PtTau',True).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau): Plots.getPlot('L1eff_OR_PtTau',False).Fill(PtTau1,PtTau2)
+    if (isTau1 and PassIsOS and passes1tau  and passes2tau and L1seedOR): Plots.getPlot('L1eff_OR_PtTau',True).Fill(PtTau1,PtTau2)
     
+    ## DeltaR<0.5
+
+    Plots.getPlot('Et_bjet_Dr05',False).Fill(Et_bjet1)
+    Plots.getPlot('Et_bjet_Dr05',False).Fill(Et_bjet2)
+    if (passes1Delta05): Plots.getPlot('Et_bjet_Dr05',True).Fill(Et_bjet1)
+    if (passes2Delta05): Plots.getPlot('Et_bjet_Dr05',True).Fill(Et_bjet2)
+
+    if not (isMuon1): Plots.getPlot('Et_bjet_Dr05_nomuon',False).Fill(Et_bjet1)
+    if not (isMuon2): Plots.getPlot('Et_bjet_Dr05_nomuon',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1Delta05): Plots.getPlot('Et_bjet_Dr05_nomuon',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05): Plots.getPlot('Et_bjet_Dr05_nomuon',True).Fill(Et_bjet2)
+
+
+    if not (isMuon1) and not (jetBoosted1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1Delta05) and not (jetBoosted1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05) and not (jetBoosted1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1',True).Fill(Et_bjet2)
+
+    if not (isMuon1) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1Delta05) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05) and not (jetBoosted1d5): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5',True).Fill(Et_bjet2)
+
+    if (b1tomu): Plots.getPlot('Et_bjet_btomuon',False).Fill(Et_bjet1)
+    if (b2tomu): Plots.getPlot('Et_bjet_btomuon',False).Fill(Et_bjet2)
+    if (isMuon1) and (b1tomu): Plots.getPlot('Et_bjet_btomuon',True).Fill(Et_bjet1)
+    if (isMuon2) and (b2tomu): Plots.getPlot('Et_bjet_btomuon',True).Fill(Et_bjet2)
+
+
+
+    
+#tau dr1
+    if not (isMuon1) and not (jetBoosted1d5) and not (B1isTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau1',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1d5) and not (B2isTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau1',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1Delta05) and not (jetBoosted1d5) and not (B1isTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau1',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05) and not (jetBoosted1d5) and not (B2isTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau1',True).Fill(Et_bjet2)
+
+#tau dr05
+    if not (isMuon1)  and not (jetBoosted1d5) and not (B1isTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau05',False).Fill(Et_bjet1)
+    if not (isMuon2)  and not (jetBoosted1d5) and not (B2isTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau05',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1Delta05) and not (jetBoosted1d5) and not (B1isTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau05',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05) and not (jetBoosted1d5) and not (B2isTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau05',True).Fill(Et_bjet2)
+
+#gentau dr1
+    
+    if not (isMuon1) and not (jetBoosted1d5) and not (B1isGenTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau1',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1d5) and not (B2isGenTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau1',False).Fill(Et_bjet2)
+    if not (isMuon1) and (passes1Delta05) and not (jetBoosted1d5) and not (B1isGenTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau1',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05) and not (jetBoosted1d5) and not (B2isGenTau1): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau1',True).Fill(Et_bjet2)
+
+#gentau dr05
+    if not (isMuon1) and not (jetBoosted1d5) and not (B1isGenTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau05',False).Fill(Et_bjet1)
+    if not (isMuon2) and not (jetBoosted1d5) and not (B2isGenTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau05',False).Fill(Et_bjet2)
+
+    if not (isMuon1) and (passes1Delta05) and not (jetBoosted1d5) and not (B1isGenTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau05',True).Fill(Et_bjet1)
+    if not (isMuon2) and (passes2Delta05) and not (jetBoosted1d5) and not (B2isGenTau05): Plots.getPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau05',True).Fill(Et_bjet2)
+
+
+
+    ## 0.5<DeltaR<1
+    ##nothing
        
     ### overall L1 efficiency
     if (isTau1 and PassIsOS and TauTau40 and passes1tau  and passes2tau): L1tot+=1    
@@ -364,7 +503,21 @@ for seed in range(0,10):
 Plots.makeEffPlot('Et_bjet1',0,'E_{T} bjet1','Efficiency')
 Plots.makeEffPlot('Et_bjet2',0,'E_{T} bjet2','Efficiency')
 Plots.makeEffPlot('Et_bjet',1,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_nomuon',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_nomuon_noBoosted1',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_nomuon_noBoosted1d5',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_nomuon_noBoosted1d5_notau',0,'E_{T} bjet','Efficiency')
 Plots.makeEffPlot('Et_bjet_Dr05',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon_noBoosted1',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon_noBoosted1d5',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau1',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_notau05',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau1',0,'E_{T} bjet','Efficiency')
+Plots.makeEffPlot('Et_bjet_Dr05_nomuon_noBoosted1d5_nogentau05',0,'E_{T} bjet','Efficiency')
+
+Plots.makeEffPlot('Et_bjet_btomuon',0,'E_{T} bjet','Efficiency')
+
 Plots.makeEffPlot('Et_bjet_cut1',1,'E_{T} bjet','Efficiency')
 Plots.makeEffPlot('Et_bjet_cut2',1,'E_{T} bjet','Efficiency')
 Plots.makeEffPlot('Et_bjet_cut3',1,'E_{T} bjet','Efficiency')
@@ -399,9 +552,13 @@ Plots.getMgPlot('Et_bjet_cut4').SetMarkerColor(2)
 
 
 Plots.makeMultiGraph('Et_bjet_cuts','E_{T} bjet','Efficiency')
+fOut = TFile (FILEOUT, "recreate")
 
-fOut= TFile ("skim_stage2_TauTauPt20_250GeV/effPlots250.root", "recreate")
 Plots.saveToFile(fOut)
+if not fOut.IsZombie(): print ('Plots saved in '+FILEOUT)
+
+fOut.Close()
+
 
 
 

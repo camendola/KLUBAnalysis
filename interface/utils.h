@@ -43,6 +43,8 @@ struct sample
   float eff ;
 } ;
 
+
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 void addTo (vector<float> & total, vector<float> & addition) ;

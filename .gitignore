@@ -13,3 +13,7 @@ combiner/cards_*
 SKIM_*/
 weights/data/
 interface/exceptions/
+skim_*/
+*.root
+*.png
+*.*~

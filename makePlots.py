@@ -2,9 +2,9 @@
 from ROOT import *
 from array import *
 
-DIR= '/data_CMS/cms/amendola/SkimmedNtuples/skim_stage2_GluGluToRadionToHHTo2B2Tau_250GeV/'
-FILEIN = 'total.root'
-FILEOUT = 'Plots250.root'
+DIR= '/data_CMS/cms/amendola/SkimmedNtuples/skim_HHTo2b2Tau_M500_btomu/'
+FILEIN = 'output_0.root'
+FILEOUT = 'Plots500_btomu.root'
 
 FILEIN = DIR+FILEIN
 FILEOUT = DIR+FILEOUT
@@ -80,7 +80,7 @@ class PlotSet:
         plot2d = TH2F ('plot_'+name+'_'+self.name, 'plot_'+name+'_'+self.name, xbins, xmin, xmax, ybins, ymin,ymax)
         plot2d.GetXaxis().SetTitle(xlabel)
         plot2d.GetYaxis().SetTitle(ylabel)
-        plot2d.Draw("colz")
+        #plot2d.Draw("colz")
         self.plots[name] = plot2d
 
 Plots = PlotSet("Plots")
@@ -88,12 +88,10 @@ Plots = PlotSet("Plots")
 
 Plots.addPlot('Unmerged_EtResJets',15,-1,1,'(L1jet E_{T}-offline bjet E_{T})/offline bjet E_{T}','Events')
 Plots.addPlot('Merged_EtResJets',5,-1,1,'(L1jet E_{T}-offline bjets sumE_{T})/offline bjets sumE_{T}','Events')
-#Plots.addPlot('EtResTaus',15,-1,1,'(L1jet E_{T}-offline tau E_{T})/offline tau E_{T}','Events')
 Plots.addPlot('Unmerged_EtResJets_norm',15,-1,1,'(L1jet E_{T}-offline bjet E_{T})/offline bjet E_{T}','a.u.')
 Plots.addPlot('Unmerged_EtResJets_norm_05',15,-1,1,'(L1jet E_{T}-offline bjet E_{T})/offline bjet E_{T}','a.u.')
 Plots.addPlot('Unmerged_EtResJets_norm_05to1',15,-1,1,'(L1jet E_{T}-offline bjet E_{T})/offline bjet E_{T}','a.u.')
 Plots.addPlot('Merged_EtResJets_norm',5,-1,1,'(L1jet E_{T}-offline bjets sumE_{T})/offline bjets sumE_{T}','a.u.')
-#Plots.addPlot('EtResTaus_norm',15,-1,1,'(L1jet E_{T}-offline tau E_{T})/offline tau E_{T}','a.u.')
 Plots.addPlot('dib_Dr',20,0,5,'#Delta R(bjet1,bjet2)','Events')
 Plots.addPlot('EtaJets05to1',20,-3,3,'#eta L1jet','Events')
 Plots.addPlot('EtaJets05',20,-3,3,'#eta L1jet','Events')
@@ -104,11 +102,24 @@ Plots.addPlot('DeltaRminTaus',30,0,2,'#Delta R(stage2#tau,#tau)','Events')
 Plots.addPlot('PtTau1',30,0,200,'P_{T} #tau1','Events')
 Plots.addPlot('PtTau2',30,0,200,'P_{T} #tau2','Events')
 Plots.addPlot('PtHbb',30,0,500,'P_{T} Hbb','Events')
-Plots.add2Dplot('EtVSdeltaR_muons05',20,0,2,50,0,200,'#Delta R(stage2muons,bjet)','E_{T} L1 muon')
-Plots.add2Dplot('EtVSdeltaR_muons05to1',20,0,2,50,0,200,'#Delta R(stage2muons,bjet)','E_{T} L1 muon')
+Plots.add2Dplot('EtVSdeltaR_muons05',40,0,4,40,0,40,'#Delta R(stage2muons,bjet)','E_{T} L1 muon')
+Plots.add2Dplot('EtVSdeltaR_muons05to1',40,0,4,40,0,40,'#Delta R(stage2muons,bjet)','E_{T} L1 muon')
+Plots.add2Dplot('UnmergedEt_stage2jetVSbjet05',50,0,300,50,0,300,'offline bjet E_{T}','L1jet E_{T}')
 Plots.add2Dplot('UnmergedEt_stage2jetVSbjet',50,0,300,50,0,300,'offline bjet E_{T}','L1jet E_{T}')
 Plots.add2Dplot('UnmergedEt_stage2jetVSbjet_cleaned',50,0,300,50,0,300,'offline bjet E_{T}','L1jet E_{T}')
 Plots.add2Dplot('MergedEt_stage2jetVSbjet',50,0,300,50,0,300,'offline bjets sumE_{T}','L1jet E_{T}')
+Plots.add2Dplot('Mass_2D',50,0,800,50,0,800,'m_{jj} (L1) [GeV]','m_{jj} (offline) [GeV]')
+Plots.addPlot('Mass',50,-1,1,'(m_{jj, L1} - m_{jj, offline})/m_{jj, offline}','Events/0.04 GeV')
+Plots.addPlot('EtaJet1_off',50,-5,5,'#eta_{bjet1}','Events/0.2 GeV')
+Plots.addPlot('EtaJet2_off',50,-5,5,'#eta_{bjet2}','Events/0.2 GeV')
+
+#bbtautau seed 
+Plots.addPlot('genmuon_Pt',80,0,80,'p_{T}^{gen#mu}','Events/2 GeV')
+Plots.addPlot('L1muon_Pt',40,0,80,'E_{T}^{L1#mu}','Events/2 GeV')
+Plots.addPlot('L1muon_genmuon_Pt',25,0,5,'E_{T}^{L1#mu}/p_{T}^{gen#mu}','Events/2 GeV')
+Plots.add2Dplot('L1muon_genmuon_Pt_2D',40,0,40,40,0,40,'E_{T}^{L1#mu}','p_{T}^{gen#mu}')
+Plots.addPlot('Ptcut_genmuon_btomuon',80,0,80,'p_{T}^{gen#mu}','Events/2 GeV')
+
 #### 
 fIn   = TFile.Open(FILEIN)
 if not fIn.IsZombie(): print ('File '+FILEIN+' opened')
@@ -137,6 +148,8 @@ for ev in range(0, nEvt):
     Eta_L1jet2 = tIn.stage2_jet2Eta
     Pt_bjet1 = tIn.bjet1_pt   
     Pt_bjet2 = tIn.bjet2_pt
+    Eta_bjet1 = tIn.bjet1_eta   
+    Eta_bjet2 = tIn.bjet2_eta
     EtJetRes1 = (tIn.stage2_jet1Et - tIn.bjet1_et)/tIn.bjet1_et
     EtJetRes2 = (tIn.stage2_jet2Et - tIn.bjet2_et)/tIn.bjet2_et
     EtJetResM = (tIn.stage2_jet1Et - tIn.bjet2_et- tIn.bjet1_et)/(tIn.bjet2_et+tIn.bjet1_et)
@@ -153,6 +166,30 @@ for ev in range(0, nEvt):
     DeltaRmin_stage2muon_bjet1=tIn.DeltaRmin_stage2muon_bjet1
     DeltaRmin_stage2muon_bjet2=tIn.DeltaRmin_stage2muon_bjet2
     dib_deltaR =  tIn.dib_deltaR
+    deltaMin_b1tau = tIn.b1tau_deltaRmin
+    deltaMin_b2tau = tIn.b2tau_deltaRmin
+
+    genmuon1_Pt = tIn.genmuon1_Pt
+    genmuon2_Pt = tIn.genmuon2_Pt
+    bjet1toMuon = tIn.bjet1toMuon
+    bjet2toMuon = tIn.bjet2toMuon
+    
+    L1jet1 = TLorentzVector()
+    L1jet1.SetPtEtaPhiM(
+        tIn.stage2_jet1Et,
+        tIn.stage2_jet1Eta,
+        tIn.stage2_jet1Phi,
+        0)
+    L1jet2 = TLorentzVector()
+    L1jet2.SetPtEtaPhiM(
+        tIn.stage2_jet2Et,
+        tIn.stage2_jet2Eta,
+        tIn.stage2_jet2Phi,
+        0)
+    L1jetPair = TLorentzVector()
+    L1jetPair = L1jet1 + L1jet2
+    m_jj_L1 = L1jetPair.M()
+    bH_mass = tIn.bH_mass
 
     #conditions   
     Etbjet1cut          = Et_bjet1>30
@@ -162,6 +199,8 @@ for ev in range(0, nEvt):
     isJetMerged         = tIn.Bjet2matchesStage2jet1==1
     passes1             = DeltaRmin_stage2jet_bjet1 < 1
     passes2             = DeltaRmin_stage2jet_bjet2 < 1
+    passes1Delta03      = DeltaRmin_stage2jet_bjet1 < 0.3
+    passes2Delta03      = DeltaRmin_stage2jet_bjet2 < 0.3
     passes1Delta05      = DeltaRmin_stage2jet_bjet1 < 0.5
     passes2Delta05      = DeltaRmin_stage2jet_bjet2 < 0.5
     passes1Delta05to1   = DeltaRmin_stage2jet_bjet1 > 0.5 and passes1
@@ -173,8 +212,12 @@ for ev in range(0, nEvt):
     ISO1                = tIn.dau1_MVAiso >=3
     ISO2                = tIn.dau2_MVAiso >=3
     PassIsOS            = tIn.isOS==1   
-    isMuon1             = DeltaRmin_stage2muon_bjet1 < 0.5
-    isMuon2             = DeltaRmin_stage2muon_bjet2 < 0.5
+    isMuon1             = DeltaRmin_stage2muon_bjet1 < 0.5 and DeltaRmin_stage2muon_bjet1 > 0. and Et_L1muon1 >0.
+    isMuon2             = DeltaRmin_stage2muon_bjet2 < 0.5 and DeltaRmin_stage2muon_bjet2 > 0. and Et_L1muon2 >0.
+    jetBoosted1 = dib_deltaR<1
+    jetBoosted1d5 = dib_deltaR<1.5
+    B1isTau = deltaMin_b1tau < 1
+    B2isTau = deltaMin_b2tau < 1
 
     if not (isJetMerged) and (passes1 and Etbjet1cut): Plots.getPlot('Unmerged_EtResJets').Fill(EtJetRes1)
     if not (isJetMerged) and (passes2 and Etbjet2cut): Plots.getPlot('Unmerged_EtResJets').Fill(EtJetRes2)
@@ -191,10 +234,8 @@ for ev in range(0, nEvt):
     if (passes1 or passes2): totEvents1 += 1
     if not (isJetMerged) and (passes1): Plots.getPlot('UnmergedEt_stage2jetVSbjet').Fill(Et_bjet1,Et_L1jet1)
     if not (isJetMerged) and (passes2): Plots.getPlot('UnmergedEt_stage2jetVSbjet').Fill(Et_bjet2,Et_L1jet2)
-    if not (isJetMerged) and (passes1) and not (isMuon1): Plots.getPlot('UnmergedEt_stage2jetVSbjet_cleaned').Fill(Et_bjet1,Et_L1jet1)
-    if not (isJetMerged) and (passes2) and not (isMuon2): Plots.getPlot('UnmergedEt_stage2jetVSbjet_cleaned').Fill(Et_bjet2,Et_L1jet2)
-
-
+    if not (isJetMerged) and (passes1) and not (isMuon1) and not (jetBoosted1d5) and not (B1isTau): Plots.getPlot('UnmergedEt_stage2jetVSbjet_cleaned').Fill(Et_bjet1,Et_L1jet1)
+    if not (isJetMerged) and (passes2) and not (isMuon2) and not (jetBoosted1d5) and not (B2isTau): Plots.getPlot('UnmergedEt_stage2jetVSbjet_cleaned').Fill(Et_bjet2,Et_L1jet2)
 
     ## DeltaR<0.5
     if not (isJetMerged) and (passes1Delta05): Plots.getPlot('Unmerged_EtResJets_norm_05').Fill(EtJetRes1)
@@ -207,7 +248,8 @@ for ev in range(0, nEvt):
     if not (isJetMerged) and (passes2Delta05): Plots.getPlot('EtaJets05').Fill(Eta_L1jet2)
     if not (isJetMerged) and (passes1Delta05): Plots.getPlot('EtVSdeltaR_muons05').Fill(DeltaRmin_stage2muon_bjet1,Et_L1muon1)
     if not (isJetMerged) and (passes2Delta05): Plots.getPlot('EtVSdeltaR_muons05').Fill(DeltaRmin_stage2muon_bjet2,Et_L1muon2)
-
+    if not (isJetMerged) and (passes1Delta05): Plots.getPlot('UnmergedEt_stage2jetVSbjet05').Fill(Et_bjet1,Et_L1jet1)
+    if not (isJetMerged) and (passes2Delta05): Plots.getPlot('UnmergedEt_stage2jetVSbjet05').Fill(Et_bjet2,Et_L1jet2)
     ## 0.5<DeltaR<1
     if not (isJetMerged) and (passes1Delta05to1): Plots.getPlot('Unmerged_EtResJets_norm_05to1').Fill(EtJetRes1)
     if not (isJetMerged) and (passes2Delta05to1): Plots.getPlot('Unmerged_EtResJets_norm_05to1').Fill(EtJetRes2)
@@ -220,6 +262,11 @@ for ev in range(0, nEvt):
     if not (isJetMerged) and (passes1Delta05to1): Plots.getPlot('EtVSdeltaR_muons05to1').Fill(DeltaRmin_stage2muon_bjet1,Et_L1muon1)
     if not (isJetMerged) and (passes2Delta05to1): Plots.getPlot('EtVSdeltaR_muons05to1').Fill(DeltaRmin_stage2muon_bjet2,Et_L1muon2)
     
+     ## DeltaR<0.3
+    if not (isJetMerged) and (passes1Delta03) and (passes2Delta03): Plots.getPlot('Mass_2D').Fill(m_jj_L1,bH_mass)
+    if not (isJetMerged) and (passes1Delta03) and (passes2Delta03): Plots.getPlot('Mass').Fill((m_jj_L1-bH_mass)/bH_mass)
+    if not (isJetMerged) and (passes1Delta03) and (passes2Delta03): Plots.getPlot('EtaJet1_off').Fill(Eta_bjet1)
+
 
     Plots.getPlot('dib_Dr').Fill(dib_deltaR)
     Plots.getPlot('PtHbb').Fill(bH_pt)
@@ -229,12 +276,34 @@ for ev in range(0, nEvt):
     Plots.getPlot('DeltaRminTaus').Fill(DeltaRmin_stage2tau_tau2)
     if(isTau1): Plots.getPlot('PtTau1').Fill(PtTau1)
     if(isTau1): Plots.getPlot('PtTau2').Fill(PtTau2) # pairType == 2
+
+    if(bjet1toMuon):
+        Plots.getPlot('genmuon_Pt').Fill(genmuon1_Pt)
+        if (isMuon1):
+            Plots.getPlot('L1muon_Pt').Fill(Et_L1muon1)
+            Plots.getPlot('L1muon_genmuon_Pt').Fill(Et_L1muon1/genmuon1_Pt)
+            Plots.getPlot('L1muon_genmuon_Pt_2D').Fill(Et_L1muon1,genmuon1_Pt)
+    
+    if(bjet2toMuon):
+        Plots.getPlot('genmuon_Pt').Fill(genmuon2_Pt)
+        if (isMuon2):
+            Plots.getPlot('L1muon_Pt').Fill(Et_L1muon2)
+            Plots.getPlot('L1muon_genmuon_Pt').Fill(Et_L1muon2/genmuon2_Pt)
+            Plots.getPlot('L1muon_genmuon_Pt_2D').Fill(Et_L1muon2,genmuon2_Pt)
+            if Et_L1muon2/genmuon2_Pt < 0:
+                print 'Et_L1muon2/genmuon2_Pt <0 '+str(Et_L1muon2)+str(genmuon2_Pt)
+genmuonBin = 0;
+for ii in range(1, Plots.getPlot('genmuon_Pt').GetNbinsX()+1):
+    genmuonBin = float(Plots.getPlot('genmuon_Pt').Integral(ii, Plots.getPlot('genmuon_Pt').GetNbinsX()+1))/(2*float(tIn.GetEntries()))
+    Plots.getPlot('Ptcut_genmuon_btomuon').SetBinContent(ii,genmuonBin)
+
+
     
 Plots.normPlot('Unmerged_EtResJets_norm',15)
 Plots.normPlot('Unmerged_EtResJets_norm_05',15)
 Plots.normPlot('Unmerged_EtResJets_norm_05to1',15)
 Plots.normPlot('Merged_EtResJets_norm',15)
-#Plots.normPlot('EtResTaus_norm')
+
 
 fIn.Close()
 
