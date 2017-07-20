@@ -142,3 +142,17 @@ The MVA info is then added to the SKIM tree with:
 ```
 ./bin/addTMVA.exe config/addTMVA.cfg 
 ```
+## About this branch
+
+
+Branch with implementation for overlap studies for HH 2016 combination. Up to date with legacy2016 code, offline studies codes form branch "old"
+
+Usage for skimmed ntuples:
+```
+cmsenv
+root
+.x selEventsAll.cxx
+.q
+./scripts/haddFinal.sh
+./makeSelectionsTxt.py
+```
