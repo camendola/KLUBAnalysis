@@ -309,7 +309,9 @@ struct smallTree
       m_lheht = 0;
 
       m_topReweight=-1;
-
+      m_passTrgBBres = false;
+      m_passTrgBBnonres = false;
+      m_passTrgGG = false;
       return 0 ;    
     }
 
@@ -599,8 +601,11 @@ struct smallTree
       //m_smallT->Branch ("TauTauKine", &m_mvaValueTauTau, "TauTauKine/F");
 
       m_smallT->Branch ("lheht", &m_lheht, "lheht/F");
-      m_smallT->Branch("topReweight",&m_topReweight,"topReweight/F");
-
+      m_smallT->Branch("topReweight",&m_topReweight,"topReweight/O");
+      m_smallT->Branch("passTrgBBres",&m_passTrgBBres,"passTrgBBres/O");
+      m_smallT->Branch("passTrgBBnonres",&m_passTrgBBnonres,"passTrgBBnonres/O");
+      m_smallT->Branch("passTrgGG",&m_passTrgGG,"passTrgGG/O");
+      
       return 0 ;
     }
 
@@ -918,7 +923,9 @@ struct smallTree
 
   Float_t m_lheht ;
   Float_t m_topReweight;
-  
+  Bool_t m_passTrgBBres;
+  Bool_t m_passTrgBBnonres;
+  Bool_t m_passTrgGG;  
 } ;
 
 #endif

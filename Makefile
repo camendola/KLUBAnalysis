@@ -12,3 +12,5 @@ exe:
 	$(MAKE) -C $(SRC) exe
 test:
 	$(MAKE) -C $(SRC) test
+comb:
+	c++ -lm -o selEvents selEvents.cc `root-config --glibs --cflags`  

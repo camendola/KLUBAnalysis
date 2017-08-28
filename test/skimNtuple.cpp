@@ -545,6 +545,9 @@ int main (int argc, char** argv)
   //I didn't store MuMu and I don't care for eleele
   vector<string> trigEleEle  =  (isMC ? gConfigParser->readStringListOption ("triggersMC::EleEle")  : gConfigParser->readStringListOption ("triggersData::EleEle")) ;
   vector<string> trigMuMu    =  (isMC ? gConfigParser->readStringListOption ("triggersMC::MuMu")  : gConfigParser->readStringListOption ("triggersData::MuMu")) ;
+  vector<string> trigBBnonres    =  (isMC ? gConfigParser->readStringListOption ("triggersMC::BBnonres")  : gConfigParser->readStringListOption ("triggersData::BBnonres")) ;
+  vector<string> trigBBres    =  (isMC ? gConfigParser->readStringListOption ("triggersMC::BBres")  : gConfigParser->readStringListOption ("triggersData::BBres")) ;
+  vector<string> trigGG    =  (isMC ? gConfigParser->readStringListOption ("triggersMC::GG")  : gConfigParser->readStringListOption ("triggersData::GG")) ;
 
   // bool applyTriggers = isMC ? false : true; // true if ask triggerbit + matching, false if doing reweight
   bool applyTriggers = isMC ? gConfigParser->readBoolOption ("parameters::applyTriggersMC") : true; // true if ask triggerbit + matching, false if doing reweight
@@ -621,6 +624,10 @@ int main (int argc, char** argv)
   // trigReader.addMuEleTrigs  (trigEleMu);
   trigReader.addMuMuTrigs   (trigMuMu);
   trigReader.addEleEleTrigs (trigEleEle);
+  trigReader.addBBresTrigs (trigBBres);
+  trigReader.addBBnonresTrigs (trigBBnonres);
+  trigReader.addGGTrigs (trigGG);
+
 
   // ------------------------------
 
@@ -1600,6 +1607,12 @@ int main (int argc, char** argv)
     {
       Long64_t triggerbit = theBigTree.triggerbit;
       bool passTrg = trigReader.checkOR (pairType, triggerbit) ;
+      bool passTrgBBres = trigReader.checkORcomb(1,triggerbit) ; 
+      theSmallTree.m_passTrgBBres = passTrgBBres;
+      bool passTrgBBnonres = trigReader.checkORcomb(2,triggerbit) ;
+      theSmallTree.m_passTrgBBnonres = passTrgBBnonres;
+      bool passTrgGG = trigReader.checkORcomb(3,triggerbit) ;
+      theSmallTree.m_passTrgGG = passTrgGG;
       Long64_t matchFlag1 = (Long64_t) theBigTree.daughters_trgMatched->at(firstDaughterIndex);
       Long64_t matchFlag2 = (Long64_t) theBigTree.daughters_trgMatched->at(secondDaughterIndex);
       bool passMatch1 = false;

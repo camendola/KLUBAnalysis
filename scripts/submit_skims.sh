@@ -1,5 +1,5 @@
-OUTDIRR="SkimmedNtuples"
-AMESSAGE="test for 2017"
+OUTDIRR="OverlapStudies"
+AMESSAGE="test for combination"
 
 
 source /opt/exp_soft/cms/t3/t3setup
@@ -8,17 +8,23 @@ mkdir /data_CMS/cms/amendola/$OUTDIRR/
 cp /home/llr/cms/amendola/CMSSW_7_4_3/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/amendola/$OUTDIRR/
 
 
+##############
+### tests for combination
+#python scripts/skimNtuple.py -s True -c  config/skim_2016_addTriggers.cfg -n 1 -k False -i comb_test/GluGluToHHTo2B2Tau_node_SM.txt -o /data_CMS/cms/amendola/$OUTDIRR/GluGluToHHTo2B2Tau_node_SM
+
+python scripts/skimNtuple.py -s True -c  config/skim_2016_addTriggers.cfg -n 1 -k False -i comb_test/GluGluToRadionToHHTo2B2Tau_M-750.txt -o /data_CMS/cms/amendola/$OUTDIRR/GluGluToRadionToHHTo2B2Tau_M-750
 
 
 
 ####################
 ### TEST FOR 2017, SIGNAL
 #python scripts/skimNtuple.py  -s True -c  config/skim_2016.cfg -n 1 -k False -i inputFiles/HHbbtt500.txt -o /data_CMS/cms/amendola/$OUTDIRR/$outdir
-python scripts/skimNtuple.py -s True -c  config/skim_2016.cfg  -n 10 -k True -o /data_CMS/cms/amendola/$OUTDIRR/SKIM_HHTo2b2Tau_M_750  -i inputFiles/29Giu2017/GluGluToRadionToHHTo2B2Tau_M-750_narrow_13TeV.txt  -x 1.0 -a True
+
+#python scripts/skimNtuple.py -s True -c  config/skim_2016.cfg  -n 10 -k True -o /data_CMS/cms/amendola/$OUTDIRR/SKIM_HHTo2b2Tau_M_750  -i inputFiles/29Giu2017/GluGluToRadionToHHTo2B2Tau_M-750_narrow_13TeV.txt  -x 1.0 -a True
 
 
-touch /data_CMS/cms/amendola/$OUTDIRR/$outdir/README.txt
-echo $AMESSAGE > /data_CMS/cms/amendola/$OUTDIRR/$outdir/README.txt
+#touch /data_CMS/cms/amendola/$OUTDIRR/$outdir/README.txt
+#echo $AMESSAGE > /data_CMS/cms/amendola/$OUTDIRR/$outdir/README.txt
 
 #####################
 ### TEST DATA W/ MORE JOBS FOR 0JETS SKIMS

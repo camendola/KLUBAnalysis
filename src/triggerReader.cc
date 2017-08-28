@@ -83,6 +83,37 @@ void triggerReader::addMuMuTrigs (vector<string> list)
     return;
 }
 
+void triggerReader::addBBresTrigs (vector<string> list)
+{
+    for (unsigned int i = 0; i < list.size(); i++)
+    {
+        auto it = find (_allTriggers.begin(), _allTriggers.end(), list.at(i));
+        if (it != _allTriggers.end()) _bbresTriggers.push_back (it - _allTriggers.begin());
+        else cout << " ** WARNING triggerReader : trigger name " << list.at(i) << " not in input histogram" << endl;
+    }
+    return;
+}
+void triggerReader::addBBnonresTrigs (vector<string> list)
+{
+    for (unsigned int i = 0; i < list.size(); i++)
+    {
+        auto it = find (_allTriggers.begin(), _allTriggers.end(), list.at(i));
+        if (it != _allTriggers.end()) _bbnonresTriggers.push_back (it - _allTriggers.begin());
+        else cout << " ** WARNING triggerReader : trigger name " << list.at(i) << " not in input histogram" << endl;
+    }
+    return;
+}
+void triggerReader::addGGTrigs (vector<string> list)
+{
+    for (unsigned int i = 0; i < list.size(); i++)
+    {
+        auto it = find (_allTriggers.begin(), _allTriggers.end(), list.at(i));
+        if (it != _allTriggers.end()) _ggTriggers.push_back (it - _allTriggers.begin());
+        else cout << " ** WARNING triggerReader : trigger name " << list.at(i) << " not in input histogram" << endl;
+    }
+    return;
+}
+
 bool triggerReader::checkORTauTau  (Long64_t triggerbit)
 {
     bool OR = false;
@@ -147,6 +178,39 @@ bool triggerReader::checkORMuMu  (Long64_t triggerbit)
     return OR;
 }
 
+bool triggerReader::checkORBBnonres  (Long64_t triggerbit)
+{
+    bool OR = false;
+    for (unsigned int i = 0; i < _bbnonresTriggers.size(); i++)
+    {
+        OR = CheckBit (triggerbit, _bbnonresTriggers.at(i));
+        if (OR) break;
+    }
+    return OR;
+}
+
+bool triggerReader::checkORBBres  (Long64_t triggerbit)
+{
+    bool OR = false;
+    for (unsigned int i = 0; i < _bbresTriggers.size(); i++)
+    {
+        OR = CheckBit (triggerbit, _bbresTriggers.at(i));
+        if (OR) break;
+    }
+    return OR;
+}
+
+bool triggerReader::checkORGG  (Long64_t triggerbit)
+{
+    bool OR = false;
+    for (unsigned int i = 0; i < _ggTriggers.size(); i++)
+    {
+        OR = CheckBit (triggerbit, _ggTriggers.at(i));
+        if (OR) break;
+    }
+    return OR;
+}
+
 bool triggerReader::CheckBit (Long64_t number, int bitpos)
 {
     bool res = number & (1 << bitpos);
@@ -164,6 +228,20 @@ bool triggerReader::checkOR (int pairType, Long64_t triggerbit)
     else
     {
         cout << " ** WARNING!! Pair type " << pairType << " not implemented for trigger" << endl;
+        return false;
+    }
+}
+
+
+bool triggerReader::checkORcomb (int analysis, Long64_t triggerbit)
+{
+    
+  if (analysis == 1 )   return checkORBBres(triggerbit);
+    else if (analysis == 2 ) return checkORBBnonres(triggerbit);
+    else if (analysis == 3 )    return checkORGG(triggerbit);
+    else
+    {
+        cout << " ** WARNING!! analysis " << analysis << " not implemented for trigger" << endl;
         return false;
     }
 }
