@@ -14,3 +14,4 @@ SKIM_*/
 weights/data/
 interface/exceptions/
 *~
+*.d
