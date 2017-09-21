@@ -15,3 +15,4 @@ weights/data/
 interface/exceptions/
 *~
 *.d
+*.pcm
