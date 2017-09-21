@@ -10,9 +10,9 @@ cp /home/llr/cms/amendola/CMSSW_7_4_3/src/KLUBAnalysis/scripts/haddAll.sh /data_
 
 ##############
 ### tests for combination
-#python scripts/skimNtuple.py -s True -c  config/skim_2016_addTriggers.cfg -n 1 -k False -i comb_test/GluGluToHHTo2B2Tau_node_SM.txt -o /data_CMS/cms/amendola/$OUTDIRR/GluGluToHHTo2B2Tau_node_SM
+python scripts/skimNtuple.py -s True -c  config/skim_2016_addTriggers.cfg -n 1 -k False -i comb_test/GluGluToHHTo2B2Tau_node_SM.txt -o /data_CMS/cms/amendola/$OUTDIRR/GluGluToHHTo2B2Tau_node_SM
 
-python scripts/skimNtuple.py -s True -c  config/skim_2016_addTriggers.cfg -n 1 -k False -i comb_test/GluGluToRadionToHHTo2B2Tau_M-750.txt -o /data_CMS/cms/amendola/$OUTDIRR/GluGluToRadionToHHTo2B2Tau_M-750
+#python scripts/skimNtuple.py -s True -c  config/skim_2016_addTriggers.cfg -n 1 -k False -i comb_test/GluGluToRadionToHHTo2B2Tau_M-750.txt -o /data_CMS/cms/amendola/$OUTDIRR/GluGluToRadionToHHTo2B2Tau_M-750
 
 
 

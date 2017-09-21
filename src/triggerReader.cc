@@ -213,8 +213,9 @@ bool triggerReader::checkORGG  (Long64_t triggerbit)
 
 bool triggerReader::CheckBit (Long64_t number, int bitpos)
 {
-    bool res = number & (1 << bitpos);
-    return res;
+  Long64_t bit = 1;
+  bool res = number & (bit << bitpos);
+  return res;
 }
 
 bool triggerReader::checkOR (int pairType, Long64_t triggerbit)

@@ -53,15 +53,15 @@ void selEvents(){
   
   TString fileList;    
   TString outfilename;
-  //  TString process = "GluGluToHHTo2B2Tau_node_SM";
-    TString process = "GluGluToRadionToHHTo2B2Tau_M-750";    
+  //   TString process = "GluGluToHHTo2B2Tau_node_SM";
+       TString process = "GluGluToRadionToHHTo2B2Tau_M-750";    
 
   fileList=dir_in+"SKIM_"+process+".txt";
   
   cout<<fileList<<endl;
   //  TFile *file = TFile::Open(Form("%s",filename.Data()),"read");
 
-
+  
   TChain * tree;
   tree = new TChain ("HTauTauTree");
   appendFromFileList(tree, fileList);
@@ -80,6 +80,7 @@ void selEvents(){
   Int_t           EventNumber;
   Int_t           RunNumber;
   Int_t           lumi;
+  Int_t           nbjetscand;
 
   Bool_t passTrgBBres;
   Bool_t passTrgBBnonres;
@@ -87,7 +88,8 @@ void selEvents(){
   
   TBranch        *b_EventNumber;   //!
   TBranch        *b_RunNumber;   //!
-  TBranch        *b_lumi;   //!  
+  TBranch        *b_lumi;   //!
+  TBranch        *b_nbjetscand;   //!  
 
   TBranch *b_passTrgBBres;
   TBranch *b_passTrgBBnonres;
@@ -96,11 +98,12 @@ void selEvents(){
   tree->SetBranchAddress("EventNumber", &EventNumber, &b_EventNumber);
   tree->SetBranchAddress("RunNumber", &RunNumber, &b_RunNumber);
   tree->SetBranchAddress("lumi", &lumi, &b_lumi);
-
+  tree->SetBranchAddress("nbjetscand", &nbjetscand, &b_nbjetscand);
+  
   tree->SetBranchAddress("passTrgBBres",&passTrgBBres,&b_passTrgBBres);
   tree->SetBranchAddress("passTrgBBnonres",&passTrgBBnonres,&b_passTrgBBnonres);
   tree->SetBranchAddress("passTrgGG",&passTrgGG,&b_passTrgBBres);
-
+  
   
   treeNew->Branch("EventNumber", &EventNumber, "EventNumber/I");
   treeNew->Branch("RunNumber", &RunNumber, "RunNumber/I");
@@ -114,80 +117,124 @@ void selEvents(){
 
 
   //selections
-  Int_t tautau_1b1jMcut_SR;
-  Int_t tautau_2b0jMcut_SR;
-  Int_t tautau_1b1jMcut_SStight;
-  Int_t tautau_2b0jMcut_SStight;
+  Bool_t tautau_1b1jMcut_SR;
+  Bool_t tautau_2b0jMcut_SR;
+  Bool_t tautau_1b1jMcut_SStight;
+  Bool_t tautau_2b0jMcut_SStight;
 
-  Int_t mutau_1b1jMcut_SR;
-  Int_t mutau_2b0jMcut_SR;
-  Int_t mutau_1b1jMcutBDT_SR;
-  Int_t mutau_2b0jMcutBDT_SR;
+  Bool_t mutau_1b1jMcut_SR;
+  Bool_t mutau_2b0jMcut_SR;
+  Bool_t mutau_1b1jMcutBDT_SR;
+  Bool_t mutau_2b0jMcutBDT_SR;
 
-  Int_t etau_1b1jMcut_SR;
-  Int_t etau_2b0jMcut_SR;
-  Int_t etau_1b1jMcutBDT_SR;
-  Int_t etau_2b0jMcutBDT_SR;
+  Bool_t etau_1b1jMcut_SR;
+  Bool_t etau_2b0jMcut_SR;
+  Bool_t etau_1b1jMcutBDT_SR;
+  Bool_t etau_2b0jMcutBDT_SR;
 
 
-  Int_t tautau_resolved_2b0j;
-  Int_t tautau_resolved_1b1j;
-  Int_t tautau_resolved_2b0j_Mcut;
-  Int_t tautau_resolved_1b1j_Mcut;
-  Int_t tautau_resolved_2b0j_McutCirc;
-  Int_t tautau_resolved_1b1j_McutCirc;
-  Int_t tautau_boosted;
-  Int_t tautau_boosted_Mcut;
-  Int_t tautau_defaultBtagLLNoIsoBBTTCut450tag;
-  Int_t tautau_defaultBtagLLNoIsoBBTTCut451tag;
-  Int_t tautau_defaultBtagLLNoIsoBBTTCut45;
-  Int_t tautau_defaultBtagLLNoIso45;
-
-  Int_t mutau_resolved_2b0j;
-  Int_t mutau_resolved_1b1j;
-  Int_t mutau_resolved_2b0j_Mcut;
-  Int_t mutau_resolved_1b1j_Mcut;
-  Int_t mutau_boosted;
-  Int_t mutau_boosted_Mcut;
-  Int_t mutau_defaultBtagMMNoIsoBBTTCut;
-  Int_t mutau_defaultBtagLLNoIso;
-  Int_t mutau_defaultBtagLLNoIsoBBTTCut;
-  Int_t mutau_defaultBtagLLNoIsoBBTTCutKine80;
-  Int_t mutau_defaultBtagLLNoIsoBBTTCutKine801tag;
-
-  Int_t etau_resolved_2b0j;
-  Int_t etau_resolved_1b1j;
-  Int_t etau_resolved_2b0j_Mcut;
-  Int_t etau_resolved_1b1j_Mcut;
-  Int_t etau_boosted;
-  Int_t etau_boosted_Mcut;
-  Int_t etau_defaultBtagMMNoIsoBBTTCut;
-  Int_t etau_defaultBtagLLNoIso;
-  Int_t etau_defaultBtagLLNoIsoBBTTCut;
-  Int_t etau_defaultBtagLLNoIsoBBTTCutKine80;
-  Int_t etau_defaultBtagLLNoIsoBBTTCutKine801tag;
- 
   
+  ////summer 2017
+  Bool_t tautau_1b1jresolvedMcut_SR;
+  Bool_t tautau_2b0jresolvedMcut_SR;
+  Bool_t tautau_boostedLLMcut_SR;
+
+  Bool_t mutau_1b1jresolvedMcut_SR;
+  Bool_t mutau_2b0jresolvedMcut_SR;
+  Bool_t mutau_boostedLLMcut_SR;
+
+  Bool_t etau_1b1jresolvedMcut_SR;
+  Bool_t etau_2b0jresolvedMcut_SR;
+  Bool_t etau_boostedLLMcut_SR;
+
+  //counters
+  Int_t tot_tautau_1b1jresolvedMcut_SR=0;
+  Int_t tot_tautau_2b0jresolvedMcut_SR=0;
+  Int_t tot_tautau_boostedLLMcut_SR=0;
+
+  Int_t tot_mutau_1b1jresolvedMcut_SR=0;
+  Int_t tot_mutau_2b0jresolvedMcut_SR=0;
+  Int_t tot_mutau_boostedLLMcut_SR=0;
+
+  Int_t tot_etau_1b1jresolvedMcut_SR=0;
+  Int_t tot_etau_2b0jresolvedMcut_SR=0;
+  Int_t tot_etau_boostedLLMcut_SR=0;
+
+
+  Int_t bjetscand4_etau_1b1jresolvedMcut_SR=0;
+  Int_t bjetscand4_etau_2b0jresolvedMcut_SR=0;
+  Int_t bjetscand4_etau_boostedLLMcut_SR=0;
+
+
+  Int_t passTrgBBnonres_tautau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgBBnonres_tautau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgBBnonres_tautau_boostedLLMcut_SR=0;
+		 
+  Int_t passTrgBBnonres_mutau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgBBnonres_mutau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgBBnonres_mutau_boostedLLMcut_SR=0;
+		 
+  Int_t passTrgBBnonres_etau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgBBnonres_etau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgBBnonres_etau_boostedLLMcut_SR=0;
+  
+  Int_t passTrgBBres_tautau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgBBres_tautau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgBBres_tautau_boostedLLMcut_SR=0;
+
+  Int_t passTrgBBres_mutau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgBBres_mutau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgBBres_mutau_boostedLLMcut_SR=0;
+
+  Int_t passTrgBBres_etau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgBBres_etau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgBBres_etau_boostedLLMcut_SR=0;
+
+
+  Int_t passTrgGG_tautau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgGG_tautau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgGG_tautau_boostedLLMcut_SR=0;
+
+  Int_t passTrgGG_mutau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgGG_mutau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgGG_mutau_boostedLLMcut_SR=0;
+
+  Int_t passTrgGG_etau_1b1jresolvedMcut_SR=0;
+  Int_t passTrgGG_etau_2b0jresolvedMcut_SR=0;
+  Int_t passTrgGG_etau_boostedLLMcut_SR=0;
+
+  Int_t passTrgGGandBB_etau_1b1jresolvedMcut_SR=0;  
   
   treeNew->SetAutoSave(-99999999999);
   treeNew->SetAutoFlush(-99999999999);
 
-  treeNew->Branch("tautau_1b1jMcut_SR",&tautau_1b1jMcut_SR,"tautau_1b1jMcut_SR/I");
-  treeNew->Branch("tautau_2b0jMcut_SR",&tautau_2b0jMcut_SR,"tautau_2b0jMcut_SR/I");
-  treeNew->Branch("tautau_1b1jMcut_SStight",&tautau_1b1jMcut_SStight,"tautau_1b1jMcut_SStight/I");
-  treeNew->Branch("tautau_2b0jMcut_SStight",&tautau_2b0jMcut_SStight,"tautau_2b0jMcut_SStight/I");
+  treeNew->Branch("tautau_1b1jMcut_SR",&tautau_1b1jMcut_SR,"tautau_1b1jMcut_SR/O");
+  treeNew->Branch("tautau_2b0jMcut_SR",&tautau_2b0jMcut_SR,"tautau_2b0jMcut_SR/O");
+  treeNew->Branch("tautau_1b1jMcut_SStight",&tautau_1b1jMcut_SStight,"tautau_1b1jMcut_SStight/O");
+  treeNew->Branch("tautau_2b0jMcut_SStight",&tautau_2b0jMcut_SStight,"tautau_2b0jMcut_SStight/O");
 
-  treeNew->Branch("mutau_1b1jMcut_SR",&mutau_1b1jMcut_SR,"mutau_1b1jMcut_SR/I");
-  treeNew->Branch("mutau_2b0jMcut_SR",&mutau_2b0jMcut_SR,"mutau_2b0jMcut_SR/I");
-  treeNew->Branch("mutau_1b1jMcutBDT_SR",&mutau_1b1jMcutBDT_SR,"mutau_1b1jMcutBDT_SR/I");
-  treeNew->Branch("mutau_2b0jMcutBDT_SR",&mutau_2b0jMcutBDT_SR,"mutau_2b0jMcutBDT_SR/I");
+  treeNew->Branch("mutau_1b1jMcut_SR",&mutau_1b1jMcut_SR,"mutau_1b1jMcut_SR/O");
+  treeNew->Branch("mutau_2b0jMcut_SR",&mutau_2b0jMcut_SR,"mutau_2b0jMcut_SR/O");
+  treeNew->Branch("mutau_1b1jMcutBDT_SR",&mutau_1b1jMcutBDT_SR,"mutau_1b1jMcutBDT_SR/O");
+  treeNew->Branch("mutau_2b0jMcutBDT_SR",&mutau_2b0jMcutBDT_SR,"mutau_2b0jMcutBDT_SR/O");
 
-  treeNew->Branch("etau_1b1jMcut_SR",&etau_1b1jMcut_SR,"etau_1b1jMcut_SR/I");
-  treeNew->Branch("etau_2b0jMcut_SR",&etau_2b0jMcut_SR,"etau_2b0jMcut_SR/I");
-  treeNew->Branch("etau_1b1jMcutBDT_SR",&etau_1b1jMcutBDT_SR,"etau_1b1jMcutBDT_SR/I");
-  treeNew->Branch("etau_2b0jMcutBDT_SR",&etau_2b0jMcutBDT_SR,"etau_2b0jMcutBDT_SR/I");
+  treeNew->Branch("etau_1b1jMcut_SR",&etau_1b1jMcut_SR,"etau_1b1jMcut_SR/O");
+  treeNew->Branch("etau_2b0jMcut_SR",&etau_2b0jMcut_SR,"etau_2b0jMcut_SR/O");
+  treeNew->Branch("etau_1b1jMcutBDT_SR",&etau_1b1jMcutBDT_SR,"etau_1b1jMcutBDT_SR/O");
+  treeNew->Branch("etau_2b0jMcutBDT_SR",&etau_2b0jMcutBDT_SR,"etau_2b0jMcutBDT_SR/O");
   
+  treeNew->Branch("tautau_1b1jresolvedMcut_SR",&tautau_1b1jresolvedMcut_SR,"tautau_1b1jresolvedMcut_SR/O");
+		  
+  treeNew->Branch("tautau_2b0jresolvedMcut_SR",&tautau_2b0jresolvedMcut_SR,"tautau_2b0jresolvedMcut_SR/O");
+  treeNew->Branch("tautau_boostedLLMcut_SR",&tautau_boostedLLMcut_SR,"tautau_boostedLLMcut_SR/O");
 
+  treeNew->Branch("mutau_1b1jresolvedMcut_SR",&mutau_1b1jresolvedMcut_SR,"mutau_1b1jresolvedMcut_SR/O");
+  treeNew->Branch("mutau_2b0jresolvedMcut_SR",&mutau_2b0jresolvedMcut_SR,"mutau_2b0jresolvedMcut_SR/O");
+  treeNew->Branch("mutau_boostedLLMcut_SR",&mutau_boostedLLMcut_SR,"mutau_boostedLLMcut_SR/O");
+
+  treeNew->Branch("etau_1b1jresolvedMcut_SR",&etau_1b1jresolvedMcut_SR,"etau_1b1jresolvedMcut_SR/O");
+  treeNew->Branch("etau_2b0jresolvedMcut_SR",&etau_2b0jresolvedMcut_SR,"etau_2b0jresolvedMcut_SR/O");
+  treeNew->Branch("etau_boostedLLMcut_SR",&etau_boostedLLMcut_SR,"etau_boostedLLMcut_SR/O");
 
   
 
@@ -217,6 +264,8 @@ void selEvents(){
     int dau1_MVAiso = theTree.dau1_MVAiso;
     float dau1_iso = theTree.dau1_iso;
     int dau2_MVAiso = theTree.dau2_MVAiso;
+    float bjet1_pt_raw = theTree.bjet1_pt_raw;
+    float bjet2_pt_raw = theTree.bjet2_pt_raw;
     //    tree->ls();
 
 
@@ -237,11 +286,21 @@ void selEvents(){
     bool tautau_baseline = pairType == 2 && dau1_pt > 45 && abs (dau1_eta) < 2.1 && dau2_pt > 45 && abs (dau2_eta) < 2.1 && nleps == 0;
     bool mutau_baseline= pairType == 0 && dau1_pt > 23 && abs (dau1_eta) < 2.1 && dau2_pt > 20 && abs (dau2_eta) < 2.3 && nleps == 0;
     bool etau_baseline = pairType == 1 && dau1_pt > 27 && abs(dau1_eta) < 2.1 && dau2_pt > 20 && abs(dau2_eta) < 2.3 && nleps == 0;
-    bool btagM = bjet1_bID > 0.800 && bjet2_bID < 0.800;
-    bool btagMM = bjet1_bID > 0.800 && bjet2_bID > 0.800;
+
+    // btag
+    bool btagM = bjet1_bID > 0.8484 && bjet2_bID < 0.8484;
+    bool btagMM = bjet1_bID > 0.8484 && bjet2_bID > 0.8484;
+    bool btagLL = bjet1_bID > 0.5426 && bjet2_bID > 0.5426;
+
+    // mass
     bool circMassCut = TMath::Sqrt((tauH_SVFIT_mass-116.)*(tauH_SVFIT_mass-116.) + (bH_mass_raw-111.)*(bH_mass_raw-111.)) < 40.0;
+    bool ellypsMassCut = ((tauH_SVFIT_mass-116.)*(tauH_SVFIT_mass-116.))/(35.*35.) + ((bH_mass_raw-111.)*(bH_mass_raw-111.))/(45.*45.) < 1.0;
+    bool boostMassCut = tauH_SVFIT_mass > 79.5 && tauH_SVFIT_mass < 152.5 && fatjet_softdropMass > 90 && fatjet_softdropMass < 160;
+															  
+    //bdt
     bool nonresBDTCut = LepTauKine > -0.134;
-      
+
+    //region
     bool tautau_SR = isOS != 0 && dau1_MVAiso >= 3 && dau2_MVAiso >= 3;
     bool mutau_SR = isOS != 0 && dau1_iso < 0.15 && dau2_MVAiso >= 3;
     bool etau_SR = isOS != 0 && dau1_iso < 0.1 && dau2_MVAiso >= 3;
@@ -252,75 +311,176 @@ void selEvents(){
     //-------- TauTau selections--------// 
     
     //comb selections from selectionCfg_TauTau.cfg
-    bool istautau_1b1jMcut_SR = tautau_baseline && btagM && tautau_SR;
-    bool istautau_2b0jMcut_SR = tautau_baseline && btagMM && circMassCut && tautau_SR;
-    bool istautau_1b1jMcut_SStight = tautau_baseline && btagM && tautau_SStight;
-    bool istautau_2b0jMcut_SStight = tautau_baseline && btagMM && circMassCut && tautau_SStight;
+    tautau_1b1jMcut_SR = tautau_baseline && btagM && tautau_SR;
+    tautau_2b0jMcut_SR = tautau_baseline && btagMM && circMassCut && tautau_SR;
+    tautau_1b1jMcut_SStight = tautau_baseline && btagM && tautau_SStight;
+    tautau_2b0jMcut_SStight = tautau_baseline && btagMM && circMassCut && tautau_SStight;
     
+    tautau_1b1jresolvedMcut_SR = tautau_baseline && btagM && tautau_SR && isBoosted!=1 && ellypsMassCut;
+    tautau_2b0jresolvedMcut_SR = tautau_baseline && btagMM && tautau_SR && isBoosted!=1 && ellypsMassCut;
+    tautau_boostedLLMcut_SR = tautau_baseline && btagLL && tautau_SR && isBoosted==1 && boostMassCut;
+
+    if(pairType==0 && !passTrgGG ){
+      cout<<"###############"<<endl;
+      cout<<"etau checks "<<i<<endl;
+      cout<<"baseline "<<etau_baseline<<endl;
+      cout<<"btagM "<<btagM<<" btagMM "<<btagMM<<" btagLL "<<btagLL<<endl;
+      cout<<"ellypsMassCut "<<ellypsMassCut<<" circMassCut "<<circMassCut<<endl;
+      cout<<"etau_SR "<<etau_SR<<endl;
+
+      cout<<"etau_1b1jresolvedMcut_SR "<<etau_1b1jresolvedMcut_SR<<endl;
+      cout<<"etau_2b0jresolvedMcut_SR "<<etau_2b0jresolvedMcut_SR<<endl;
+      cout<<"etau_boostedLLMcut_SR "<<etau_boostedLLMcut_SR<<endl;
+
+      cout<<"passTrgGG "<<passTrgGG<<endl;
+      cout<<"passTrgBB "<<passTrgBBres<<endl;
+	    
+    }
+    if(tautau_1b1jresolvedMcut_SR ) tot_tautau_1b1jresolvedMcut_SR+=1;
+    if(tautau_2b0jresolvedMcut_SR)  tot_tautau_2b0jresolvedMcut_SR+=1;
+    if(tautau_boostedLLMcut_SR)     tot_tautau_boostedLLMcut_SR+=1;
+
+    if(tautau_1b1jresolvedMcut_SR &&passTrgBBnonres)   passTrgBBnonres_tautau_1b1jresolvedMcut_SR+=1;
+    if(tautau_2b0jresolvedMcut_SR &&passTrgBBnonres)   passTrgBBnonres_tautau_2b0jresolvedMcut_SR+=1;
+    if(tautau_boostedLLMcut_SR &&passTrgBBnonres)      passTrgBBnonres_tautau_boostedLLMcut_SR+=1;
+
+    if(tautau_1b1jresolvedMcut_SR &&passTrgBBres)   passTrgBBres_tautau_1b1jresolvedMcut_SR+=1;
+    if(tautau_2b0jresolvedMcut_SR &&passTrgBBres)   passTrgBBres_tautau_2b0jresolvedMcut_SR+=1;
+    if(tautau_boostedLLMcut_SR &&passTrgBBres)      passTrgBBres_tautau_boostedLLMcut_SR+=1;
+
+    if(tautau_1b1jresolvedMcut_SR &&passTrgGG)   passTrgGG_tautau_1b1jresolvedMcut_SR+=1;
+    if(tautau_2b0jresolvedMcut_SR &&passTrgGG)   passTrgGG_tautau_2b0jresolvedMcut_SR+=1;
+    if(tautau_boostedLLMcut_SR &&passTrgGG)      passTrgGG_tautau_boostedLLMcut_SR+=1;
+
     
-
-
-    //-----------MuTau selections------------//
+    //-----------Tautau selections------------//
     //comb selections from selectionCfg_MuTau.cfg
-    bool ismutau_1b1jMcut_SR = mutau_baseline && btagM && mutau_SR;
-    bool ismutau_2b0jMcut_SR = mutau_baseline && btagMM && circMassCut && mutau_SR;
-    bool ismutau_1b1jMcutBDT_SR = mutau_baseline && btagM && mutau_SR && nonresBDTCut;
-    bool ismutau_2b0jMcutBDT_SR = mutau_baseline && btagMM && circMassCut && mutau_SR && nonresBDTCut;
-   
+    mutau_1b1jMcut_SR = mutau_baseline && btagM && mutau_SR;
+    mutau_2b0jMcut_SR = mutau_baseline && btagMM && circMassCut && mutau_SR;
+    mutau_1b1jMcutBDT_SR = mutau_baseline && btagM && mutau_SR && nonresBDTCut;
+    mutau_2b0jMcutBDT_SR = mutau_baseline && btagMM && circMassCut && mutau_SR && nonresBDTCut;
+    
+    mutau_1b1jresolvedMcut_SR = mutau_baseline && btagM && mutau_SR && isBoosted!=1 && ellypsMassCut;
+    mutau_2b0jresolvedMcut_SR = mutau_baseline && btagMM && mutau_SR && isBoosted!=1 && ellypsMassCut;
+    mutau_boostedLLMcut_SR = mutau_baseline && btagLL && mutau_SR && isBoosted==1 && boostMassCut;
 
+    if(mutau_1b1jresolvedMcut_SR ) tot_mutau_1b1jresolvedMcut_SR+=1;
+    if(mutau_2b0jresolvedMcut_SR)  tot_mutau_2b0jresolvedMcut_SR+=1;
+    if(mutau_boostedLLMcut_SR)     tot_mutau_boostedLLMcut_SR+=1;
+
+    if(mutau_1b1jresolvedMcut_SR &&passTrgBBnonres)   passTrgBBnonres_mutau_1b1jresolvedMcut_SR+=1;
+    if(mutau_2b0jresolvedMcut_SR &&passTrgBBnonres)   passTrgBBnonres_mutau_2b0jresolvedMcut_SR+=1;
+    if(mutau_boostedLLMcut_SR &&passTrgBBnonres)      passTrgBBnonres_mutau_boostedLLMcut_SR+=1;
+
+    if(mutau_1b1jresolvedMcut_SR &&passTrgBBres)   passTrgBBres_mutau_1b1jresolvedMcut_SR+=1;
+    if(mutau_2b0jresolvedMcut_SR &&passTrgBBres)   passTrgBBres_mutau_2b0jresolvedMcut_SR+=1;
+    if(mutau_boostedLLMcut_SR &&passTrgBBres)      passTrgBBres_mutau_boostedLLMcut_SR+=1;
+
+    if(mutau_1b1jresolvedMcut_SR &&passTrgGG)   passTrgGG_mutau_1b1jresolvedMcut_SR+=1;
+    if(mutau_2b0jresolvedMcut_SR &&passTrgGG)   passTrgGG_mutau_2b0jresolvedMcut_SR+=1;
+    if(mutau_boostedLLMcut_SR &&passTrgGG)      passTrgGG_mutau_boostedLLMcut_SR+=1;
+    
 
     //-----------ETau selections---------------//
 
     //comb selections from selectionCfg_Etau.cfg
-    bool isetau_1b1jMcut_SR = etau_baseline && btagM && etau_SR;
-    bool isetau_2b0jMcut_SR = etau_baseline && btagMM && circMassCut && etau_SR;
-    bool isetau_1b1jMcutBDT_SR = etau_baseline && btagM && etau_SR && nonresBDTCut;
-    bool isetau_2b0jMcutBDT_SR = etau_baseline && btagMM && circMassCut && etau_SR && nonresBDTCut;
-   
+    etau_1b1jMcut_SR = etau_baseline && btagM && etau_SR;
+    etau_2b0jMcut_SR = etau_baseline && btagMM && circMassCut && etau_SR;
+    etau_1b1jMcutBDT_SR = etau_baseline && btagM && etau_SR && nonresBDTCut;
+    etau_2b0jMcutBDT_SR = etau_baseline && btagMM && circMassCut && etau_SR && nonresBDTCut;
+    
+    
+    etau_1b1jresolvedMcut_SR = etau_baseline && btagM && etau_SR && isBoosted!=1 && ellypsMassCut;
+    etau_2b0jresolvedMcut_SR = etau_baseline && btagMM && etau_SR && isBoosted!=1 && ellypsMassCut;
+    etau_boostedLLMcut_SR = etau_baseline && btagLL && etau_SR && isBoosted==1 && boostMassCut;
+
+    if(etau_1b1jresolvedMcut_SR ) tot_etau_1b1jresolvedMcut_SR+=1;
+    if(etau_2b0jresolvedMcut_SR)  tot_etau_2b0jresolvedMcut_SR+=1;
+    if(etau_boostedLLMcut_SR)     tot_etau_boostedLLMcut_SR+=1;
+
+    if(etau_1b1jresolvedMcut_SR && nbjetscand>3 )  bjetscand4_etau_1b1jresolvedMcut_SR+=1;
+    if(etau_2b0jresolvedMcut_SR && nbjetscand>3 )  bjetscand4_etau_2b0jresolvedMcut_SR+=1;
+    if(etau_boostedLLMcut_SR && nbjetscand>3 )     bjetscand4_etau_boostedLLMcut_SR+=1;
+
+    
+    if(etau_1b1jresolvedMcut_SR &&passTrgBBnonres)   passTrgBBnonres_etau_1b1jresolvedMcut_SR+=1;
+    if(etau_2b0jresolvedMcut_SR &&passTrgBBnonres)   passTrgBBnonres_etau_2b0jresolvedMcut_SR+=1;
+    if(etau_boostedLLMcut_SR &&passTrgBBnonres)      passTrgBBnonres_etau_boostedLLMcut_SR+=1;
+
+    if(etau_1b1jresolvedMcut_SR &&passTrgBBres)   passTrgBBres_etau_1b1jresolvedMcut_SR+=1;
+    if(etau_2b0jresolvedMcut_SR &&passTrgBBres)   passTrgBBres_etau_2b0jresolvedMcut_SR+=1;
+    if(etau_boostedLLMcut_SR &&passTrgBBres)      passTrgBBres_etau_boostedLLMcut_SR+=1;
+
+    if(etau_1b1jresolvedMcut_SR && passTrgGG)   passTrgGG_etau_1b1jresolvedMcut_SR+=1;
+    if(etau_2b0jresolvedMcut_SR && passTrgGG)   passTrgGG_etau_2b0jresolvedMcut_SR+=1;
+    if(etau_boostedLLMcut_SR && passTrgGG)      passTrgGG_etau_boostedLLMcut_SR+=1;
+
+    if(etau_1b1jresolvedMcut_SR && passTrgGG && passTrgBBnonres)   passTrgGGandBB_etau_1b1jresolvedMcut_SR+=1;
+    
 
 
-
-
-   tautau_1b1jMcut_SR = 0;
-   tautau_2b0jMcut_SR = 0;
-   tautau_1b1jMcut_SStight = 0;
-   tautau_2b0jMcut_SStight = 0;
-
-   mutau_1b1jMcut_SR = 0;
-   mutau_2b0jMcut_SR = 0;
-   mutau_1b1jMcutBDT_SR = 0;
-   mutau_2b0jMcutBDT_SR = 0;
-
-   etau_1b1jMcut_SR = 0;
-   etau_2b0jMcut_SR = 0;
-   etau_1b1jMcutBDT_SR = 0;
-   etau_2b0jMcutBDT_SR = 0;
-
-
-
-   if(istautau_1b1jMcut_SR) tautau_1b1jMcut_SR = 1;
-   if(istautau_2b0jMcut_SR) tautau_2b0jMcut_SR = 1;
-   if(istautau_1b1jMcut_SStight) tautau_1b1jMcut_SStight = 1;
-   if(istautau_2b0jMcut_SStight) tautau_2b0jMcut_SStight = 1;
-
-   if(ismutau_1b1jMcut_SR) mutau_1b1jMcut_SR = 1;
-   if(ismutau_2b0jMcut_SR) mutau_2b0jMcut_SR = 1;
-   if(ismutau_1b1jMcutBDT_SR) mutau_1b1jMcutBDT_SR = 1;
-   if(ismutau_2b0jMcutBDT_SR) mutau_2b0jMcutBDT_SR = 1;
-
-   if(isetau_1b1jMcut_SR) etau_1b1jMcut_SR = 1;
-   if(isetau_2b0jMcut_SR) etau_2b0jMcut_SR = 1;
-   if(isetau_1b1jMcutBDT_SR) etau_1b1jMcutBDT_SR = 1;
-   if(isetau_2b0jMcutBDT_SR) etau_2b0jMcutBDT_SR = 1;
-
-
- treeNew->Fill();  
+    treeNew->Fill();  
     
   }
   fileNew->cd();
   treeNew->Write();
   fileNew->Close();
+
+
+
+  cout<<" tot_tautau_1b1jresolvedMcut_SR "		<<   tot_tautau_1b1jresolvedMcut_SR		<<endl;	  
+  cout<<" tot_tautau_2b0jresolvedMcut_SR "		<<   tot_tautau_2b0jresolvedMcut_SR		<<endl;	  
+  cout<<" tot_tautau_boostedLLMcut_SR "			<<   tot_tautau_boostedLLMcut_SR		<<endl;	  
+  cout<<endl;
+  cout<<" tot_mutau_1b1jresolvedMcut_SR "			<<   tot_mutau_1b1jresolvedMcut_SR		<<endl;	  
+  cout<<" tot_mutau_2b0jresolvedMcut_SR "			<<   tot_mutau_2b0jresolvedMcut_SR		<<endl;	  
+  cout<<" tot_mutau_boostedLLMcut_SR "			<<   tot_mutau_boostedLLMcut_SR			<<endl;  
+  cout<<endl;
+  cout<<" tot_etau_1b1jresolvedMcut_SR "			<<   tot_etau_1b1jresolvedMcut_SR		<<endl;	  
+  cout<<" tot_etau_2b0jresolvedMcut_SR "			<<   tot_etau_2b0jresolvedMcut_SR		<<endl;	  
+  cout<<" tot_etau_boostedLLMcut_SR "			<<   tot_etau_boostedLLMcut_SR			<<endl;
+  cout<<"\tnbjetscand4_etau_1b1jresolvedMcut_SR "	<<   bjetscand4_etau_1b1jresolvedMcut_SR		<<endl;	  
+  cout<<"\tnbjetscand4_etau_2b0jresolvedMcut_SR "	<<   bjetscand4_etau_2b0jresolvedMcut_SR		<<endl;	  
+  cout<<"\tnbjetscand4_etau_boostedLLMcut_SR "		<<   bjetscand4_etau_boostedLLMcut_SR			<<endl;  
+  cout<<endl;
   
+  cout<<" passTrgBBnonres_tautau_1b1jresolvedMcut_SR "	<<   passTrgBBnonres_tautau_1b1jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBnonres_tautau_2b0jresolvedMcut_SR "	<<   passTrgBBnonres_tautau_2b0jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBnonres_tautau_boostedLLMcut_SR "	<<   passTrgBBnonres_tautau_boostedLLMcut_SR	  <<endl;
+  cout<<endl;
+  cout<<" passTrgBBnonres_mutau_1b1jresolvedMcut_SR "	<<   passTrgBBnonres_mutau_1b1jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBnonres_mutau_2b0jresolvedMcut_SR "	<<   passTrgBBnonres_mutau_2b0jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBnonres_mutau_boostedLLMcut_SR "	<<   passTrgBBnonres_mutau_boostedLLMcut_SR       <<endl;		  
+  cout<<endl;  
+  cout<<" passTrgBBnonres_etau_1b1jresolvedMcut_SR "	<<   passTrgBBnonres_etau_1b1jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBnonres_etau_2b0jresolvedMcut_SR "	<<   passTrgBBnonres_etau_2b0jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBnonres_etau_boostedLLMcut_SR "		<<   passTrgBBnonres_etau_boostedLLMcut_SR	  <<endl;	  
+  cout<<endl;
+  cout<<" passTrgBBres_tautau_1b1jresolvedMcut_SR "	<<   passTrgBBres_tautau_1b1jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBres_tautau_2b0jresolvedMcut_SR "	<<   passTrgBBres_tautau_2b0jresolvedMcut_SR	  <<endl;
+  cout<<" passTrgBBres_tautau_boostedLLMcut_SR "		<<   passTrgBBres_tautau_boostedLLMcut_SR	  <<endl;	  
+  cout<<endl;
+  cout<<" passTrgBBres_mutau_1b1jresolvedMcut_SR "	<<   passTrgBBres_mutau_1b1jresolvedMcut_SR       <<endl;		  
+  cout<<" passTrgBBres_mutau_2b0jresolvedMcut_SR "	<<   passTrgBBres_mutau_2b0jresolvedMcut_SR       <<endl;		  
+  cout<<" passTrgBBres_mutau_boostedLLMcut_SR "		<<   passTrgBBres_mutau_boostedLLMcut_SR	  <<endl;	  
+  cout<<endl;
+  cout<<" passTrgBBres_etau_1b1jresolvedMcut_SR "		<<   passTrgBBres_etau_1b1jresolvedMcut_SR	  <<endl;	  
+  cout<<" passTrgBBres_etau_2b0jresolvedMcut_SR "		<<   passTrgBBres_etau_2b0jresolvedMcut_SR	  <<endl;	  
+  cout<<" passTrgBBres_etau_boostedLLMcut_SR "		<<   passTrgBBres_etau_boostedLLMcut_SR		  <<endl;
+  cout<<endl;
+  cout<<" passTrgGG_tautau_1b1jresolvedMcut_SR "		<<   passTrgGG_tautau_1b1jresolvedMcut_SR	  <<endl;	  
+  cout<<" passTrgGG_tautau_2b0jresolvedMcut_SR "		<<   passTrgGG_tautau_2b0jresolvedMcut_SR	  <<endl;	  
+  cout<<" passTrgGG_tautau_boostedLLMcut_SR "		<<   passTrgGG_tautau_boostedLLMcut_SR		  <<endl;
+  cout<<endl;
+  cout<<" passTrgGG_mutau_1b1jresolvedMcut_SR "		<<   passTrgGG_mutau_1b1jresolvedMcut_SR	  <<endl;	  
+  cout<<" passTrgGG_mutau_2b0jresolvedMcut_SR "		<<   passTrgGG_mutau_2b0jresolvedMcut_SR	  <<endl;	  
+  cout<<" passTrgGG_mutau_boostedLLMcut_SR "		<<   passTrgGG_mutau_boostedLLMcut_SR		  <<endl;
+  cout<<endl;
+  cout<<" passTrgGG_etau_1b1jresolvedMcut_SR "		<<   passTrgGG_etau_1b1jresolvedMcut_SR		  <<endl;
+  cout<<" passTrgGG_etau_2b0jresolvedMcut_SR "		<<   passTrgGG_etau_2b0jresolvedMcut_SR		  <<endl;
+  cout<<" passTrgGG_etau_boostedLLMcut_SR "        	<<   passTrgGG_etau_boostedLLMcut_SR              <<endl;
+  cout<<""<<endl;
+  cout<<passTrgGGandBB_etau_1b1jresolvedMcut_SR<<endl;
 
 }
 

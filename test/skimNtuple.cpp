@@ -1,5 +1,4 @@
 // ntuple skimmer for analysis and synchronization
-
 #include <iostream>
 #include <string>
 #include <fstream>
