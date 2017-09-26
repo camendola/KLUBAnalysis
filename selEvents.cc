@@ -53,7 +53,7 @@ void selEvents(){
   
   TString fileList;    
   TString outfilename;
-  //   TString process = "GluGluToHHTo2B2Tau_node_SM";
+  //     TString process = "GluGluToHHTo2B2Tau_node_SM";
        TString process = "GluGluToRadionToHHTo2B2Tau_M-750";    
 
   fileList=dir_in+"SKIM_"+process+".txt";
@@ -203,7 +203,7 @@ void selEvents(){
   Int_t passTrgGG_etau_2b0jresolvedMcut_SR=0;
   Int_t passTrgGG_etau_boostedLLMcut_SR=0;
 
-  Int_t passTrgGGandBB_etau_1b1jresolvedMcut_SR=0;  
+
   
   treeNew->SetAutoSave(-99999999999);
   treeNew->SetAutoFlush(-99999999999);
@@ -415,7 +415,7 @@ void selEvents(){
     if(etau_2b0jresolvedMcut_SR && passTrgGG)   passTrgGG_etau_2b0jresolvedMcut_SR+=1;
     if(etau_boostedLLMcut_SR && passTrgGG)      passTrgGG_etau_boostedLLMcut_SR+=1;
 
-    if(etau_1b1jresolvedMcut_SR && passTrgGG && passTrgBBnonres)   passTrgGGandBB_etau_1b1jresolvedMcut_SR+=1;
+
     
 
 
@@ -480,7 +480,7 @@ void selEvents(){
   cout<<" passTrgGG_etau_2b0jresolvedMcut_SR "		<<   passTrgGG_etau_2b0jresolvedMcut_SR		  <<endl;
   cout<<" passTrgGG_etau_boostedLLMcut_SR "        	<<   passTrgGG_etau_boostedLLMcut_SR              <<endl;
   cout<<""<<endl;
-  cout<<passTrgGGandBB_etau_1b1jresolvedMcut_SR<<endl;
+
 
 }
 
