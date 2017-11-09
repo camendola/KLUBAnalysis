@@ -239,6 +239,8 @@ public :
    Float_t         dau2_jecUnc;
    Float_t         bjet1_jecUnc;
    Float_t         bjet2_jecUnc;
+   Float_t         lep1_btag;
+   Float_t         lep2_btag;
    vector<float>   *leps_pt;
    vector<float>   *leps_eta;
    vector<float>   *leps_phi;
@@ -496,6 +498,8 @@ public :
    TBranch        *b_dau2_jecUnc;   //!
    TBranch        *b_bjet1_jecUnc;   //!
    TBranch        *b_bjet2_jecUnc;   //!
+   TBranch        *b_lep1_btag;   //!
+   TBranch        *b_lep2_btag;   //!
    TBranch        *b_leps_pt;   //!
    TBranch        *b_leps_eta;   //!
    TBranch        *b_leps_phi;   //!
@@ -837,6 +841,8 @@ void newClass::Init(TTree *tree)
    fChain->SetBranchAddress("dau2_jecUnc", &dau2_jecUnc, &b_dau2_jecUnc);
    fChain->SetBranchAddress("bjet1_jecUnc", &bjet1_jecUnc, &b_bjet1_jecUnc);
    fChain->SetBranchAddress("bjet2_jecUnc", &bjet2_jecUnc, &b_bjet2_jecUnc);
+   fChain->SetBranchAddress("lep1_btag", &lep1_btag, &b_lep1_btag);
+   fChain->SetBranchAddress("lep2_btag", &lep2_btag, &b_lep2_btag);
    fChain->SetBranchAddress("leps_pt", &leps_pt, &b_leps_pt);
    fChain->SetBranchAddress("leps_eta", &leps_eta, &b_leps_eta);
    fChain->SetBranchAddress("leps_phi", &leps_phi, &b_leps_phi);

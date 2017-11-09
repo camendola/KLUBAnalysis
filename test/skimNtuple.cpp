@@ -626,8 +626,8 @@ int main (int argc, char** argv)
   trigReader.addBBresTrigs (trigBBres);
   trigReader.addBBnonresTrigs (trigBBnonres);
   trigReader.addGGTrigs (trigGG);
-
-
+  TH1F* hTauCSV = new TH1F("hTauCSV","hTauCSV",50,0,1); 
+  
   // ------------------------------
 
   OfflineProducerHelper oph (hTriggers, hTauIDS) ;
@@ -2141,9 +2141,17 @@ int main (int argc, char** argv)
         theBigTree.jets_e->at (iJet)
       ) ;
       if (tlv_jet.Pt () < 20. /*GeV*/) continue ; 
-      if (tlv_jet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
-      if (tlv_jet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
-
+      if (tlv_jet.DeltaR (tlv_firstLepton) < lepCleaningCone){
+	if (TMath::Abs(tlv_jet.Eta()) < 2.4 && pairType ==2) 	  hTauCSV->Fill(theBigTree.bCSVscore->at (iJet));
+	if (TMath::Abs(tlv_jet.Eta()) < 2.4) theSmallTree.m_lep1_btag = theBigTree.bCSVscore->at (iJet);
+	continue ;
+      }
+      if (tlv_jet.DeltaR (tlv_secondLepton) < lepCleaningCone){
+	if (TMath::Abs(tlv_jet.Eta()) < 2.4 && pairType ==2)	  hTauCSV->Fill(theBigTree.bCSVscore->at (iJet));
+	if (TMath::Abs(tlv_jet.Eta()) < 2.4) theSmallTree.m_lep2_btag = theBigTree.bCSVscore->at (iJet);
+	continue ;
+	
+      }
       // all jets selected as btag cands apart from eta cut
       int ajetHadFlav = abs(theBigTree.jets_HadronFlavour->at(iJet));
       if (ajetHadFlav == 5) ++theSmallTree.m_njetsBHadFlav;
@@ -3039,6 +3047,7 @@ int main (int argc, char** argv)
   smallFile->cd() ;
   h_eff.Write () ;
   h_effSummary->Write() ;
+    hTauCSV->Write() ;
   if (isHHsignal)
   {
     for (uint ich = 0; ich < 6; ++ich)
