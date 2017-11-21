@@ -1,13 +1,13 @@
-OUTDIRR="Skims2017_18Lug_efftest2"
+OUTDIRR="Skims2017_sync"
 #AMESSAGE="Adding dxy and dz, testing on a few samples. Skims fixing the MuMu sideband SFs on both muons. Reweighted benchmarks 5D reweight. Introduced ele10 sideband. Data from 22Feb production, 7Feb2017 REminiaod. Data with fixed evts number. Added OR of non ER mu triggers to see if agreement is retrieved.Includes nBadMu filter applied. 11 Feb 2017 MC production (most but not all jobs are finished)."
-AMESSAGE="not skims but efficiency histograms"
+AMESSAGE="skims for sync IF-FR"
 
 source /opt/exp_soft/cms/t3/t3setup
-mkdir /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
+mkdir /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/
 mkdir $OUTDIRR
-touch /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
-echo $AMESSAGE > /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
-cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
+touch /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/README.txt
+echo $AMESSAGE > /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/README.txt
+cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/listAll.sh /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/
 
 
 # source /opt/exp_soft/cms/t3/t3setup
@@ -16,6 +16,27 @@ cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh
 # touch /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
 # echo $AMESSAGE > /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/README.txt
 # cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/
+
+
+###################
+# TT
+# TT x section: 831.76 for inclusive sample, W->had 67,60% , W->l nu 3*10,8% = 32,4% (sum over all leptons)
+# hh = 45.7%
+# ll = 10.5%
+# hl = 21.9% (x2 for permutation t-tbar)
+# technical note: use -q long if splitting on ~180-350 jobs
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 400 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_fullyHad  -i inputFiles/Files_7Feb2016/TT_powheg_fullyHad_7Feb2017.txt    -x 380.1143 -t True -b 1
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 700 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_semiLep   -i inputFiles/Files_7Feb2016/TT_powheg_semiLep_7Feb2017.txt     -x 364.3108 -t True -b 5
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 700 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_fullyLep  -i inputFiles/Files_7Feb2016/TT_powheg_fullyLep_7Feb2017.txt    -x 87.3348  -t True -b 4
+
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 700 -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TTTo2L2Nu_TuneCUETP8M2  -i inputFiles/Files_7Feb2016/TT7FebSplit/20_TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 87.3348  -t True 
+
+python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 700 -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_TuneCUETP8M2  -i inputFiles/Files_7Feb2016/TT7FebSplit/23_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 831.76 -t True
+
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 700 -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_TuneCUETP8M2_backup  -i inputFiles/Files_7Feb2016/TT7FebSplit/22_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8__RunIISummer16MiniAODv2-PUMoriond17_backup_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 831.76 -t True 
+
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2017_sync.cfg  -n 700 -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TTToSemilepton_TuneCUETP8M2  -i inputFiles/Files_7Feb2016/TT7FebSplit/21_TTToSemilepton_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 364.3108 -t True
+
 
 
 #####################
@@ -48,7 +69,7 @@ cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh
 # ll = 10.5%
 # hl = 21.9% (x2 for permutation t-tbar)
 # technical note: use -q long if splitting on ~180-350 jobs
-# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 400 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_fullyHad  -i inputFiles/Files_7Feb2016/TT_powheg_fullyHad_7Feb2017.txt    -x 380.1143 -t True -b 1
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 400 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_fullyHad  -i inputFiles/Files_7Feb2016/TT_powheg_fullyHad_7Feb2017.txt    -x 380.1143 -t True -b 1
 # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 700 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_semiLep   -i inputFiles/Files_7Feb2016/TT_powheg_semiLep_7Feb2017.txt     -x 364.3108 -t True -b 5
 # python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 700 -k True -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_TT_fullyLep  -i inputFiles/Files_7Feb2016/TT_powheg_fullyLep_7Feb2017.txt    -x 87.3348  -t True -b 4
 
@@ -173,18 +194,18 @@ cp /home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/scripts/haddAll.sh
 
 
 #### HH dyn rew 12 benchmarks
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_1   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_1.txt -x 1.0    --kl  7.5  --kt 1.0 --c2 -1.0 --cg  0.0 --c2g  0.0 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_2   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_2.txt -x 1.0    --kl  1.0  --kt 1.0 --c2  0.5 --cg -0.8 --c2g  0.6 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_3   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_3.txt -x 1.0    --kl  1.0  --kt 1.0 --c2 -1.5 --cg  0.0 --c2g -0.8 -a True 
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_4   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_4.txt -x 1.0    --kl -3.5  --kt 1.5 --c2 -3.0 --cg  0.0 --c2g  0.0 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_5   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_5.txt -x 1.0    --kl  1.0  --kt 1.0 --c2  0.0 --cg  0.8 --c2g -1.0 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_6   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_6.txt -x 1.0    --kl  2.4  --kt 1.0 --c2  0.0 --cg  0.2 --c2g -0.2 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_7   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_7.txt -x 1.0    --kl  5.0  --kt 1.0 --c2  0.0 --cg  0.2 --c2g -0.2 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_8   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_8.txt -x 1.0    --kl  15.0 --kt 1.0 --c2  0.0 --cg -1.0 --c2g  1.0 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_9   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_9.txt -x 1.0    --kl  1.0  --kt 1.0 --c2  1.0 --cg -0.6 --c2g  0.6 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_10  -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_10.txt -x 1.0   --kl 10.0  --kt 1.5 --c2 -1.0 --cg  0.0 --c2g  0.0 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_11  -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_11.txt -x 1.0   --kl  2.4  --kt 1.0 --c2  0.0 --cg  1.0 --c2g -1.0 -a True
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_12  -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_12.txt -x 1.0   --kl 15.0  --kt 1.0 --c2  1.0 --cg  0.0 --c2g  0.0 -a True 
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_1   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_1.txt -x 1.0    --kl  7.5  --kt 1.0 --c2 -1.0 --cg  0.0 --c2g  0.0 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_2   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_2.txt -x 1.0    --kl  1.0  --kt 1.0 --c2  0.5 --cg -0.8 --c2g  0.6 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_3   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_3.txt -x 1.0    --kl  1.0  --kt 1.0 --c2 -1.5 --cg  0.0 --c2g -0.8 -a True 
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_4   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_4.txt -x 1.0    --kl -3.5  --kt 1.5 --c2 -3.0 --cg  0.0 --c2g  0.0 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_5   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_5.txt -x 1.0    --kl  1.0  --kt 1.0 --c2  0.0 --cg  0.8 --c2g -1.0 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_6   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_6.txt -x 1.0    --kl  2.4  --kt 1.0 --c2  0.0 --cg  0.2 --c2g -0.2 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_7   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_7.txt -x 1.0    --kl  5.0  --kt 1.0 --c2  0.0 --cg  0.2 --c2g -0.2 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_8   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_8.txt -x 1.0    --kl  15.0 --kt 1.0 --c2  0.0 --cg -1.0 --c2g  1.0 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_9   -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_9.txt -x 1.0    --kl  1.0  --kt 1.0 --c2  1.0 --cg -0.6 --c2g  0.6 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_10  -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_10.txt -x 1.0   --kl 10.0  --kt 1.5 --c2 -1.0 --cg  0.0 --c2g  0.0 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_11  -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_11.txt -x 1.0   --kl  2.4  --kt 1.0 --c2  0.0 --cg  1.0 --c2g -1.0 -a True
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 20 -k False -o /data_CMS/cms/cadamuro/test_submit_to_tier3/$OUTDIRR/SKIM_HH_benchmark_12  -i inputFiles/Files_7Feb2016/allNonResClonesBench/filelist_bench_12.txt -x 1.0   --kl 15.0  --kt 1.0 --c2  1.0 --cg  0.0 --c2g  0.0 -a True 
 
 
 
