@@ -48,7 +48,7 @@ void selEvents(){
   TString fileList;    
   TString outfilename;
   //   TString process = "GluGluToHHTo2B2Tau_node_SM";
-           TString process = "GluGluToRadionToHHTo2B2Tau_M-750";    
+  TString process = "GluGluToRadionToHHTo2B2Tau_M-750";    
   
   fileList=dir_in+"SKIM_"+process+".txt";
   
