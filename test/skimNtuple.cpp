@@ -437,7 +437,7 @@ int main (int argc, char** argv)
   bool isTTBar = (isTTBarI == 1) ? true : false;
   if (!isMC) isTTBar = false; // force it, you never know...
   cout << "** INFO: is this a TTbar sample? : " << isTTBar << endl;
-
+  cout <<"@@@@@@@ TTBar "<<isTTBar<<" MC"<<isMC<<endl;
   bool DY_Nbs = false; // run on genjets to count in DY samples the number of b jets
   bool DY_tostitch = false;
   int I_DY_Nbs = atoi(argv[10]);
