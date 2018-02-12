@@ -1,8 +1,10 @@
 #define selEvents_cxx
 //#define myclass_cxx
 #define newClass_cxx
+//#define skimTree_cxx
 //#include "myclass.h"
 #include "newClass.h"
+#include "skimTree.h"
 #include <TFile.h>
 #include <TTree.h>
 #include <TBranch.h>
@@ -43,15 +45,27 @@ void selEvents(){
   TString dir_in="./comb_test/";
   TString dir_out="./comb_test/";
 
+  bool isData = false;
+
+  bool isMu = false;
+  bool isEle = false;
+  bool isTau = false;
   
   
   TString fileList;    
   TString outfilename;
-  //   TString process = "GluGluToHHTo2B2Tau_node_SM";
-  TString process = "GluGluToRadionToHHTo2B2Tau_M-750";    
+
+  TString process;
   
+  if (isData){
+      if (isMu) process = "SingleMuon";
+      if (isEle) process = "SingleElectron";
+      if (isTau) process = "Tau";
+      
+    }
+  process = "TT_incl";
   fileList=dir_in+"SKIM_"+process+".txt";
-  
+  //fileList = "/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_5Mar/SKIM_"+process+"/goodfiles.txt";
   cout<<fileList<<endl;
   //  TFile *file = TFile::Open(Form("%s",filename.Data()),"read");
   
@@ -63,7 +77,8 @@ void selEvents(){
   //TTree *tree = (TTree*) file->Get("HTauTauTree");
   //tree->ls();  
   //myclass theTree(tree); 
-  newClass theTree(tree); 
+  newClass theTree(tree);
+  //skimTree theTree(tree); 
   outfilename = dir_out+Form("output_%s_sel",process.Data());
   TFile *fileNew = TFile::Open(Form("%s.root",outfilename.Data()),"recreate");
   TTree *treeNew = new TTree ("HTauTauTreeSelections","HTauTauTreeSelections");
@@ -71,7 +86,7 @@ void selEvents(){
   
   //  unsigned int nentries = tree->GetEntries(); 
   
-  Int_t           EventNumber;
+  ULong64_t           EventNumber;
   Int_t           RunNumber;
   Int_t           lumi;
   Int_t           nbjetscand;
@@ -100,22 +115,22 @@ void selEvents(){
   tree->SetBranchAddress("nbjetscand", &nbjetscand, &b_nbjetscand);
   
   
-  tree->SetBranchAddress("passTrgBBres",&passTrgBBres,&b_passTrgBBres);
-  tree->SetBranchAddress("passTrgBBnonres",&passTrgBBnonres,&b_passTrgBBnonres);
-  tree->SetBranchAddress("passTrgGG",&passTrgGG,&b_passTrgBBres);
   
-  
-  treeNew->Branch("EventNumber", &EventNumber, "EventNumber/I");
+  treeNew->Branch("EventNumber", &EventNumber, "EventNumber/l");
   treeNew->Branch("RunNumber", &RunNumber, "RunNumber/I");
   treeNew->Branch("lumi", &lumi, "lumi/I");
 
 
+  //  if(!isData){
+
+  tree->SetBranchAddress("passTrgBBres",&passTrgBBres,&b_passTrgBBres);
+  tree->SetBranchAddress("passTrgBBnonres",&passTrgBBnonres,&b_passTrgBBnonres);
+  tree->SetBranchAddress("passTrgGG",&passTrgGG,&b_passTrgBBres);
+    
   treeNew->Branch("passTrgBBres",&passTrgBBres,"passTrgBBres/O");
   treeNew->Branch("passTrgBBnonres",&passTrgBBnonres,"passTrgBBnonres/O");
   treeNew->Branch("passTrgGG",&passTrgGG,"passTrgGG/O");
-
-
-
+  // }
 
   
   ////summer 2017
@@ -127,10 +142,27 @@ void selEvents(){
   Bool_t mutau_2b0jresolvedMcut_SR;
   Bool_t mutau_boostedLLMcut_SR;
 
+  Bool_t  mutau_2b0jresolvedMcutlmr90_SR;
+  Bool_t  mutau_2b0jresolvedMcuthmr90_SR;
+  Bool_t  mutau_1b1jresolvedMcutlmr90_SR;
+  Bool_t  mutau_1b1jresolvedMcuthmr90_SR;
+  Bool_t  mutau_1b1jresolvedMcutlmr70_SR;
+  Bool_t  mutau_2b0jresolvedMcutlmr70_SR;
+
   Bool_t etau_1b1jresolvedMcut_SR;
   Bool_t etau_2b0jresolvedMcut_SR;
   Bool_t etau_boostedLLMcut_SR;
 
+  Bool_t  etau_2b0jresolvedMcutlmr90_SR;
+  Bool_t  etau_2b0jresolvedMcuthmr90_SR;
+  Bool_t  etau_1b1jresolvedMcutlmr90_SR;
+  Bool_t  etau_1b1jresolvedMcuthmr90_SR;
+  Bool_t  etau_1b1jresolvedMcutlmr70_SR;
+  Bool_t  etau_2b0jresolvedMcutlmr70_SR;
+  
+  
+
+  
   //counters
   Int_t tot_tautau_1b1jresolvedMcut_SR=0;
   Int_t tot_tautau_2b0jresolvedMcut_SR=0;
@@ -270,7 +302,7 @@ void selEvents(){
   treeNew->SetAutoFlush(-99999999999);
 
   
-  
+  if (!isData){
   treeNew->Branch("tautau_1b1jresolvedMcut_SR",&tautau_1b1jresolvedMcut_SR,"tautau_1b1jresolvedMcut_SR/O");
   treeNew->Branch("tautau_2b0jresolvedMcut_SR",&tautau_2b0jresolvedMcut_SR,"tautau_2b0jresolvedMcut_SR/O");
   treeNew->Branch("tautau_boostedLLMcut_SR",&tautau_boostedLLMcut_SR,"tautau_boostedLLMcut_SR/O");
@@ -282,16 +314,47 @@ void selEvents(){
   treeNew->Branch("etau_1b1jresolvedMcut_SR",&etau_1b1jresolvedMcut_SR,"etau_1b1jresolvedMcut_SR/O");
   treeNew->Branch("etau_2b0jresolvedMcut_SR",&etau_2b0jresolvedMcut_SR,"etau_2b0jresolvedMcut_SR/O");
   treeNew->Branch("etau_boostedLLMcut_SR",&etau_boostedLLMcut_SR,"etau_boostedLLMcut_SR/O");
+  }
+  if(isData){
+    if (isMu){
+      treeNew->Branch("mutau_1b1jresolvedMcut_SR",&mutau_1b1jresolvedMcut_SR,"mutau_1b1jresolvedMcut_SR/O");
+      treeNew->Branch("mutau_2b0jresolvedMcut_SR",&mutau_2b0jresolvedMcut_SR,"mutau_2b0jresolvedMcut_SR/O");
+      treeNew->Branch("mutau_boostedLLMcut_SR",&mutau_boostedLLMcut_SR,"mutau_boostedLLMcut_SR/O");
+      treeNew->Branch("mutau_2b0jresolvedMcutlmr90_SR",&mutau_2b0jresolvedMcutlmr90_SR,"mutau_2b0jresolvedMcutlmr90_SR/O");
+      treeNew->Branch("mutau_2b0jresolvedMcuthmr90_SR",&mutau_2b0jresolvedMcuthmr90_SR,"mutau_2b0jresolvedMcuthmr90_SR/O");
+      treeNew->Branch("mutau_1b1jresolvedMcutlmr90_SR",&mutau_1b1jresolvedMcutlmr90_SR,"mutau_1b1jresolvedMcutlmr90_SR/O");
+      treeNew->Branch("mutau_1b1jresolvedMcuthmr90_SR",&mutau_1b1jresolvedMcuthmr90_SR,"mutau_1b1jresolvedMcuthmr90_SR/O");
+      treeNew->Branch("mutau_1b1jresolvedMcutlmr70_SR",&mutau_1b1jresolvedMcutlmr70_SR,"mutau_1b1jresolvedMcutlmr70_SR/O");
+      treeNew->Branch("mutau_2b0jresolvedMcutlmr70_SR",&mutau_2b0jresolvedMcutlmr70_SR,"mutau_2b0jresolvedMcutlmr70_SR/O");
+    }
+    if (isEle){
+      treeNew->Branch("etau_1b1jresolvedMcut_SR",&etau_1b1jresolvedMcut_SR,"etau_1b1jresolvedMcut_SR/O");
+      treeNew->Branch("etau_2b0jresolvedMcut_SR",&etau_2b0jresolvedMcut_SR,"etau_2b0jresolvedMcut_SR/O");
+      treeNew->Branch("etau_boostedLLMcut_SR",&etau_boostedLLMcut_SR,"etau_boostedLLMcut_SR/O");
+      treeNew->Branch("etau_2b0jresolvedMcutlmr90_SR",&etau_2b0jresolvedMcutlmr90_SR,"etau_2b0jresolvedMcutlmr90_SR/O");
+      treeNew->Branch("etau_2b0jresolvedMcuthmr90_SR",&etau_2b0jresolvedMcuthmr90_SR,"etau_2b0jresolvedMcuthmr90_SR/O");
+      treeNew->Branch("etau_1b1jresolvedMcutlmr90_SR",&etau_1b1jresolvedMcutlmr90_SR,"etau_1b1jresolvedMcutlmr90_SR/O");
+      treeNew->Branch("etau_1b1jresolvedMcuthmr90_SR",&etau_1b1jresolvedMcuthmr90_SR,"etau_1b1jresolvedMcuthmr90_SR/O");
+      treeNew->Branch("etau_1b1jresolvedMcutlmr70_SR",&etau_1b1jresolvedMcutlmr70_SR,"etau_1b1jresolvedMcutlmr70_SR/O");
+      treeNew->Branch("etau_2b0jresolvedMcutlmr70_SR",&etau_2b0jresolvedMcutlmr70_SR,"etau_2b0jresolvedMcutlmr70_SR/O");
 
-  
+      
+    }
+    if(isTau){
+      treeNew->Branch("tautau_1b1jresolvedMcut_SR",&tautau_1b1jresolvedMcut_SR,"tautau_1b1jresolvedMcut_SR/O");
+      treeNew->Branch("tautau_2b0jresolvedMcut_SR",&tautau_2b0jresolvedMcut_SR,"tautau_2b0jresolvedMcut_SR/O");
+      treeNew->Branch("tautau_boostedLLMcut_SR",&tautau_boostedLLMcut_SR,"tautau_boostedLLMcut_SR/O");
+    }
+  }
+
+
 
   for (Long64_t i =0 ;true; ++i){
 
     int got = 0;
     got = theTree.GetEntry(i);
     if (got == 0) break;
-    //  for(unsigned int i=0; i<nentries; i++) {
-    // theTree.GetEntry(i);    
+    if( i >10000) break;
     int isOS = theTree.isOS;
     int pairType = theTree.pairType;
     int isBoosted = theTree.isBoosted;
@@ -316,12 +379,14 @@ void selEvents(){
     float bjet2_pt_raw = theTree.bjet2_pt_raw;
     vector<float> *jets_btag=theTree.jets_btag;
     vector<float> *jets_eta=theTree.jets_eta;
+    float BDTResonantLM = theTree.BDTResonantLM;
+    float BDTResonantHM = theTree.BDTResonantHM;
 
     float lep1_btag = theTree.lep1_btag;
     float lep2_btag = theTree.lep2_btag;
 	
 
-    
+
     int nbjetscand3 = 0;
 
     int nleps2bjets = 0;
@@ -344,7 +409,8 @@ void selEvents(){
     bool tautau_baseline = pairType == 2 && dau1_pt > 45 && abs (dau1_eta) < 2.1 && dau2_pt > 45 && abs (dau2_eta) < 2.1 && nleps == 0;
     bool mutau_baseline= pairType == 0 && dau1_pt > 23 && abs (dau1_eta) < 2.1 && dau2_pt > 20 && abs (dau2_eta) < 2.3 && nleps == 0;
     bool etau_baseline = pairType == 1 && dau1_pt > 27 && abs(dau1_eta) < 2.1 && dau2_pt > 20 && abs(dau2_eta) < 2.3 && nleps == 0;
-
+    cout <<pairType << " "<<dau1_pt<<" "<<abs (dau1_eta) <<" "<<nleps<<" "<<endl;
+    cout <<tautau_baseline<<" base"<<endl;
     // btag
     bool btagM = bjet1_bID > 0.8484 && bjet2_bID < 0.8484;
     bool btagMM = bjet1_bID > 0.8484 && bjet2_bID > 0.8484;
@@ -357,6 +423,11 @@ void selEvents(){
 															  
     //bdt
     bool nonresBDTCut = LepTauKine > -0.134;
+    bool lmrBDTCut70rej = BDTResonantLM > -0.0764;
+    bool lmrBDTCut90rej = BDTResonantLM > 0.4772;
+    bool hmrBDTCut70rej = BDTResonantHM > -0.7492;
+    bool hmrBDTCut90rej = BDTResonantHM > 0.0188;
+
 
     //region
     bool tautau_SR = isOS != 0 && dau1_MVAiso >= 3 && dau2_MVAiso >= 3;
@@ -377,6 +448,12 @@ void selEvents(){
     tautau_1b1jresolvedMcut_SR = tautau_baseline && btagM && tautau_SR && isBoosted!=1 && ellypsMassCut;
     tautau_2b0jresolvedMcut_SR = tautau_baseline && btagMM && tautau_SR && isBoosted!=1 && ellypsMassCut;
     tautau_boostedLLMcut_SR = tautau_baseline && btagLL && tautau_SR && isBoosted==1 && boostMassCut;
+    cout<<btagM<<" btagM"<<endl;
+    cout<<tautau_SR<<" tautauSR"<<endl;
+    cout<<isBoosted<<" boost"<<endl;
+    cout<<ellypsMassCut<<" mass"<<endl;
+    
+    cout<<tautau_1b1jresolvedMcut_SR<<" tautau_1b1jresolvedMcut_SR "<<endl;
 
     if(pairType == 2 && lep1b && lep2b) nleps2bjets+=1; 
     
@@ -422,13 +499,22 @@ void selEvents(){
     
     //-----------Tautau selections------------//
     //comb selections from selectionCfg_MuTau.cfg
-    
+
     mutau_1b1jresolvedMcut_SR = mutau_baseline && btagM && mutau_SR && isBoosted!=1 && ellypsMassCut;
     mutau_2b0jresolvedMcut_SR = mutau_baseline && btagMM && mutau_SR && isBoosted!=1 && ellypsMassCut;
     mutau_boostedLLMcut_SR = mutau_baseline && btagLL && mutau_SR && isBoosted==1 && boostMassCut;
 
-    if(pairType == 0 && lep1b && lep2b) nleps2bjets+=1; 
-    
+
+      
+    mutau_2b0jresolvedMcutlmr90_SR = mutau_2b0jresolvedMcut_SR && lmrBDTCut90rej;
+    mutau_2b0jresolvedMcuthmr90_SR = mutau_2b0jresolvedMcut_SR && hmrBDTCut90rej;
+    mutau_1b1jresolvedMcutlmr90_SR = mutau_1b1jresolvedMcut_SR && lmrBDTCut90rej;
+    mutau_1b1jresolvedMcuthmr90_SR = mutau_1b1jresolvedMcut_SR && hmrBDTCut90rej;
+    mutau_1b1jresolvedMcutlmr70_SR = mutau_1b1jresolvedMcut_SR && lmrBDTCut70rej;
+    mutau_2b0jresolvedMcutlmr70_SR = mutau_2b0jresolvedMcut_SR && lmrBDTCut70rej;
+      
+     if(pairType == 0 && lep1b && lep2b) nleps2bjets+=1; 
+
     if(mutau_1b1jresolvedMcut_SR ) tot_mutau_1b1jresolvedMcut_SR+=1;
     if(mutau_2b0jresolvedMcut_SR)  tot_mutau_2b0jresolvedMcut_SR+=1;
     if(mutau_boostedLLMcut_SR)     tot_mutau_boostedLLMcut_SR+=1;
@@ -477,7 +563,15 @@ void selEvents(){
     etau_2b0jresolvedMcut_SR = etau_baseline && btagMM && etau_SR && isBoosted!=1 && ellypsMassCut;
     etau_boostedLLMcut_SR = etau_baseline && btagLL && etau_SR && isBoosted==1 && boostMassCut;
 
-    if(pairType == 1 && lep1b && lep2b) nleps2bjets+=1; 
+
+    etau_2b0jresolvedMcutlmr90_SR = etau_2b0jresolvedMcut_SR && lmrBDTCut90rej;
+    etau_2b0jresolvedMcuthmr90_SR = etau_2b0jresolvedMcut_SR && hmrBDTCut90rej;
+    etau_1b1jresolvedMcutlmr90_SR = etau_1b1jresolvedMcut_SR && lmrBDTCut90rej;
+    etau_1b1jresolvedMcuthmr90_SR = etau_1b1jresolvedMcut_SR && hmrBDTCut90rej;
+    etau_1b1jresolvedMcutlmr70_SR = etau_1b1jresolvedMcut_SR && lmrBDTCut70rej;
+    etau_2b0jresolvedMcutlmr70_SR = etau_2b0jresolvedMcut_SR && lmrBDTCut70rej;
+
+      if(pairType == 1 && lep1b && lep2b) nleps2bjets+=1; 
     
     if(etau_1b1jresolvedMcut_SR ) tot_etau_1b1jresolvedMcut_SR+=1;
     if(etau_2b0jresolvedMcut_SR)  tot_etau_2b0jresolvedMcut_SR+=1;
@@ -522,8 +616,9 @@ void selEvents(){
     if(etau_1b1jresolvedMcut_SR && nleps2bjets &&passTrgGG)  GGandleps2bjets_etau_1b1jresolvedMcut_SR+=1;
     if(etau_2b0jresolvedMcut_SR && nleps2bjets &&passTrgGG)  GGandleps2bjets_etau_2b0jresolvedMcut_SR+=1;
     if(etau_boostedLLMcut_SR && nleps2bjets    &&passTrgGG)  GGandleps2bjets_etau_boostedLLMcut_SR+=1;
+
     treeNew->Fill();  
-    
+
   }
   fileNew->cd();
   treeNew->Write();
