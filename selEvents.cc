@@ -1,7 +1,7 @@
 #define selEvents_cxx
 //#define myclass_cxx
-#define newClass_cxx
-//#define skimTree_cxx
+//#define newClass_cxx
+#define skimTree_cxx
 //#include "myclass.h"
 #include "newClass.h"
 #include "skimTree.h"
@@ -46,7 +46,7 @@ void selEvents(){
   TString dir_out="./comb_test/";
 
   bool isData = false;
-
+  bool isOld = true;
   bool isMu = false;
   bool isEle = false;
   bool isTau = false;
@@ -63,9 +63,10 @@ void selEvents(){
       if (isTau) process = "Tau";
       
     }
-  process = "TT_incl";
-  fileList=dir_in+"SKIM_"+process+".txt";
-  //fileList = "/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_5Mar/SKIM_"+process+"/goodfiles.txt";
+
+  process = "TT_2L2Nu";
+  //fileList=dir_in+"SKIM_"+process+".txt";
+  fileList = "/data_CMS/cms/cadamuro/test_submit_to_tier3/Skims2017_28Feb/SKIM_TT_fullyHad/goodfiles.txt";
   cout<<fileList<<endl;
   //  TFile *file = TFile::Open(Form("%s",filename.Data()),"read");
   
@@ -76,9 +77,12 @@ void selEvents(){
 
   //TTree *tree = (TTree*) file->Get("HTauTauTree");
   //tree->ls();  
-  //myclass theTree(tree); 
-  newClass theTree(tree);
-  //skimTree theTree(tree); 
+  //myclass theTree(tree);
+  // if(isOld){
+  skimTree theTree(tree);   
+  //}else{
+  // newClass theTree(tree);
+  // }
   outfilename = dir_out+Form("output_%s_sel",process.Data());
   TFile *fileNew = TFile::Open(Form("%s.root",outfilename.Data()),"recreate");
   TTree *treeNew = new TTree ("HTauTauTreeSelections","HTauTauTreeSelections");
@@ -86,7 +90,7 @@ void selEvents(){
   
   //  unsigned int nentries = tree->GetEntries(); 
   
-  ULong64_t           EventNumber;
+  ULong64_t       EventNumber;
   Int_t           RunNumber;
   Int_t           lumi;
   Int_t           nbjetscand;
@@ -121,7 +125,7 @@ void selEvents(){
   treeNew->Branch("lumi", &lumi, "lumi/I");
 
 
-  //  if(!isData){
+  if( !isOld){
 
   tree->SetBranchAddress("passTrgBBres",&passTrgBBres,&b_passTrgBBres);
   tree->SetBranchAddress("passTrgBBnonres",&passTrgBBnonres,&b_passTrgBBnonres);
@@ -130,7 +134,7 @@ void selEvents(){
   treeNew->Branch("passTrgBBres",&passTrgBBres,"passTrgBBres/O");
   treeNew->Branch("passTrgBBnonres",&passTrgBBnonres,"passTrgBBnonres/O");
   treeNew->Branch("passTrgGG",&passTrgGG,"passTrgGG/O");
-  // }
+  }
 
   
   ////summer 2017
@@ -381,11 +385,14 @@ void selEvents(){
     vector<float> *jets_eta=theTree.jets_eta;
     float BDTResonantLM = theTree.BDTResonantLM;
     float BDTResonantHM = theTree.BDTResonantHM;
-
-    float lep1_btag = theTree.lep1_btag;
-    float lep2_btag = theTree.lep2_btag;
+    float lep1_btag = 0;
+    float lep2_btag =0;
+   if (!isOld){
+    
+     //    lep1_btag = theTree.lep1_btag;
+     // lep2_btag = theTree.lep2_btag;
 	
-
+   }
 
     int nbjetscand3 = 0;
 

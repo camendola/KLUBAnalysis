@@ -14,8 +14,8 @@ from subprocess import Popen, PIPE
 #tag = "MC_SVFit_MiniAODV2_22Nov2015_EssentialSamples_SVFix"
 ###chiara
 #tag = "MC_Radion750_3Jul2017"
-tag = "MC_BKG_3Jul2017"
-
+#tag = "MC_BKG_3Jul2017"
+tag  ='/store/user/camendol/HHNtuplesComb2016/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/'
 
 #tag = "Data_SilverJson_SVfit_31Dic2015"
 #tag = "MC_SilverJson_SVfit_31Dic2015"
@@ -77,7 +77,7 @@ tag = "MC_BKG_3Jul2017"
 #outFolder = '/home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/Files_23SepReReco_26Feb'
 #outFolder = '/home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/Files_22Feb2017'
 #outFolder = '/home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/Files_5apr_SUSY'
-outFolder = '/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/FilesTest2017'
+outFolder = '/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/comb_test'
 
 areEnrichedMiniAOD = False; # if true:  add a header and the /store.. etc to run ntuplizer on Tier3 on CMSSW
                                  # if false: only add the polgrid server to run the skim and submit on root
@@ -121,7 +121,8 @@ partialPath = "/store/user/camendol/HHNtuples/"
 #partialPath = "/store/user/davignon/EnrichedMiniAOD/"
 #partialPath = "/store/user/gortona/HHNtuples/"
 
-path = dpmhome + partialPath + tag
+#path = dpmhome + partialPath + tag
+path = dpmhome + tag
 if outFolder[-1] != "/": outFolder += '/'
 
 command = "/usr/bin/rfdir %s | awk '{print $9}'" % path
@@ -129,22 +130,24 @@ command = "/usr/bin/rfdir %s | awk '{print $9}'" % path
 pipe = Popen(command, shell=True, stdout=PIPE)
 
 allLists = {} #dictionary
-
+#print pipe.stdout
 for line in pipe.stdout:
     
-    #print line
+#    print line
     if useOnly:
         if not (line.strip()) in useOnly:
             continue
     samplesPath = (path + "/" + line).strip()    
     sampleName = line
     allLists[sampleName] = []
-    print sampleName.strip()
-    for level in range(0, 3): #sampleName, tag, hash subfolders
+    #print sampleName.strip()
+    for level in range(0, 1): #sampleName, tag, hash subfolders
+#    for level in range(0, 3): #sampleName, tag, hash subfolders
         comm = "/usr/bin/rfdir %s | awk '{print $9}'" % samplesPath.strip()
         #print "comm: ==> " , comm
         pipeNested = Popen (comm, shell=True, stdout=PIPE)
         out = pipeNested.stdout.readlines()
+        #print out
         numLines = len (out)
         if numLines > 0 :
             if numLines > 1 : print "  *** WARNING: In %s too many subfolders, using last one (most recent submission)" % samplesPath        
@@ -161,9 +164,10 @@ for line in pipe.stdout:
             getFilesComm = "/usr/bin/rfdir %s | grep Enriched_miniAOD | awk '{print $9}'" % finalDir.strip()
         else :
             getFilesComm = "/usr/bin/rfdir %s | grep HTauTauAnalysis | awk '{print $9}'" % finalDir.strip()
-            #print getFilesComm
+
         pipeGetFiles = Popen (getFilesComm, shell=True, stdout=PIPE)
         outGetFiles = pipeGetFiles.stdout.readlines()
+        #print outGetFiles
         for filename in outGetFiles:
             name = formatName (finalDir + "/" + filename.strip(), dpmhome)
             allLists[sampleName].append (name)
