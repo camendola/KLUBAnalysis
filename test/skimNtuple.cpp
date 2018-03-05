@@ -2133,7 +2133,7 @@ int main (int argc, char** argv)
 	{
 	  // JET PU ID cut 
 	  if (theBigTree.jets_PUJetID->at (iJet) < PUjetID_minCut) continue ;
-	  if (theBigTree.PFjetID->at (iJet) < PFjetID_WP) continue; // 0 ; don't pass PF Jet ID; 1: loose, 2: tight, 3: tightLepVeto
+	  if (theBigTree.PFjetID->at (iJet) < PFjetID_WP) continue; // 0 ; don't pass PF Jet ID; 1: tight, 2: tightLepVeto
 
 	  TLorentzVector tlv_jet 
 	    (
@@ -2825,7 +2825,8 @@ int main (int argc, char** argv)
 			      );
 	      if (ijet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
 	      if (ijet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
-	      if(ijet.Pt() < 30) continue;		  
+	      if(ijet.Pt() < 30) continue;
+	      if(fabs(ijet.Eta()) > 5.) continue; // keeping the whole HF acceptance for the time being
 	      for (unsigned int kJet = iJet+1 ;   (kJet < theBigTree.jets_px->size ()) && (theSmallTree.m_njets < maxNjetsSaved) ;  ++kJet){
 		if (int (kJet) == bjet1idx || int (kJet) == bjet2idx) continue;
 	    
@@ -2838,7 +2839,8 @@ int main (int argc, char** argv)
 				);
 		if (kjet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
 		if (kjet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
-		if(kjet.Pt() < 30) continue;		  
+		if(kjet.Pt() < 30) continue;
+		if(fabs(kjet.Eta()) > 5.) continue;   
 		TLorentzVector jetPair = ijet+kjet;
 		VBFcand_Mjj.push_back(make_tuple(jetPair.M(),iJet,kJet));
 	      }
