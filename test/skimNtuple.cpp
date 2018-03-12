@@ -901,6 +901,54 @@ int main (int argc, char** argv)
 		}
 	    }
 	}
+	  //LHE particles
+
+	  TLorentzVector tlv_LHE_H1, tlv_LHE_H2, tlv_LHE_VBF1, tlv_LHE_VBF2;
+	  tlv_LHE_H1.SetPxPyPzE(
+				theBigTree.lhe_H1_px,
+				theBigTree.lhe_H1_py,
+				theBigTree.lhe_H1_pz,
+				theBigTree.lhe_H1_e);
+	  tlv_LHE_H2.SetPxPyPzE(
+				theBigTree.lhe_H2_px,
+				theBigTree.lhe_H2_py,
+				theBigTree.lhe_H2_pz,
+				theBigTree.lhe_H2_e
+			    );
+	  
+	  tlv_LHE_VBF1.SetPxPyPzE(
+				  theBigTree.lhe_qout1_px,
+				  theBigTree.lhe_qout1_py,
+				  theBigTree.lhe_qout1_pz,
+				  theBigTree.lhe_qout1_e
+			       );
+	  tlv_LHE_VBF2.SetPxPyPzE(
+				  theBigTree.lhe_qout2_px,
+				  theBigTree.lhe_qout2_py,
+				  theBigTree.lhe_qout2_pz,
+				  theBigTree.lhe_qout2_e
+			       );
+	  theSmallTree.m_LHE_H1_pt = tlv_LHE_H1.Pt();
+	  theSmallTree.m_LHE_H1_eta = tlv_LHE_H1.Eta();
+	  theSmallTree.m_LHE_H1_phi = tlv_LHE_H1.Phi();
+	  theSmallTree.m_LHE_H1_et = tlv_LHE_H1.Et();
+	  theSmallTree.m_LHE_H2_pt = tlv_LHE_H2.Pt();
+	  theSmallTree.m_LHE_H2_eta = tlv_LHE_H2.Eta();
+	  theSmallTree.m_LHE_H2_phi = tlv_LHE_H2.Phi();
+	  theSmallTree.m_LHE_H2_et = tlv_LHE_H2.Et();
+	  theSmallTree.m_LHE_HH_mass = (tlv_LHE_H1+tlv_LHE_H2).M();
+	  
+	  theSmallTree.m_LHE_VBF1_pt = tlv_LHE_VBF1.Pt();
+	  theSmallTree.m_LHE_VBF1_eta = tlv_LHE_VBF1.Eta();
+	  theSmallTree.m_LHE_VBF1_phi = tlv_LHE_VBF1.Phi();
+	  theSmallTree.m_LHE_VBF1_et = tlv_LHE_VBF1.Et();
+
+	  theSmallTree.m_LHE_VBF2_pt = tlv_LHE_VBF2.Pt();
+	  theSmallTree.m_LHE_VBF2_eta = tlv_LHE_VBF2.Eta();
+	  theSmallTree.m_LHE_VBF2_phi = tlv_LHE_VBF2.Phi();
+	  theSmallTree.m_LHE_VBF2_et = tlv_LHE_VBF2.Et();
+	  theSmallTree.m_LHE_VBFjj_mass = (tlv_LHE_VBF1+tlv_LHE_VBF2).M();
+	 
 
       // gen info -- fetch tt pair and compute top PT reweight
       float topPtReweight = 1.0; // 1 for all the other samples      
@@ -2311,13 +2359,14 @@ int main (int argc, char** argv)
 	  bool hasgj2 = false;          
 	  if (isMC){            
         
-	    int mcind = theBigTree.jets_genjetIndex->at(bjet2idx);
+	    int mcind = theBigTree.jets_genjetIndex->at(bjet1idx);
 	    if (mcind>=0){
 	      TLorentzVector gen(theBigTree.genjet_px->at(mcind),theBigTree.genjet_py->at(mcind),theBigTree.genjet_pz->at(mcind),theBigTree.genjet_e->at(mcind));
 	      theSmallTree.m_genjet1_pt = gen.Pt();
 	      theSmallTree.m_genjet1_eta = gen.Eta();
 	      theSmallTree.m_genjet1_phi = gen.Phi();
 	      theSmallTree.m_genjet1_e = gen.E();
+	      theSmallTree.m_genjet1_flav = theBigTree.genjet_hadronFlavour->at(mcind);
 	      if (gen.Pt() > 8) hasgj1 = true;
 	    }
 
@@ -2328,11 +2377,13 @@ int main (int argc, char** argv)
 	      theSmallTree.m_genjet2_eta = gen.Eta();
 	      theSmallTree.m_genjet2_phi = gen.Phi();
 	      theSmallTree.m_genjet2_e = gen.E();
+	      theSmallTree.m_genjet2_flav = theBigTree.genjet_hadronFlavour->at(mcind);
 	      if (gen.Pt() > 8) hasgj2 = true;
 	    }
 	  }
 	  theSmallTree.m_bjet1_hasgenjet = hasgj1 ;
 	  theSmallTree.m_bjet2_hasgenjet = hasgj2 ;
+
 
 	  float METx = theBigTree.METx->at (chosenTauPair) ;
 	  float METy = theBigTree.METy->at (chosenTauPair) ;

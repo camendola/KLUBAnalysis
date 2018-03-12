@@ -242,7 +242,22 @@ public :
    std::vector<float>   *subjets_e;
    std::vector<float>   *subjets_CSV;
    std::vector<int>     *subjets_ak8MotherIdx;
-
+   Float_t lhe_H1_px;
+   Float_t lhe_H1_py;
+   Float_t lhe_H1_pz;
+   Float_t lhe_H1_e;
+   Float_t lhe_H2_px;
+   Float_t lhe_H2_py;
+   Float_t lhe_H2_pz;
+   Float_t lhe_H2_e;
+   Float_t lhe_qout1_px;
+   Float_t lhe_qout1_py;
+   Float_t lhe_qout1_pz;
+   Float_t lhe_qout1_e;
+   Float_t lhe_qout2_px;
+   Float_t lhe_qout2_py;
+   Float_t lhe_qout2_pz;
+   Float_t lhe_qout2_e;
 
    // List of branches
    TBranch        *b_EventNumber;   //!
@@ -458,7 +473,22 @@ public :
    TBranch        *b_subjets_e;
    TBranch        *b_subjets_CSV;
    TBranch        *b_subjets_ak8MotherIdx;
-
+   TBranch 	  *b_lhe_H1_px;
+   TBranch     	  *b_lhe_H1_py;
+   TBranch     	  *b_lhe_H1_pz;
+   TBranch     	  *b_lhe_H1_e;
+   TBranch     	  *b_lhe_H2_px;
+   TBranch     	  *b_lhe_H2_py;
+   TBranch     	  *b_lhe_H2_pz;
+   TBranch     	  *b_lhe_H2_e;
+   TBranch     	  *b_lhe_qout1_px;
+   TBranch     	  *b_lhe_qout1_py;
+   TBranch     	  *b_lhe_qout1_pz;
+   TBranch     	  *b_lhe_qout1_e;
+   TBranch     	  *b_lhe_qout2_px;
+   TBranch     	  *b_lhe_qout2_py;
+   TBranch     	  *b_lhe_qout2_pz;
+   TBranch     	  *b_lhe_qout2_e;
 
    bigTree (TChain * inputChain) : fChain (inputChain) { Init(fChain);}
    virtual ~bigTree() { }
@@ -668,7 +698,22 @@ public :
        subjets_e = 0;
        subjets_CSV = 0;
        subjets_ak8MotherIdx = 0;
-
+       lhe_H1_px = 0;
+       lhe_H1_py = 0;
+       lhe_H1_pz = 0;
+       lhe_H1_e = 0;
+       lhe_H2_px = 0;
+       lhe_H2_py = 0;
+       lhe_H2_pz = 0;
+       lhe_H2_e = 0;
+       lhe_qout1_px = 0;
+       lhe_qout1_py = 0;
+       lhe_qout1_pz = 0;
+       lhe_qout1_e = 0;
+       lhe_qout2_px = 0;
+       lhe_qout2_py = 0;
+       lhe_qout2_pz = 0;
+       lhe_qout2_e = 0;
        fChain->SetMakeClass(1);
 
        fChain->SetBranchAddress("EventNumber", &EventNumber, &b_EventNumber);
@@ -883,6 +928,22 @@ public :
             fChain->SetBranchAddress("SVfit_phiUncTauDown", &SVfit_phiUncTauDown, &b_SVfit_phiUncTauDown);
             fChain->SetBranchAddress("SVfit_fitMETRhoTauDown", &SVfit_fitMETRhoTauDown, &b_SVfit_fitMETRhoTauDown);
             fChain->SetBranchAddress("SVfit_fitMETPhiTauDown", &SVfit_fitMETPhiTauDown, &b_SVfit_fitMETPhiTauDown);
+	    fChain->SetBranchAddress("lhe_H1_px",&lhe_H1_px,&b_lhe_H1_px);
+	    fChain->SetBranchAddress("lhe_H1_py",&lhe_H1_py,&b_lhe_H1_py);
+	    fChain->SetBranchAddress("lhe_H1_pz",&lhe_H1_pz,&b_lhe_H1_pz);
+	    fChain->SetBranchAddress("lhe_H1_e",&lhe_H1_e,&b_lhe_H1_e);
+	    fChain->SetBranchAddress("lhe_H2_px",&lhe_H2_px,&b_lhe_H2_px);
+	    fChain->SetBranchAddress("lhe_H2_py",&lhe_H2_py,&b_lhe_H2_py);
+	    fChain->SetBranchAddress("lhe_H2_pz",&lhe_H2_pz,&b_lhe_H2_pz);
+	    fChain->SetBranchAddress("lhe_H2_e",&lhe_H2_e,&b_lhe_H2_e);
+	    fChain->SetBranchAddress("lhe_qout1_px",&lhe_qout1_px,&b_lhe_qout1_px);
+	    fChain->SetBranchAddress("lhe_qout1_py",&lhe_qout1_py,&b_lhe_qout1_py);
+	    fChain->SetBranchAddress("lhe_qout1_pz",&lhe_qout1_pz,&b_lhe_qout1_pz);
+	    fChain->SetBranchAddress("lhe_qout1_e",&lhe_qout1_e,&b_lhe_qout1_e);
+	    fChain->SetBranchAddress("lhe_qout2_px",&lhe_qout2_px,&b_lhe_qout2_px);
+	    fChain->SetBranchAddress("lhe_qout2_py",&lhe_qout2_py,&b_lhe_qout2_py);
+	    fChain->SetBranchAddress("lhe_qout2_pz",&lhe_qout2_pz,&b_lhe_qout2_pz);
+	    fChain->SetBranchAddress("lhe_qout2_e",&lhe_qout2_e,&b_lhe_qout2_e);
        }
        
     }

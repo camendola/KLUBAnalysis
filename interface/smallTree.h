@@ -183,12 +183,12 @@ struct smallTree
       m_genjet1_eta  = -1. ;
       m_genjet1_phi  = -1. ;
       m_genjet1_e  = -1. ;
-
+      m_genjet1_flav = -1;
       m_genjet2_pt  = -1. ;
       m_genjet2_eta  = -1. ;
       m_genjet2_phi  = -1. ;
       m_genjet2_e  = -1. ;
-
+      m_genjet2_flav = -1;
       m_tauH_pt = -1. ;
       m_tauH_eta = -1. ;
       m_tauH_phi = -1. ;
@@ -447,6 +447,24 @@ struct smallTree
       m_top_Wjj_b_mass = -1.;
       m_top_Wjj_bclose_mass = -1.;
 
+      m_LHE_H1_pt = -999;
+	m_LHE_H1_eta = -999;
+	m_LHE_H1_phi = -999;
+	m_LHE_H1_et = -999;
+	m_LHE_H2_pt = -999;
+	m_LHE_H2_eta = -999;
+	m_LHE_H2_phi = -999;
+	m_LHE_H2_et = -999;
+	m_LHE_HH_mass = -999;
+	m_LHE_VBF1_pt = -999;
+	m_LHE_VBF1_eta = -999;
+	m_LHE_VBF1_phi = -999;
+	m_LHE_VBF1_et = -999;
+	m_LHE_VBF2_pt = -999;
+	m_LHE_VBF2_eta = -999;
+	m_LHE_VBF2_phi = -999;
+	m_LHE_VBF2_et = -999;
+	m_LHE_VBFjj_mass = -999;
       
       return 0 ;    
     }
@@ -613,12 +631,14 @@ struct smallTree
       m_smallT->Branch ("genjet1_eta", &m_genjet1_eta, "genjet1_eta/F") ;
       m_smallT->Branch ("genjet1_phi", &m_genjet1_phi, "genjet1_phi/F") ;
       m_smallT->Branch ("genjet1_e",   &m_genjet1_e,   "genjet1_e/F") ;
-
+      m_smallT->Branch ("genjet1_flav",   &m_genjet1_flav,   "genjet1_flav/I") ;
+      
       m_smallT->Branch ("genjet2_pt",  &m_genjet2_pt,  "genjet2_pt/F") ;
       m_smallT->Branch ("genjet2_eta", &m_genjet2_eta, "genjet2_eta/F") ;
       m_smallT->Branch ("genjet2_phi", &m_genjet2_phi, "genjet2_phi/F") ;
       m_smallT->Branch ("genjet2_e",   &m_genjet2_e,   "genjet2_e/F") ;
-
+      m_smallT->Branch ("genjet2_flav",   &m_genjet2_flav,   "genjet2_flav/I") ;
+	    
       m_smallT->Branch ("tauH_pt", &m_tauH_pt, "tauH_pt/F") ;
       m_smallT->Branch ("tauH_eta", &m_tauH_eta, "tauH_eta/F") ;
       m_smallT->Branch ("tauH_phi", &m_tauH_phi, "tauH_phi/F") ;
@@ -864,6 +884,25 @@ struct smallTree
       m_smallT->Branch ("top_Wjj_b_mass",&m_top_Wjj_b_mass,"top_Wjj_b_mass/F");
       m_smallT->Branch ("top_Wjj_bclose_mass",&m_top_Wjj_bclose_mass,"top_Wjj_bclose_mass/F");
       
+      m_smallT->Branch ("LHE_H1_pt", &m_LHE_H1_pt,"LHE_H1_pt/F");
+      m_smallT->Branch ("LHE_H1_eta", &m_LHE_H1_eta,"LHE_H1_eta/F");
+      m_smallT->Branch ("LHE_H1_phi", &m_LHE_H1_phi,"LHE_H1_phi/F");
+      m_smallT->Branch ("LHE_H1_et", &m_LHE_H1_et,"LHE_H1_et/F");
+      m_smallT->Branch ("LHE_H2_pt", &m_LHE_H2_pt,"LHE_H2_pt/F");
+      m_smallT->Branch ("LHE_H2_eta", &m_LHE_H2_eta,"LHE_H2_eta/F");
+      m_smallT->Branch ("LHE_H2_phi", &m_LHE_H2_phi,"LHE_H2_phi/F");
+      m_smallT->Branch ("LHE_H2_et", &m_LHE_H2_et,"LHE_H2_et/F");
+      m_smallT->Branch ("LHE_HH_mass", &m_LHE_HH_mass,"LHE_HH_mass/F");
+      m_smallT->Branch ("LHE_VBF1_pt", &m_LHE_VBF1_pt,"LHE_VBF1_pt/F");
+      m_smallT->Branch ("LHE_VBF1_eta", &m_LHE_VBF1_eta,"LHE_VBF1_eta/F");
+      m_smallT->Branch ("LHE_VBF1_phi", &m_LHE_VBF1_phi,"LHE_VBF1_phi/F");
+      m_smallT->Branch ("LHE_VBF1_et", &m_LHE_VBF1_et,"LHE_VBF1_et/F");
+      m_smallT->Branch ("LHE_VBF2_pt", &m_LHE_VBF2_pt,"LHE_VBF2_pt/F");
+      m_smallT->Branch ("LHE_VBF2_eta", &m_LHE_VBF2_eta,"LHE_VBF2_eta/F");
+      m_smallT->Branch ("LHE_VBF2_phi", &m_LHE_VBF2_phi,"LHE_VBF2_phi/F");
+      m_smallT->Branch ("LHE_VBF2_et", &m_LHE_VBF2_et,"LHE_VBF2_et/F");
+      m_smallT->Branch ("LHE_VBFjj_mass", &m_LHE_VBFjj_mass,"LHE_VBFjj_mass/F");
+	
       return 0 ;
     }
 
@@ -1042,13 +1081,15 @@ struct smallTree
   Float_t m_genjet1_eta ;
   Float_t m_genjet1_phi ;
   Float_t m_genjet1_e ;
+  Int_t m_genjet1_flav ;
 
   // the gen jet associated to the second b jet
   Float_t m_genjet2_pt ;
   Float_t m_genjet2_eta ;
   Float_t m_genjet2_phi ;
   Float_t m_genjet2_e ;
-
+  Int_t m_genjet2_flav ;
+  
   // the tautau-H candidate
   Float_t m_tauH_pt ;
   Float_t m_tauH_eta ;
@@ -1303,6 +1344,25 @@ struct smallTree
   Float_t m_top_Wmass_bclose_mass;
   Float_t m_top_Wjj_b_mass;
   Float_t m_top_Wjj_bclose_mass;
+
+  Float_t m_LHE_H1_pt ;
+  Float_t m_LHE_H1_eta ;
+  Float_t m_LHE_H1_phi ;
+  Float_t m_LHE_H1_et ;
+  Float_t m_LHE_H2_pt ;
+  Float_t m_LHE_H2_eta ;
+  Float_t m_LHE_H2_phi ;
+  Float_t m_LHE_H2_et ;
+  Float_t m_LHE_HH_mass ;
+  Float_t m_LHE_VBF1_pt ;
+  Float_t m_LHE_VBF1_eta ;
+  Float_t m_LHE_VBF1_phi ;
+  Float_t m_LHE_VBF1_et ;
+  Float_t m_LHE_VBF2_pt ;
+  Float_t m_LHE_VBF2_eta ;
+  Float_t m_LHE_VBF2_phi ;
+  Float_t m_LHE_VBF2_et ;
+  Float_t m_LHE_VBFjj_mass ;
   
 } ;
 
