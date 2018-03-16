@@ -931,22 +931,22 @@ int main (int argc, char** argv)
 	  theSmallTree.m_LHE_H1_pt = tlv_LHE_H1.Pt();
 	  theSmallTree.m_LHE_H1_eta = tlv_LHE_H1.Eta();
 	  theSmallTree.m_LHE_H1_phi = tlv_LHE_H1.Phi();
-	  theSmallTree.m_LHE_H1_et = tlv_LHE_H1.Et();
+	  theSmallTree.m_LHE_H1_e = tlv_LHE_H1.E();
 	  theSmallTree.m_LHE_H2_pt = tlv_LHE_H2.Pt();
 	  theSmallTree.m_LHE_H2_eta = tlv_LHE_H2.Eta();
 	  theSmallTree.m_LHE_H2_phi = tlv_LHE_H2.Phi();
-	  theSmallTree.m_LHE_H2_et = tlv_LHE_H2.Et();
+	  theSmallTree.m_LHE_H2_e = tlv_LHE_H2.E();
 	  theSmallTree.m_LHE_HH_mass = (tlv_LHE_H1+tlv_LHE_H2).M();
 	  
 	  theSmallTree.m_LHE_VBF1_pt = tlv_LHE_VBF1.Pt();
 	  theSmallTree.m_LHE_VBF1_eta = tlv_LHE_VBF1.Eta();
 	  theSmallTree.m_LHE_VBF1_phi = tlv_LHE_VBF1.Phi();
-	  theSmallTree.m_LHE_VBF1_et = tlv_LHE_VBF1.Et();
+	  theSmallTree.m_LHE_VBF1_e = tlv_LHE_VBF1.E();
 
 	  theSmallTree.m_LHE_VBF2_pt = tlv_LHE_VBF2.Pt();
 	  theSmallTree.m_LHE_VBF2_eta = tlv_LHE_VBF2.Eta();
 	  theSmallTree.m_LHE_VBF2_phi = tlv_LHE_VBF2.Phi();
-	  theSmallTree.m_LHE_VBF2_et = tlv_LHE_VBF2.Et();
+	  theSmallTree.m_LHE_VBF2_e = tlv_LHE_VBF2.E();
 	  theSmallTree.m_LHE_VBFjj_mass = (tlv_LHE_VBF1+tlv_LHE_VBF2).M();
 	 
 

@@ -1,4 +1,4 @@
-OUTDIRR="Skims2017_8March2018_LHE"
+OUTDIRR="Skims2017_16March2018_LHE"
 AMESSAGE="skims with VBF variables"
 
 source /opt/exp_soft/cms/t3/t3setup
@@ -19,6 +19,7 @@ cp /home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/scripts/listAll.sh /data_
 ### LHE X Jona
 
 python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt
+
 
 
 
