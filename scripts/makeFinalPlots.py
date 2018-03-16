@@ -408,9 +408,9 @@ if __name__ == "__main__" :
     #sigList = ["VBFC2V1","ggHH"]
     sigNameList = []
     if args.log:
-            sigNameList = ["VBFC2V1","ggHH"]
+            sigNameList = ["VBF (#times 10^{2})","ggF (#times 10^{2})"]
     else:
-            sigNameList = ["VBFC2V1","ggHH (#times 0.1)"]
+            sigNameList = ["VBF (#times 10^{4})","ggF (#times 10^{4})"]
 
 
     sigColors = {}
@@ -470,6 +470,7 @@ if __name__ == "__main__" :
 
     
     outplotterName = findInFolder  (args.dir+"/", 'analyzedOutPlotter.root')
+    #outplotterName = findInFolder  (args.dir+"/", 'outPlotter.root')
     
 
     rootFile = TFile.Open (args.dir+"/"+outplotterName)
@@ -485,12 +486,15 @@ if __name__ == "__main__" :
 
 
     
-    xsecRatio = 19.56
-    if not args.log: xsecRatio = xsecRatio/float(10)
-    sigScale = [1. , xsecRatio*hSigs["ggHH"].GetEntries()/float(hSigs["VBFC2V1"].GetEntries())]
-
-
-
+    #   xsecRatio = 19.56
+    #   if not args.log: xsecRatio = xsecRatio/float(10)
+    #   sigScale = [1. , xsecRatio*hSigs["ggHH"].GetEntries()/float(hSigs["VBFC2V1"].GetEntries())]
+    plotScale = 10000
+    plotScaleLog = plotScale/100
+    if not args.log: 
+            sigScale = [1.64*0.073*0.001*plotScale,33.49*0.073*0.001*plotScale]
+    else:
+            sigScale = [1.64*0.073*0.001*plotScaleLog,33.49*0.073*0.001*plotScaleLog]
             
     doOverflow = args.overflow
     
@@ -522,7 +526,7 @@ if __name__ == "__main__" :
         bkgColors["QCD"] = kPink+5
   
     hData = getHisto  ("data", hDatas , doOverflow)
-
+    print "data events in plot_" +str(hData.GetEntries())
     # remove all data from blinding region before creating tgraph etc...
     if args.blindrange:
         blow = float (args.blindrange[0]) 
@@ -617,10 +621,10 @@ if __name__ == "__main__" :
     bkgStack.SetTitle(plotTitle)
 
 
-    for key in hSigs:
-        intSig = hSigs[key].Integral()
-        if intSig > 0:
-                hSigs[key].Scale(intBkg/intSig)
+    #for key in hSigs:
+    #    intSig = hSigs[key].Integral()
+    #    if intSig > 0:
+    #            hSigs[key].Scale(intBkg/intSig)
 
     # apply sig scale
     for i, scale in enumerate (sigScale):
@@ -869,4 +873,9 @@ if __name__ == "__main__" :
             saveName = saveName+"_flat"    
         c1.SaveAs (saveName+".pdf")
         c1.SaveAs (saveName+".png")
-        print "data events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hData.Integral(0,hData.GetNbinsX()+1))
+        scale = plotScale;
+        if args.log: scale = plotScaleLog
+        print "data events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hData.Integral(1,hData.GetNbinsX()+1))
+        print "bkg events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(bkgStack.GetStack().Last().Integral(1,bkgStack.GetStack().Last().GetNbinsX()+1)*width)
+        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)*width/scale)
+        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)*width/scale)
