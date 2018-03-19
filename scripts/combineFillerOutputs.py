@@ -128,6 +128,6 @@ if cfg.hasSection('pp_QCD'):
         doFitIf      = cfg.readOption('pp_QCD::doFitIf'),
         fitFunc      = cfg.readOption('pp_QCD::fitFunc')
         )
-
+    
 fOut = ROOT.TFile(args.dir+"/" + 'analyzedOutPlotter.root', 'recreate')
 omngr.saveToFile(fOut)
