@@ -2866,7 +2866,9 @@ int main (int argc, char** argv)
       
 	  if (theBigTree.jets_px->size ()>1){
 	    for (unsigned int iJet = 0 ;   (iJet < theBigTree.jets_px->size ()) && (theSmallTree.m_njets < maxNjetsSaved) ;  ++iJet){
-	      if (int (iJet) == bjet1idx || int (iJet) == bjet2idx) continue;
+	      if (theBigTree.jets_PUJetID->at (iJet) < PUjetID_minCut) continue ;
+	      if (theBigTree.PFjetID->at (iJet) < PFjetID_WP) continue; // 0 ; don't pass PF Jet ID; 1: loose, 2: tight, 3: tightLepVeto
+      	      if (int (iJet) == bjet1idx || int (iJet) == bjet2idx) continue;
 	      TLorentzVector ijet;
 	      ijet.SetPxPyPzE(
 			      theBigTree.jets_px->at (iJet),
@@ -2879,8 +2881,10 @@ int main (int argc, char** argv)
 	      if(ijet.Pt() < 30) continue;
 	      if(fabs(ijet.Eta()) > 5.) continue; // keeping the whole HF acceptance for the time being
 	      for (unsigned int kJet = iJet+1 ;   (kJet < theBigTree.jets_px->size ()) && (theSmallTree.m_njets < maxNjetsSaved) ;  ++kJet){
+		if (theBigTree.jets_PUJetID->at (kJet) < PUjetID_minCut) continue ;
+		if (theBigTree.PFjetID->at (kJet) < PFjetID_WP) continue; // 0 ; don't pass PF Jet ID; 1: loose, 2: tight, 3: tightLepVeto
 		if (int (kJet) == bjet1idx || int (kJet) == bjet2idx) continue;
-	    
+		
 		TLorentzVector kjet;
 		kjet.SetPxPyPzE(
 				theBigTree.jets_px->at (kJet),
