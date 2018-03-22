@@ -301,6 +301,12 @@ struct smallTree
       m_leps_flav.clear () ;
       m_nleps = 0 ;
 
+      m_genjets_pt.clear () ;
+      m_genjets_eta.clear () ;
+      m_genjets_phi.clear () ;
+      m_genjets_e.clear () ;
+      m_genjets_flav.clear () ;
+      
       //m_mvaValueMuTau = 0;
       //m_mvaValueTauTau = 0;      
       //m_mvaValueETau = 0;      
@@ -723,6 +729,11 @@ struct smallTree
       m_smallT->Branch ("bjet1_jecUnc", &m_bjet1_jecUnc,"bjet1_jecUnc/F");
       m_smallT->Branch ("bjet2_jecUnc", &m_bjet2_jecUnc,"bjet2_jecUnc/F");
 
+      m_smallT->Branch ("genjets_pt",&m_genjets_pt) ;
+      m_smallT->Branch ("genjets_eta",&m_genjets_eta) ;
+      m_smallT->Branch ("genjets_phi",&m_genjets_phi) ;
+      m_smallT->Branch ("genjets_e",&m_genjets_e) ;
+      m_smallT->Branch ("genjets_flav",&m_genjets_flav) ;
 
       m_smallT->Branch ("leps_pt", &m_leps_pt) ;
       m_smallT->Branch ("leps_eta", &m_leps_eta) ;
@@ -1179,6 +1190,13 @@ struct smallTree
   Int_t m_njetsBHadFlav ;
   Int_t m_njetsCHadFlav ;
 
+  std::vector<Float_t> m_genjets_pt ;
+  std::vector<Float_t> m_genjets_eta ;
+  std::vector<Float_t> m_genjets_phi ;
+  std::vector<Float_t> m_genjets_e ;
+  std::vector<Int_t> m_genjets_flav ;
+
+  
   std::vector<Float_t> m_jets_jecUnc ;
   Float_t m_dau1_jecUnc;
   Float_t m_dau2_jecUnc;

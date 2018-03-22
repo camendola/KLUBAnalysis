@@ -2173,8 +2173,21 @@ int main (int argc, char** argv)
 	}
 
       // ----------------------------------------------------------
+      for (unsigned int genJet = 0 ; genJet < theBigTree.genjet_px->size () ; ++genJet){
+	TLorentzVector thisGenJet(theBigTree.genjet_px->at(genJet),theBigTree.genjet_py->at(genJet),theBigTree.genjet_pz->at(genJet),theBigTree.genjet_e->at(genJet));
+	if (thisGenJet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
+	if (thisGenJet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
+	theSmallTree.m_genjets_pt.push_back(thisGenJet.Pt());
+	theSmallTree.m_genjets_eta.push_back(thisGenJet.Eta());
+	theSmallTree.m_genjets_phi.push_back(thisGenJet.Phi());
+	theSmallTree.m_genjets_e.push_back(thisGenJet.E());
+	theSmallTree.m_genjets_flav.push_back(theBigTree.genjet_hadronFlavour->at(genJet));
+      }
+
+
       // select jets 
 
+  
       vector <pair <float, int> > jets_and_sortPar ;
       // loop over jets
       for (unsigned int iJet = 0 ; iJet < theBigTree.jets_px->size () ; ++iJet)
@@ -3165,6 +3178,8 @@ int main (int argc, char** argv)
 	  theSmallTree.m_jet4_btag= theSmallTree.m_jets_btag.at (1);
 	  theSmallTree.m_jet4_flav= theSmallTree.m_jets_flav.at (1);
 	  theSmallTree.m_jet4_hasgenjet= theSmallTree.m_jets_hasgenjet.at (1);
+
+
 	  
 	  //invariant mass of first 2 additional jets (skipping H decay) ordered by Pt
 	  TLorentzVector tlv_jet1;
