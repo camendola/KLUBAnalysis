@@ -488,6 +488,8 @@ int main (int argc, char** argv)
   cout << "**       c2, cg, c2g reweight " << c2_rew << " " << cg_rew << " " << c2g_rew << " [if any is < -990: will do only a klambda / kt reweight if requested]" << endl;
 
   string susyModel = argv[21];
+  float VBF1cut = atof(argv[22]);
+  float VBF2cut = atof(argv[23]);
   cout << "** INFO: requesting SUSY model to be: -" << susyModel << "- [NOTSUSY: no request on this parameter]" << endl;
 
   // ------------------  decide what to do for the reweight of HH samples
@@ -2891,7 +2893,7 @@ int main (int argc, char** argv)
 			      );
 	      if (ijet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
 	      if (ijet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
-	      if(ijet.Pt() < 30) continue;
+	      if(ijet.Pt() < VBF1cut) continue;
 	      if(fabs(ijet.Eta()) > 5.) continue; // keeping the whole HF acceptance for the time being
 	      for (unsigned int kJet = iJet+1 ;   (kJet < theBigTree.jets_px->size ()) && (theSmallTree.m_njets < maxNjetsSaved) ;  ++kJet){
 		if (theBigTree.jets_PUJetID->at (kJet) < PUjetID_minCut) continue ;
@@ -2907,7 +2909,7 @@ int main (int argc, char** argv)
 				);
 		if (kjet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
 		if (kjet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
-		if(kjet.Pt() < 30) continue;
+		if(kjet.Pt() < VBF2cut) continue;
 		if(fabs(kjet.Eta()) > 5.) continue;   
 		TLorentzVector jetPair = ijet+kjet;
 		VBFcand_Mjj.push_back(make_tuple(jetPair.M(),iJet,kJet));
