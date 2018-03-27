@@ -1,4 +1,4 @@
-OUTDIRR="Skims2017_26March2018_LHE"
+OUTDIRR="Skims2017_27March2018_LHE"
 AMESSAGE="skims with VBF variables"
 
 source /opt/exp_soft/cms/t3/t3setup
@@ -18,24 +18,23 @@ cp /home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/scripts/listAll.sh /data_
 
 ### LHE X Jona
 
-#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt
+python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt -a true
 
 
 ### LHE X scan
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE   -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 30
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_40_40    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 40 --VBF2 40
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_40_30    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 40 --VBF2 30
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_40_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 40 --VBF2 20
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_35    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 35
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_30    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 30
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_25    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 25
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 20
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_30_30    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 30
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_30_25    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 25
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_30_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 20
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_25_25    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 25 --VBF2 25
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_25_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 25 --VBF2 20
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_20_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 20 --VBF2 20
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE   -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 30
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_40_40    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 40 --VBF2 40
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_40_30    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 40 --VBF2 30
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_40_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 40 --VBF2 20
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_35    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 35
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_30    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 30
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_25    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 25
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_35_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 35 --VBF2 20
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_30_25    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 25
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_30_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 30 --VBF2 20
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_25_25    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 25 --VBF2 25
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_25_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 25 --VBF2 20
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 15  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/VBFC2V1_LHE_20_20    -i inputFiles/Files_8March2019_VBF_LHE/VBF2016_LHE_8March2018.txt --VBF1 20 --VBF2 20
 
 
 

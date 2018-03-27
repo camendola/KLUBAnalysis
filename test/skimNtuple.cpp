@@ -1159,6 +1159,8 @@ int main (int argc, char** argv)
 	  float mHH = -1;
 	  float ct1 = -999;
 	  // loop on gen to find Higgs
+	  int idxb1 = -1;
+	  int idxb2 = -1;
 	  int idx1 = -1;
 	  int idx2 = -1;
 	  int idx1last = -1;
@@ -1168,6 +1170,7 @@ int main (int argc, char** argv)
 	    {
 	      bool isFirst     = CheckBit (theBigTree.genpart_flags->at(igen), 12) ; // 12 = isFirstCopy
 	      bool isLast      = CheckBit (theBigTree.genpart_flags->at(igen), 13) ; // 13 = isLastCopy
+	      bool isHardProcess = CheckBit (theBigTree.genpart_flags->at(igen), 7) ; //  7 = isHardProcess, for b coming from H
 	      bool isHardScatt = CheckBit (theBigTree.genpart_flags->at(igen), 5) ; //   3 = isPromptTauDecayProduct
 	      // bool isDirectPromptTauDecayProduct = CheckBit (theBigTree.genpart_flags->at(igen), 5) ; // 5 = isDirectPromptTauDecayProduct
 	      int pdg = theBigTree.genpart_pdg->at(igen);
@@ -1187,7 +1190,17 @@ int main (int argc, char** argv)
 	      //   cout << "/// igen = " << igen << " pdgId " << pdg << " flag=" << bs << " mothidx=" <<  theBigTree.genpart_TauMothInd->at(igen) << " px=" << theBigTree.genpart_px->at(igen) << endl;
 	      //   // cout << "/// igen = " << igen << " pdgId " << pdg << " isFirst=" << isFirst << " isLast=" << isLast << " isHardScatt=" << isHardScatt << " mothIsHardScatt=" << mothIsHardScatt << " isDirectPromptTauDecayProduct=" << isDirectPromptTauDecayProduct << " mothIdx=" << theBigTree.genpart_TauMothInd->at(igen) << endl;
 	      // }
-
+	      if (TMath::Abs(pdg) == 5 && isHardProcess )
+		{
+		  //cout << igen << " b found "<<endl;
+		  if (idxb1 == -1) idxb1 = igen;
+		  else if (idxb2 == -1) idxb2 = igen;
+		  else
+		    {
+		      cout << "** ERROR: there are more than 2 hard scatter b: evt = " << theBigTree.EventNumber << endl;
+		    }
+		}
+	      
 
 	      if (abs(pdg) == 25)
 		{
@@ -1245,7 +1258,27 @@ int main (int argc, char** argv)
 	      cout << "** ERROR: couldn't find 2 H (first)" << endl;
 	      continue;
 	    }
+	  if (idxb1 == -1 || idxb2 == -1)
+	    {
+	      cout << "** ERROR: couldn't find 2 b" << endl;
+	      
+	    }else{
 
+	  TLorentzVector vgenb1H (theBigTree.genpart_px->at(idxb1),theBigTree.genpart_py->at(idxb1),theBigTree.genpart_pz->at(idxb1),theBigTree.genpart_e->at(idxb1));
+	  TLorentzVector vgenb2H (theBigTree.genpart_px->at(idxb2),theBigTree.genpart_py->at(idxb2),theBigTree.genpart_pz->at(idxb2),theBigTree.genpart_e->at(idxb2)); 
+
+	  theSmallTree.m_genb1_pt = vgenb1H.Pt();
+	  theSmallTree.m_genb1_eta = vgenb1H.Eta();
+	  theSmallTree.m_genb1_phi = vgenb1H.Phi();
+	  theSmallTree.m_genb1_e = vgenb1H.E();
+
+	  theSmallTree.m_genb2_pt = vgenb2H.Pt();
+	  theSmallTree.m_genb2_eta = vgenb2H.Eta();
+	  theSmallTree.m_genb2_phi = vgenb2H.Phi();
+	  theSmallTree.m_genb2_e = vgenb2H.E();
+
+	  }
+	  
 	  if (idx1last != -1 && idx2last != -1) // this is not critical if not found
 	    {
 	      // store gen decay mode of the two H identified

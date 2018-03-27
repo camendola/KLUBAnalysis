@@ -149,6 +149,16 @@ struct smallTree
       m_bjet2_pt_raw_jetdown  = -1. ;
       m_bjet2_hasgenjet = false ;
 
+      m_genb1_pt = -1;
+      m_genb1_eta= -1;
+      m_genb1_phi= -1;
+      m_genb1_e = -1;
+      m_genb2_pt = -1;
+      m_genb2_eta= -1;
+      m_genb2_phi= -1;
+      m_genb2_e = -1;
+
+      
       m_bjets_bID = -1.;
       m_nfatjets = -1;
       m_fatjet_pt = -1. ;
@@ -604,6 +614,14 @@ struct smallTree
       m_smallT->Branch ("bjet2_hasgenjet", &m_bjet2_hasgenjet, "bjet2_hasgenjet/O") ;
       m_smallT->Branch ("bjets_bID",&m_bjets_bID,"bjets_bID/F");
       
+      m_smallT->Branch ("genb1_pt",&m_genb1_pt , "genb1_pt/F");
+      m_smallT->Branch ("genb1_eta",&m_genb1_eta, "genb1_eta/F");
+      m_smallT->Branch ("genb1_phi",&m_genb1_phi, "genb1_phi/F");
+      m_smallT->Branch ("genb1_e",&m_genb1_e , "genb1_e/F");
+      m_smallT->Branch ("genb2_pt",&m_genb2_pt , "genb2_pt/F");
+      m_smallT->Branch ("genb2_eta",&m_genb2_eta, "genb2_eta/F");
+      m_smallT->Branch ("genb2_phi",&m_genb2_phi, "genb2_phi/F");
+      m_smallT->Branch ("genb2_e",&m_genb2_e , "genb2_e/F");
       
       m_smallT->Branch ("nfatjets", &m_nfatjets, "nfatjets/I");
       m_smallT->Branch ("fatjet_pt", &m_fatjet_pt, "fatjet_pt/F");
@@ -1056,6 +1074,15 @@ struct smallTree
   Float_t m_bjet2_pt_raw_jetup ;
   Float_t m_bjet2_pt_raw_jetdown ;
   Bool_t  m_bjet2_hasgenjet ;
+
+  Float_t m_genb1_pt ;
+  Float_t m_genb1_eta;
+  Float_t m_genb1_phi;
+  Float_t m_genb1_e ;
+  Float_t m_genb2_pt ;
+  Float_t m_genb2_eta;
+  Float_t m_genb2_phi;
+  Float_t m_genb2_e ;
 
   Float_t m_bjets_bID;
   // fat jets and subjet info
