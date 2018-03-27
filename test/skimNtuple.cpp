@@ -2311,21 +2311,27 @@ int main (int argc, char** argv)
 
 	  //
 
-	  int bjet2idx_notVBF = bjet2idx_temp;                               // assign 2nd jet by CSV in any case, then: 
+	  int bjet2idx_notVBF = bjet2idx_temp;                                   // assign 2nd jet by CSV in any case, then: 
 	  int bjet2idx_isVBF = bjet2idx_temp;  
 
-	  if (!bPairFound){                                                  // if the bjet2 was not definitive yet
-	    if(isVBF){                                                       // if VBF pair was found
-	      if ((bjet2idx_temp == VBFidx1) || (bjet2idx_temp == VBFidx2)){ // and the 2nd jet by CSV was already picked as VBF jet
-		if (int(jets_and_sortPar.size()) >= 3){
-		  bjet2idx_isVBF = jets_and_sortPar.at(njets-3).second ;     // bjet2 will be the 3rd jet by CSV
-		}else{                                                       // if there is not a third jet
-		  isVBF = false;                                             // discard the jets as VBF jets
+	  if (!bPairFound){                                                      // if the bjet2 was not definitive yet
+	    if(isVBF){
+	      if ((bjet2idx_temp == VBFidx1) || (bjet2idx_temp == VBFidx2)){     // and the 2nd jet by CSV was already picked as VBF jet
+		for (int bidx = 2; bidx<=int(jets_and_sortPar.size()); bidx++){  // look for the next jet by CSV
+		  int idxbyCSV = jets_and_sortPar.at(njets-bidx).second;
+		  if ((idxbyCSV== VBFidx1)||(idxbyCSV== VBFidx2)) continue;
+		  bPairFound = true;				  
+		  bjet2idx_isVBF = idxbyCSV;
+		  break;
+		}
+		if(bPairFound == false){                                         // if there were not enough jets
+		  isVBF = false;                                                 // discard the jets as VBF jets
 		  VBFcand_Mjj.clear();
 		}
 	      }
 	    }
 	  }
+	  
 	  
 	  	  
 
