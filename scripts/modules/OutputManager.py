@@ -266,7 +266,66 @@ class OutputManager:
             
 
         ### FIXME: now do 2D histos
+        for var in self.variables2D:
+            var1 = var.rsplit(':', 1)[0]
+            var2 = var.rsplit(':', 1)[1]
+            for sel in self.sel_def:
+                
+                # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' : print "DOING ", var, sel
 
+                ## make shape hist
+                for idx, data in enumerate(self.data):
+                    hname = makeHisto2DName(data, sel+'_'+shapeSB, var1,var2)
+                    if idx == 0:
+                        hQCD = self.histos2D[hname].Clone(makeHistoName(QCDname, sel+'_'+SR, var1,var2)) ## use SR name as this is where QCD refers to
+                        hQCD.SetTitle(hQCD.GetName())
+                    else:
+                        hQCD.Add(self.histos2D[hname])
+                    # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' : print ">> data - SHAPE: " , hname, hQCD.Integral()
+
+                # subtract bkg
+                for bkg in self.bkgs:
+                    hname = makeHistoName(bkg, sel+'_'+shapeSB, var1,var2)
+                    hQCD.Add(self.histos2D[hname], -1.)
+                    # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' : print ">> -- bkg - SHAPE: " , hname, hQCD.Integral()
+
+                ## remove negative bins if needed
+                if removeNegBins:
+                    for ibin in range(1, hQCD.GetNbinsX()+1):
+                        if hQCD.GetBinContent(ibin) < 0:
+                            hQCD.SetBinContent(ibin, 1.e-6)
+
+                ## now compute yield to be set
+                for idx, data in enumerate(self.data):
+                    hname = makeHistoName(data, sel+'_'+yieldSB, var1,var2)
+                    if idx == 0:
+                        hyieldQCD = self.histos2D[hname].Clone(makeHistoName(QCDname+'yield', sel+'_'+yieldSB, var1,var2))
+                    else:
+                        hyieldQCD.Add(self.histos2D[hname])
+                    # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' : print ">> data: " , hname, qcdYield
+
+                for bkg in self.bkgs:
+                    hname = makeHistoName(bkg, sel+'_'+yieldSB, var1,var2)
+                    hyieldQCD.Add(self.histos2D[hname], -1)
+                    # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' : print ">> -- bkg: " , hname, qcdYield
+
+                # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' :  print qcdYield
+                ## now scale
+                qcdYield = hyieldQCD.Integral()
+                sc = SBtoSRfactor*qcdYield/hQCD.Integral() if hQCD.Integral() > 0 else 0.0
+                hQCD.Scale(sc)
+
+                ## add to collection
+                # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' :  print 'saving as ' , hQCD.GetName()
+
+                if eval(doFitIf):
+
+                    print "@@@ Fit required on 2D histogram, skipped"
+
+                ## store hQCD - is either 'QCD' if no fit was done or uncorrQCD if fit was done, in any case is the final one to plot
+                self.histos2D[hQCD.GetName()] = hQCD
+
+        
     def rebin(self, var, sel, newbinning):        
         print '... rebinning histos for var:' , var, 'sel:', sel
         newbinning_a = array.array('d', newbinning)
