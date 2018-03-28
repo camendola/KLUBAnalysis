@@ -66,6 +66,8 @@ if __name__ == "__main__":
     parser.add_option ('--cg',               dest='cgreweight', help='cg for dynamic reweight'              , default='-999.0')
     parser.add_option ('--c2g',              dest='c2greweight', help='c2g for dynamic reweight'            , default='-999.0')
     parser.add_option ('--susy',             dest='susyModel' , help='name of susy model to select'         , default='NOTSUSY')
+    parser.add_option ('--VBF1',             dest='VBF1cut'   , help='VBF cut for leading jet'              , default='30')
+    parser.add_option ('--VBF2',             dest='VBF2cut'   , help='VBF cut for subleading jet'           , default='30')
     
     (opt, args) = parser.parse_args()
 
@@ -237,6 +239,9 @@ if __name__ == "__main__":
         command += (" " + opt.klreweight + " " + opt.ktreweight + " " + opt.c2reweight + " " + opt.cgreweight + " " + opt.c2greweight)
         command += (" " + opt.susyModel)
 
+        command += (" " + opt.VBF1cut)
+        command += (" " + opt.VBF2cut)
+        
         command += ' >& ' + opt.output + '/' + "output_" + str(n) + '.log\n'
         scriptFile.write (command)
         scriptFile.write ('touch ' + jobsDir + '/done_%d\n'%n)
