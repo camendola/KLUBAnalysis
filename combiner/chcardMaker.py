@@ -75,13 +75,13 @@ def  writeCard(input,theLambda,select,region=-1) :
 	print "writing cards"
 	variables =[]
 	if opt.isResonant : variables.append('HHKin_mass_raw')
-	else : variables.append('MT2')
+	else : variables.append('HH_mass')
 
 	#out_dir = opt.outDir
-	theOutputDir = "{0}{1}{2}".format(theLambda,select,variables[0])
+	theOutputDir = "{0}_{1}_{2}".format(theLambda,select,variables[0])
 	dname = "_"+opt.channel+opt.outDir
 	out_dir = "cards{1}/{0}/".format(theOutputDir,dname)
-	print out_dir
+	print "@@@@@@@@@"+out_dir
 	#in_dir = "/grid_mnt/vol__vol_U__u/llr/cms/ortona/diHiggs/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_MuTauprova/HHSM2b0jMcutBDTMT2/";
 	cmb1 = ch.CombineHarvester()
 	cmb1.SetFlag('workspaces-use-clone', True)
@@ -120,7 +120,7 @@ def  writeCard(input,theLambda,select,region=-1) :
 		templateName = "{0}_{1}_SR_{2}".format(bkg,select,variables[0])
 		print templateName
 		template = inRoot.Get(templateName)
-		if template.Integral()>0.000001 :
+                if template.Integral()>0.000001 :
 			backgrounds.append(bkg)
 			processes.append(bkg)
 			if bkg is not "QCD" :
@@ -136,13 +136,24 @@ def  writeCard(input,theLambda,select,region=-1) :
 				if regionSuffix[regionsuff] == "SR" :
 					fname="QCD"
 				templateName = "{0}_{1}_{3}_{2}".format(fname,select,variables[0],regionSuffix[regionsuff])
-				template = inRoot.Get(templateName)
+
+                                template = inRoot.Get(templateName)
 				#allQCDs.append(template.Integral())
 				allQCDs[regionsuff]= allQCDs[regionsuff]+template.Integral()
 				iQCD = ichan
 			elif regionSuffix[regionsuff] is not "SR" :
 				templateName = "{0}_{1}_{3}_{2}".format(backgrounds[ichan],select,variables[0],regionSuffix[regionsuff])
+                                print "!!!!!! template "+templateName
+                                template = TH1F()
 				template = inRoot.Get(templateName)
+                                print template
+                                c1 = TCanvas()
+                                template.Draw()
+                                c1.Update()
+                                c1.Modified()
+                                c1.Draw()
+                            
+
 				allQCDs[regionsuff] = allQCDs[regionsuff] - template.Integral()
 
 	if allQCDs[0]>0 and allQCDs[1]>0 and allQCDs[2]>0 and allQCDs[3]>0 : allQCD = True
@@ -330,14 +341,16 @@ print input.signals
 for il in range(len(input.signals)) :
 	input.signals[il] = input.signals[il].replace("lambdarew","ggHH_bbtt")	
 	input.signals[il] = input.signals[il].replace("bidimrew","ggHH_bbtt")	
+print input.signals
 for theLambda in input.signals:
-	if not lambdaName in theLambda : 
-		continue
+#	if not lambdaName in theLambda : 
+#		continue
 	for sel in allSel : 
 		#if not "lambda" in theLambda and not "Radion" in theLambda : continue
 #		if opt.isResonant :
 #			if not "Radion" in theLambda : continue
 #		else :
 #			if not "ggHH_bbtt" in theLambda : continue
-	    for ireg in range(-1,3) :
+	    for ireg in range(-1,3):
+                        print "scrivoooo"
 			writeCard(input,theLambda,sel,ireg)

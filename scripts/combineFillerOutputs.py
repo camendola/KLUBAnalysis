@@ -76,7 +76,6 @@ if cfg.hasSection("merge"):
         elif mergelist[0] in bkgList:  theList = bkgList
         for x in mergelist: theList.remove(x)
         theList.append(groupname)
-
 rootfile = ROOT.TFile.Open(args.dir + "/" + outplotterName)
 print '... opening ' , (args.dir + "/" + outplotterName)
 

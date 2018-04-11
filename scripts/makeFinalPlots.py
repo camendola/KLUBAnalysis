@@ -69,15 +69,7 @@ def getHisto (histoName,inputList,doOverflow):
                         break
         return h
 
-### QCD is special and has a strange name, need data to recontruct it
-### CORR_DDQCD_SS_DATA_HHKin_mass_SS_defaultBtagMMNoIsoBBTTCut_DsingleMuRunD
-#def retrieveQCD (rootFile, var, sel, dataNameList):
-#    name = "CORR_DDQCD_SS_DATA_" + var + "_SS_" + sel + "_" + dataNameList[-1]
-#    if not rootFile.GetListOfKeys().Contains(name):
-#        print "*** WARNING: QCD histo " , name , " not available"
-#        return None
-#    hQCD = rootFile.Get(name)
-#    return hQCD
+
 
 # makes an histogram by adding together all those in the input list ; inputList: names, histoList: histograms
 def makeStack (stackName, histoList):
@@ -93,14 +85,8 @@ def makeSum (sumName, histoList):
     return hsum
 
 def setPlotStyle ():
-    #Styles are: Plain Bold Video Pub Classic Default Modern
-    #Modern is the default one
-    #ss = gROOT.GetListOfStyles()
-    #for s in ss: sys.stdout.write(s.GetName() + " ")
-    
     gROOT.SetStyle("Modern")
-    #LucaStyle = TStyle ("LucaStyle", "LucaStyle")
-    #LucaStyle
+
 
 # tranform an histo into a TGraphAsymmErrors, with 
 def makeTGraphFromHist (histo, newName):
@@ -410,7 +396,7 @@ if __name__ == "__main__" :
     if args.log:
             sigNameList = ["VBF (#times 10^{2})","ggF (#times 10^{2})"]
     else:
-            sigNameList = ["VBF (#times 10^{4})","ggF (#times 10^{4})"]
+            sigNameList = ["VBF (#times 10^{4})","ggF (#times 10^{3})"]
 
 
     sigColors = {}
@@ -489,12 +475,12 @@ if __name__ == "__main__" :
     #   xsecRatio = 19.56
     #   if not args.log: xsecRatio = xsecRatio/float(10)
     #   sigScale = [1. , xsecRatio*hSigs["ggHH"].GetEntries()/float(hSigs["VBFC2V1"].GetEntries())]
-    plotScale = 10000
-    plotScaleLog = plotScale/100
+    plotScale = [10000, 1000]
+    plotScaleLog = [plotScale[0]/100, plotScale[1]/100]
     if not args.log: 
-            sigScale = [1.64*0.073*0.001*plotScale,33.49*0.073*0.001*plotScale]
+            sigScale = [1.64*0.073*0.001*plotScale[0],33.49*0.073*0.001*plotScale[1]]
     else:
-            sigScale = [1.64*0.073*0.001*plotScaleLog,33.49*0.073*0.001*plotScaleLog]
+            sigScale = [1.64*0.073*0.001*plotScaleLog[0],33.49*0.073*0.001*plotScaleLog[1]]
             
     doOverflow = args.overflow
     
@@ -877,5 +863,5 @@ if __name__ == "__main__" :
         if args.log: scale = plotScaleLog
         print "data events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hData.Integral(1,hData.GetNbinsX()+1))
         print "bkg events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(bkgStack.GetStack().Last().Integral(1,bkgStack.GetStack().Last().GetNbinsX()+1)*width)
-        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)*width/scale)
-        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)*width/scale)
+        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)*width/scale[1])
+        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)*width/scale[0])
