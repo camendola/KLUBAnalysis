@@ -331,8 +331,9 @@ for il in range(len(input.signals)) :
 	input.signals[il] = input.signals[il].replace("lambdarew","ggHH_bbtt")	
 	input.signals[il] = input.signals[il].replace("bidimrew","ggHH_bbtt")	
 for theLambda in input.signals:
-	if not lambdaName in theLambda : 
-		continue
+        import pdb; pdb.set_trace()
+        #  if not lambdaName in theLambda : 
+	#	continue
 	for sel in allSel : 
 		#if not "lambda" in theLambda and not "Radion" in theLambda : continue
 #		if opt.isResonant :
@@ -340,4 +341,8 @@ for theLambda in input.signals:
 #		else :
 #			if not "ggHH_bbtt" in theLambda : continue
 	    for ireg in range(-1,3) :
-			writeCard(input,theLambda,sel,ireg)
+                print "chmaker"
+                print sel
+                print ireg
+                print theLambda
+		writeCard(input,theLambda,sel,ireg)

@@ -2,8 +2,8 @@
 # make cards with all vars/selections
 
 #./makeCategories.sh lmr70 
-./makeCategories.sh lmr90 "-r" &
-./makeCategories.sh hmr90 "-r" &
+./makeCategories.sh lmr90 "bla" 
+#./makeCategories.sh hmr90 "-r" &
 
 
 #./makeCategoriesParallel.sh lmr70 cards 0
