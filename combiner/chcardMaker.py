@@ -195,20 +195,21 @@ def  writeCard(input,theLambda,select,region=-1) :
 		if opt.shapeUnc > 0:
 			jesproc = MCbackgrounds
 			jesproc.append(lambdaName)
-			if "1b1j" in select and opt.channel == "TauTau" : jesproc.remove("DY0b")
+			#if "1b1j" in select and opt.channel == "TauTau" : jesproc.remove("DY0b")
 			cmb1.cp().process(jesproc).AddSyst(cmb1, "CMS_scale_j_13TeV","shape",ch.SystMap('channel','bin_id')([opt.channel],[0],1.000))
 			cmb1.cp().process(jesproc).AddSyst(cmb1, "CMS_scale_t_13TeV","shape",ch.SystMap('channel','bin_id')([opt.channel],[0],1.000))
 			cmb1.cp().process(["TT"]).AddSyst(cmb1, "top","shape",ch.SystMap('channel','bin_id')([opt.channel],[0],1.000))
-
-	    #	$BIN        --> proc.bin()
-	    #	$PROCESS    --> proc.process()
-	    #	$MASS       --> proc.mass()
-	    #	$SYSTEMATIC --> syst.name()
-#		cmb1.cp().ExtractShapes(
-#			opt.filename,
-#			"$PROCESS_$BIN_{1}_{0}".format(variables[0],regionSuffix[region+1]),
-#			"$PROCESS_$BIN_{1}_{0}_$SYSTEMATIC".format(variables[0],regionSuffix[region+1]))
-		cmb1.cp().backgrounds().ExtractShapes(
+                        
+	        #	$BIN        --> proc.bin()
+                #	$PROCESS    --> proc.process()
+	        #	$MASS       --> proc.mass()
+	        #	$SYSTEMATIC --> syst.name()
+                #		cmb1.cp().ExtractShapes(
+                #			opt.filename,
+                #			"$PROCESS_$BIN_{1}_{0}".format(variables[0],regionSuffix[region+1]),
+                #			"$PROCESS_$BIN_{1}_{0}_$SYSTEMATIC".format(variables[0],regionSuffix[region+1]))
+                
+                cmb1.cp().backgrounds().ExtractShapes(
 			opt.filename,
 			"$PROCESS_$BIN_{1}_{0}".format(variables[0],regionSuffix[region+1]),
 			"$PROCESS_$BIN_{1}_{0}_$SYSTEMATIC".format(variables[0],regionSuffix[region+1]))
@@ -313,11 +314,11 @@ if(opt.config==""): configname = "../config/analysis_"+opt.channel+".cfg"
 else: configname = opt.config
 input = configReader(configname)
 input.readInputs()
-
+print input.background
 if opt.isResonant:
 	lambdaName="Radion"
 else:
-	lambdaName="ggHH_bbtt"
+	lambdaName="ggHH"
 
 if opt.overSel == "" :
 	allSel = ["s1b1jresolvedMcut", "s2b0jresolvedMcut", "sboostedLLMcut"]
@@ -331,15 +332,15 @@ for il in range(len(input.signals)) :
 	input.signals[il] = input.signals[il].replace("lambdarew","ggHH_bbtt")	
 	input.signals[il] = input.signals[il].replace("bidimrew","ggHH_bbtt")	
 for theLambda in input.signals:
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         #  if not lambdaName in theLambda : 
 	#	continue
 	for sel in allSel : 
 		#if not "lambda" in theLambda and not "Radion" in theLambda : continue
-#		if opt.isResonant :
-#			if not "Radion" in theLambda : continue
-#		else :
-#			if not "ggHH_bbtt" in theLambda : continue
+	    if opt.isResonant :
+		if not "Radion" in theLambda : continue
+		else :
+		    if not opt.overLambda in theLambda : continue
 	    for ireg in range(-1,3) :
                 print "chmaker"
                 print sel
