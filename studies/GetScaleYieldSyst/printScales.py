@@ -1,7 +1,13 @@
 from ROOT import *
 
-bkgList = ["TT", "DY0b", "DY1b", "DY2b", "WJets", "TW", "EWKW", "EWKZ2Jets_ZToLL", "WW", "WZ", "ZZ", "ZH", 'Radion250', 'Radion270', 'Radion280', 'Radion300', 'Radion350', 'Radion400', 'Radion450', 'Radion500', 'Radion550', 'Radion600', 'Radion650', 'Radion750', 'Radion900', 'lambdarew0', 'lambdarew1', 'lambdarew2', 'lambdarew3', 'lambdarew4', 'lambdarew5', 'lambdarew6', 'lambdarew7', 'lambdarew8', 'lambdarew9', 'lambdarew10', 'lambdarew11', 'lambdarew12', 'lambdarew13', 'lambdarew14', 'lambdarew15', 'lambdarew16', 'lambdarew17', 'lambdarew18', 'lambdarew19', 'lambdarew20', 'lambdarew21', 'lambdarew22', 'lambdarew23', 'lambdarew24', 'lambdarew25', 'lambdarew26', 'lambdarew27', 'lambdarew28', 'lambdarew29', 'lambdarew30', 'lambdarew31', 'lambdarew32', 'lambdarew33', 'lambdarew34', 'lambdarew35', 'lambdarew36', 'lambdarew37', 'lambdarew38', 'lambdarew39', 'lambdarew40', 'lambdarew41', 'lambdarew42', 'lambdarew43', 'lambdarew44', 'lambdarew45', 'lambdarew46', 'lambdarew47', 'lambdarew48', 'lambdarew49', 'lambdarew50', 'lambdarew51']
+#bkgList = ["TT", "DY0b", "DY1b", "DY2b", "WJets", "TW", "EWKW", "EWKZ2Jets_ZToLL", "WW", "WZ", "ZZ", "ZH", 'Radion250', 'Radion270', 'Radion280', 'Radion300', 'Radion350', 'Radion400', 'Radion450', 'Radion500', 'Radion550', 'Radion600', 'Radion650', 'Radion750', 'Radion900', 'lambdarew0', 'lambdarew1', 'lambdarew2', 'lambdarew3', 'lambdarew4', 'lambdarew5', 'lambdarew6', 'lambdarew7', 'lambdarew8', 'lambdarew9', 'lambdarew10', 'lambdarew11', 'lambdarew12', 'lambdarew13', 'lambdarew14', 'lambdarew15', 'lambdarew16', 'lambdarew17', 'lambdarew18', 'lambdarew19', 'lambdarew20', 'lambdarew21', 'lambdarew22', 'lambdarew23', 'lambdarew24', 'lambdarew25', 'lambdarew26', 'lambdarew27', 'lambdarew28', 'lambdarew29', 'lambdarew30', 'lambdarew31', 'lambdarew32', 'lambdarew33', 'lambdarew34', 'lambdarew35', 'lambdarew36', 'lambdarew37', 'lambdarew38', 'lambdarew39', 'lambdarew40', 'lambdarew41', 'lambdarew42', 'lambdarew43', 'lambdarew44', 'lambdarew45', 'lambdarew46', 'lambdarew47', 'lambdarew48', 'lambdarew49', 'lambdarew50', 'lambdarew51']
 
+bkgList = ["DY",
+           "TT",
+           "WJets",
+           "VVJJ",
+           "VBFC2V1",
+           "ggHH"]
 
 channel = 'MuTau'
 var = 'MT2' ## oops! forgot mt2 here
@@ -10,7 +16,25 @@ var = 'MT2' ## oops! forgot mt2 here
 # var = 'ditau_deltaR' ## oops! forgot mt2 here
 # # list without the nominal
 
-selections = ['s1b1jresolvedMcutlmr70', 's2b0jresolvedMcutlmr70', 's1b1jresolvedMcutlmr90', 's2b0jresolvedMcutlmr90', 's1b1jresolvedMcuthmr90', 's2b0jresolvedMcuthmr90', 'sboostedLLMcut']
+#selections = ['s1b1jresolvedMcutlmr70', 's2b0jresolvedMcutlmr70', 's1b1jresolvedMcutlmr90', 's2b0jresolvedMcutlmr90', 's1b1jresolvedMcuthmr90', 's2b0jresolvedMcuthmr90', 'sboostedLLMcut']
+selections = ['VBFm300eta2',
+              'VBFm400eta2',
+              'VBFm500eta2',
+              'VBFm600eta2',
+              'VBFm700eta2',
+              'VBFm300eta2p5',
+              'VBFm400eta2p5',
+              'VBFm500eta2p5',
+              'VBFm600eta2p5',
+              'VBFm700eta2p5',              
+              'VBFm300eta3',
+              'VBFm400eta3',
+              'VBFm500eta3',
+              'VBFm600eta3',
+              'VBFm700eta3']
+
+
+              
 
 # channel = 'TauTau'
 # var = 'MT2'
@@ -49,8 +73,8 @@ print "doing channel: ", channel
 
 #################
 
-inputFile = '/home/llr/cms/cadamuro/testAnalysisHelper2/CMSSW_7_4_7/src/KLUBAnalysis/analysis_%s_27Feb_scaleSyst/outPlotter.root' % channel
-toscan = ['tes', 'jes'] ## will append "Up/Down"
+inputFile = '/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/analysis_%s_VBF30April2018_combine_oldOrdering_VBFscan/analyzedOutPlotter.root' % channel
+toscan = {'tes':'tau', 'jes':'jet'} ## will append "Up/Down"
 
 print inputFile
 
@@ -59,15 +83,15 @@ fIn = TFile.Open(inputFile)
 # DY0b_s2b0jresolvedMcutlmr70_tesDown_SR_MT2
 ## retrieve histograms
 for sel in selections:
-    for scale in toscan:
+    for scale,obj in toscan.items():
         histos_nominal = {}
         histos_up      = {}
         histos_down    = {}
         
         for bkg in bkgList:
-            hname_nominal = bkg + '_' + sel + '_nominal_SR_' + var 
-            hname_up      = bkg + '_' + sel + '_' + scale + 'Up_SR_'   + var 
-            hname_down    = bkg + '_' + sel + '_' + scale + 'Down_SR_' + var  
+            hname_nominal = bkg + '_' + sel + '_SR_' + var 
+            hname_up      = bkg + '_' + sel +'_SR_' + var + '_'+ obj + 'up'  
+            hname_down    = bkg + '_' + sel +'_SR_' + var + '_'+ obj + 'down' 
 
             histos_nominal[bkg] = fIn.Get(hname_nominal)
             histos_up[bkg]      = fIn.Get(hname_up)

@@ -65,7 +65,7 @@ for key in inFile.GetListOfKeys() :
 				found =0
 			if found>=0 :
 				names = kname.split("_")
-				if not names[1].startswith('s') :
+				if not (names[1].startswith('s') or names[1].startswith('VBF')) :
 					names[0] = names[0]+"_"+names[1]
 					names.remove(names[1]) 
 				proc = names[0]
@@ -77,6 +77,7 @@ for key in inFile.GetListOfKeys() :
 					yieldName = yieldName+"_tes.txt"
 				else :
 					yieldName = yieldName+"_jes.txt"
+
 				infile = open(yieldName)
 				scale = 1.000
 				for line in infile :

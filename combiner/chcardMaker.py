@@ -96,10 +96,12 @@ def  writeCard(input,theLambda,select,region=-1) :
 	if opt.channel == "MuTau" : thechannel="2"
 	elif opt.channel == "TauTau" : thechannel = "3"
 
-	if "0b0j" in select : theCat = "0"
+	if "VBF" in select :
+            if not (( "2b0j" in select) or ("1b1j" in select) or ("boosted" in select)): theCat = "0"
 	if "2b0j" in select : theCat = "2"
 	elif "1b1j" in select : theCat = "1"
 	elif "boosted" in select : theCat = "3"
+
 
 	outFile = "hh_{0}_C{1}_L{2}_13TeV.txt".format(thechannel,theCat,theLambda)
 	file = open( "temp.txt", "wb")
@@ -318,7 +320,10 @@ print input.background
 if opt.isResonant:
 	lambdaName="Radion"
 else:
-	lambdaName="ggHH"
+    if opt.overLambda:
+        lambdaName = opt.overLambda
+    else:
+        lambdaName="ggHH"
 
 if opt.overSel == "" :
 	allSel = ["s1b1jresolvedMcut", "s2b0jresolvedMcut", "sboostedLLMcut"]
