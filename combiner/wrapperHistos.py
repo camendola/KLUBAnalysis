@@ -41,7 +41,8 @@ for key in inFile.GetListOfKeys() :
 	#if "Radion" in newName in newName:
 	#	template.Scale(0.1)
 	#protection against empty bins
-	changedInt = False
+        print newName
+        changedInt = False
 	for ibin in range(1,template.GetNbinsX()+1) :
 		integral = template.Integral()
 		if template.GetBinContent(ibin) <= 0 :
@@ -65,13 +66,17 @@ for key in inFile.GetListOfKeys() :
 				found =0
 			if found>=0 :
 				names = kname.split("_")
-				if not (names[1].startswith('s') or names[1].startswith('VBF')) :
+                                print "names", names 
+				if not (names[1].startswith('s') or 'VBF' in names[1]) :
 					names[0] = names[0]+"_"+names[1]
-					names.remove(names[1]) 
+					names.remove(names[1])
+                                if ('noVBF' in names[2]) :
+					names[1] = names[1]+"_"+names[2]
+					names.remove(names[2]) 
 				proc = names[0]
 				if "bidimrew" in proc :
 					proc = "lambdarew21"
-				#print names
+				print "names1",names[1]
 				yieldName=yieldFolder+"/"+opt.channel+"_"+names[1]
 				if isyst == 0 :
 					yieldName = yieldName+"_tes.txt"

@@ -2,16 +2,16 @@
 # make cards with all vars/selections
 
 
-export DELTAETA="2" 
-export OUTSTRING="sboost_noVBFScan_oldOrder_deltaEta${DELTAETA}"
-export INSTRING="VBF1May2018_combine_oldOrder_sboost_noVBFscan"
-export intag="1May2018_sboost_noVBFscan"
+export DELTAETA="3" 
+export OUTSTRING="s2b0j_noVBFScan_oldOrder_deltaEta${DELTAETA}"
+export INSTRING="VBF1May2018_combine_oldOrder_s2b0j_noVBFscan"
+export intag="1May2018_s2b0j_noVBFscan"
 export STRINGLEPTONS="$1"
 
-export SELECTION="sboostedLL_noVBFmXXXeta${DELTAETA}"
+export SELECTION="s2b0jresolvedMcut_noVBFmXXXeta${DELTAETA}"
 export NAMESAMPLE="ggHH VBFC2V1"
 export RESONANT=$2
-export LEPTONS="TauTau"
+export LEPTONS="TauTau ETau MuTau"
 
 export MASS="300 350 400 450 500 550 600 650 700"
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
