@@ -314,9 +314,11 @@ ROOT.gSystem.Load("libHiggsAnalysisCombinedLimit.so")
 parseOptions()
 if(opt.config==""): configname = "../config/analysis_"+opt.channel+".cfg"
 else: configname = opt.config
+print configname
 input = configReader(configname)
 input.readInputs()
 print input.background
+print "input background"
 if opt.isResonant:
 	lambdaName="Radion"
 else:

@@ -1,19 +1,23 @@
 #!/bin/bash
 # make cards with all vars/selections
 
+export cat="$1"
+export prefix="$2"
+export DELTAETA="$3" 
+export OUTSTRING="${cat}Scan_oldOrder_deltaEta${DELTAETA}_22May2018"
+export INSTRING="VBF22May2018_combine_oldOrder_${cat}scan"
+export intag="22May2018_${cat}scan"
 
-export DELTAETA="3" 
-export OUTSTRING="s2b0j_noVBFScan_oldOrder_deltaEta${DELTAETA}"
-export INSTRING="VBF1May2018_combine_oldOrder_s2b0j_noVBFscan"
-export intag="1May2018_s2b0j_noVBFscan"
-export STRINGLEPTONS="$1"
 
-export SELECTION="s2b0jresolvedMcut_noVBFmXXXeta${DELTAETA}"
-export NAMESAMPLE="ggHH VBFC2V1"
+#export SELECTION="s2b0jresolvedMcut_noVBFmXXXeta${DELTAETA}"
+#export SELECTION="s1b1jresolvedMcut_noVBFmXXXeta${DELTAETA}"
+export SELECTION="${prefix}mXXXeta${DELTAETA}"
+export NAMESAMPLE="ggHHXS VBFC2V1XS"
 export RESONANT=$2
 export LEPTONS="TauTau ETau MuTau"
 
-export MASS="300 350 400 450 500 550 600 650 700"
+export MASS="300 400 500 600 650 700 750 800 900 1000"
+
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
 
 
@@ -113,7 +117,8 @@ do
 	done
     done
 done
-#done
+
+
 
 echo "OK fino a qua"
 

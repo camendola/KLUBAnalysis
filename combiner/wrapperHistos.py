@@ -41,7 +41,6 @@ for key in inFile.GetListOfKeys() :
 	#if "Radion" in newName in newName:
 	#	template.Scale(0.1)
 	#protection against empty bins
-        print newName
         changedInt = False
 	for ibin in range(1,template.GetNbinsX()+1) :
 		integral = template.Integral()
@@ -66,7 +65,7 @@ for key in inFile.GetListOfKeys() :
 				found =0
 			if found>=0 :
 				names = kname.split("_")
-                                print "names", names 
+                                #print "names", names 
 				if not (names[1].startswith('s') or 'VBF' in names[1]) :
 					names[0] = names[0]+"_"+names[1]
 					names.remove(names[1])
@@ -76,7 +75,7 @@ for key in inFile.GetListOfKeys() :
 				proc = names[0]
 				if "bidimrew" in proc :
 					proc = "lambdarew21"
-				print "names1",names[1]
+                                #print names[1]
 				yieldName=yieldFolder+"/"+opt.channel+"_"+names[1]
 				if isyst == 0 :
 					yieldName = yieldName+"_tes.txt"
@@ -87,10 +86,14 @@ for key in inFile.GetListOfKeys() :
 				scale = 1.000
 				for line in infile :
 					words = line.split()
-					if words[0] == proc :
-						#print "found ",words, proc,float(words[1+found])
+                                     	if words[0] == proc :
 						scale = float(words[1+found])
-						break
+                                                #if "ggHH" in proc:
+                                                #    scale *= float(33.49*0.001*0.073)
+                                                #    print scale
+                                                #if "VBF" in proc:
+                                                #    scale *= float(1.64*0.001*0.073)
+                                                break
 				template.Scale(scale)
 				#print proc,scale,yieldName
 				#if abs(1-scale)>0.02 : print "correct",yieldName, proc,scale
