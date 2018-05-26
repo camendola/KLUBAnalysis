@@ -35,8 +35,8 @@ cp /home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/scripts/listAll.sh /data_
 # # #####################
 # # ### single top t-channel
 # # cross section from https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SingleTopRefXsec#Single_top_t_channel
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 30 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ST_t-channel_antitop_5f_inclusiveDecays -i inputFiles/Files_17Nov_VBF/1_ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 83.0066
-python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 30 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ST_t-channel_top_5f_inclusiveDecays -i inputFiles/Files_17Nov_VBF/2_ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 137.4581
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 30 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ST_t-channel_antitop_5f_inclusiveDecays -i inputFiles/Files_17Nov_VBF/1_ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 83.0066
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 30 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ST_t-channel_top_5f_inclusiveDecays -i inputFiles/Files_17Nov_VBF/2_ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 137.4581
 
 
 
@@ -120,14 +120,52 @@ python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 30
 #python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 700 -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_TT_fullyLep  -i inputFiles/Files_7Feb2016/TT_powheg_fullyLep_7Feb2017.txt    -x 87.3348  -t True -b 4
 
 
+# # ####################
+# # ## ELECTROWEAK
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_EWKWPlus2Jets_WToLNu   -i inputFiles/Files_7Feb2016/EWKWPlus2Jets_WToLNu_M-50.txt   -x 25.62
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_EWKWMinus2Jets_WToLNu  -i inputFiles/Files_7Feb2016/EWKWMinus2Jets_WToLNu_M-50.txt  -x 20.25
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_EWKZ2Jets_ZToLL        -i inputFiles/Files_7Feb2016/EWKZ2Jets_ZToLL_M-50.txt        -x 3.987
 
-#####################
+
+# # # #####################
+# # # ### DI-boson:
+# # # # note2: all njobs listed here were increased by x10 to make them run on the short queue
+# # # #XS taken from here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#Diboson
+# # ## for Z->4Q, I scaled from ZZ->2nu2Q using BR(2Nu2Q) = 2 * 20% * 69.91%
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WWTo2L2Nu  -i inputFiles/Files_7Feb2016/40_WWTo2L2Nu_13TeV-powheg__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt   -x 12.178
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WWToLNuQQ  -i inputFiles/Files_7Feb2016/WWToLNuQQ.txt                                                                                                  -x 49.997
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WWTo4Q     -i inputFiles/Files_7Feb2016/43_WWTo4Q_13TeV-powheg__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt      -x 51.723
+
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZZTo2L2Nu  -i inputFiles/Files_7Feb2016/32_ZZTo2L2Nu_13TeV_powheg_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt               -x 0.564
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZZTo2L2Q   -i inputFiles/Files_7Feb2016/33_ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt  -x 3.22
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZZTo4L     -i inputFiles/Files_7Feb2016/34_ZZTo4L_13TeV-amcatnloFXFX-pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1.txt       -x 1.212
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 50   -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZZTo4Q     -i inputFiles/Files_7Feb2016/37_ZZTo4Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt    -x 7.06091
+
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 200  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WZTo3LNu       -i inputFiles/Files_7Feb2016/31_WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt      -x 4.42965 
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 200  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WZTo1L3Nu      -i inputFiles/Files_7Feb2016/47_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt    -x 3.033
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 200  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WZTo1L1Nu2Q    -i inputFiles/Files_7Feb2016/48_WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v3.txt  -x 10.71
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 400  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_WZTo2L2Q       -i inputFiles/Files_7Feb2016/49_WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt     -x 5.595
+
+# # # #####################
+# # # ### SM Higgs
+# # # ### HXSWG: xs(ZH) = 0.8839 pb
+# # # ### Z->qq : 69.91% , Z->ll : 3,3658% (x3 for all the leptons)
+# # # ### H->bb : 57.7%  , H->tautau : 6.32%
+# # # ##### ZH (Zall, Htautau) : 6.32%
+# # # ##### ZH (Zll, Hbb)      : 5.83%
+# # # ##### ZH (Zqq, Hbb)      : 40.34%
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZH_HTauTau      -i inputFiles/Files_7Feb2016/50_ZHToTauTau_M125_13TeV_powheg_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt      -x 0.8839 -y 0.0632
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZH_HBB_ZLL      -i inputFiles/Files_7Feb2016/ZH_HToBB_ZToLL.txt                                                                                                              -x 0.8839 -y 0.0583
+# python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_ZH_HBB_ZQQ      -i inputFiles/Files_7Feb2016/53_ZH_HToBB_ZToQQ_M125_13TeV_powheg_pythia8__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt  -x 0.8839 -y 0.4034
+
+
+ #####################
 ### MC VBF HH bbtt non resonant
-#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_VBFHH2b2T_nonres_C2V1        -i inputFiles/VBF_signals_13Nov/1_VBFHHTo2B2Tau_CV_1_C2V_1_C3_1_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt
+python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_VBFHH2b2T_nonres_C2V1_XS        -i inputFiles/VBF_signals_13Nov/1_VBFHHTo2B2Tau_CV_1_C2V_1_C3_1_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 0.0001168
 #python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_VBFHH2b2T_nonres_C2V2        -i inputFiles/VBF_signals_13Nov/2_VBFHHTo2B2Tau_CV_1_C2V_2_C3_1_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt
 
 #### MC ggHH SM non resonant
-#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 10 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SM_nonresonant   -i inputFiles/Files_7Feb2016/38_GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt       -x 1.0 -a True
+python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 10 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SM_nonresonant_XS   -i inputFiles/Files_7Feb2016/38_GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt       -x 0.0024455 -a True
 
 
 

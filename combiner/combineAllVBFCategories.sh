@@ -4,17 +4,20 @@ export out="incl_noVBF"
 #export out="incl"
 export CATEGORIES="sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
 #export CATEGORIES="VBF sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
-export DELTAETA="3" 
+export DELTAETA="2" 
 #export sel="VBF sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF"
 export sel="sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF" 
 
-export OUTSTRING="${out}Scan_oldOrder_deltaEta${DELTAETA}_22May2018"
+export OUTSTRING="${out}Scan_oldOrder_deltaEta${DELTAETA}_22May2018_onlyGGFsig"
 export INSTRING="XXXScan_oldOrder_deltaEta${DELTAETA}_22May2018"
 
 export STRINGLEPTONS="$1"
 
 export SELECTION="mXXXeta${DELTAETA}"
-export NAMESAMPLE="ggHHXS VBFC2V1XS"
+#export NAMESAMPLE="" #empty: both signals
+export NAMESAMPLE="ggHHXS"
+#export NAMESAMPLE="VBFC2V1XS"
+
 export LEPTONS="TauTau ETau MuTau"
 
 export MASS="300 400 500 600 650 700 750 800 900 1000"
@@ -56,23 +59,23 @@ do
 	
 	if [[ $s = *"s1b1j"* ]]
 	   then
-	       cp cards_Combined_${INSTRING/XXX/s1b1j_noVBF}/${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
+	       cp cards_Combined_${INSTRING/XXX/s1b1j_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	fi
 	if [[ $s = *"s2b0j"* ]]
 	then
-	    cp cards_Combined_${INSTRING/XXX/s2b0j_noVBF}/${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
+	    cp cards_Combined_${INSTRING/XXX/s2b0j_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	fi
 
 		if [[ $s = *"sboost"* ]]
 	then
-	    cp cards_Combined_${INSTRING/XXX/sboost_noVBF}/${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
+	    cp cards_Combined_${INSTRING/XXX/sboost_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	fi
 
 	if [[ $s = *"VBF"* ]]
 	then
 	    if [[ $s != *"noVBF"* ]]
 	       then
-	    cp cards_Combined_${INSTRING/XXX/VBF}/${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
+	    cp cards_Combined_${INSTRING/XXX/VBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	    fi
 	    fi
     done

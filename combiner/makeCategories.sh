@@ -8,6 +8,7 @@ export STRINGLEPTONS="$1"
 #export SELECTIONS="s2b0jresolvedMcut s1b1jresolvedMcut sboostedLLMcut"
 export SELECTIONS="sboostedLLMcut s1b1jresolvedMcut${STRINGLEPTONS} s2b0jresolvedMcut${STRINGLEPTONS}"
 export NAMESAMPLE="ggHHXS"
+#export NAMESAMPLE="VBFC2V1XS"
 #"ggHH_bbtt"
 export RESONANT=$2
 export LEPTONS="MuTau ETau TauTau"
@@ -163,18 +164,7 @@ do
          ln -ns ../../prepareGOF.py .
          ln -ns ../../prepareAsymptotic.py .
          python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
-#         if [ $i == "21" ]
-#            then
-#            for g in {0..20}
-#            do
-#               python prepareGOF.py -n $g 
-#           done
-#       fi
-         #combine -M HybridNew --frequentist -m 125.0 --testStat LHC comb.root  -H ProfileLikelihood -n ${i}_forLim --expectedFromGrid=0.5
-         #for q in $QUANTILES
-         #do
- 		#python prepareHybrid.py -n $q
- 	    #done
+
         cd ${CF}
     done
 
