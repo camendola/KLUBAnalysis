@@ -13,7 +13,7 @@ def parseOptions():
     parser.add_option('-b', '--bdtLevel',   dest='bdtLevel',   type='string', default="lmr70",  help='BDT level')
     parser.add_option('-x', '--benchmark',   dest='bench',   type='int', default=0,  help='benchmark')
     parser.add_option('-c', '--categories',  action="store_true", dest='cats', help='by categories')
-    parser.add_option('-o', '--outName',   dest='outName',   type='string', default="2017_02_12",  help='outsuffix')
+    parser.add_option('-o', '--outName',   dest='outName',   type='string', default="testApr2018",  help='outsuffix')
     parser.add_option('-d', '--draw',  action="store_true", dest='draw', help='draw histos')
     parser.add_option('-l', '--log',  action="store_true", dest='logy', help='draw logY scale')
     parser.add_option('-a', '--addObs',  action="store_true", dest='addobs', help='add observation')
@@ -39,7 +39,7 @@ channelsName = ["bb e#tau_{h} channel","bb #mu#tau_{h} channel","bb #tau_{h}#tau
 if plotByCategory : channelsName = ["Combined 2b0j","Combined 1b1j", "Combined boosted"]
 
 #folder = "2017_03_07_2D_{0}".format(bdtstring) #bis = 3cat, ter = 2cat
-folder = "2017_03_10_{0}".format(bdtstring) #bis = 3cat, ter = 2cat
+folder = "TestAllChannels_{0}".format(bdtstring) #bis = 3cat, ter = 2cat
 #outString = "2017_02_12_{0}_resonant".format(bdtstring)
 outString = opt.outName + "_{0}".format(bdtstring)
 if benchmark == 999 :
@@ -196,7 +196,7 @@ for c in range(len(tooLopOn)) :
 		catstring = catstring.replace(bdtstring,"")
 	if benchmark == 2 : 
 		npoints = 2673
-		app = "ggHH_bbtt"
+		app = "ggHH"
 		for m in range(0,npoints) : masses.append(m)
 	elif benchmark == 1 : 
 		npoints = 12
@@ -204,7 +204,7 @@ for c in range(len(tooLopOn)) :
 		for m in range(0,npoints) : masses.append(m)
 	elif benchmark == 0 :
 		npoints = 52
-		app = "ggHH_bbtt"
+		app = "ggHH"
 		for m in range(0,npoints) : masses.append(m)
 	elif benchmark < 0:
 		npoints = 1507
@@ -217,10 +217,10 @@ for c in range(len(tooLopOn)) :
 	#for m in range(0,npoints):
 	offsetX = 20 
 	if benchmark == 999 or benchmark == 2: offsetX =0
-	for m in masses :
-		fileLocation = "/home/llr/cms/ortona/diHiggs/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_"+channels[c]+"_"+folder+"/"+app+str(m)+catstring+"/higgsCombine"+app+str(m)+"_forLim_noTH.Asymptotic.mH"+str(m)+".root"
+	for m in range(1,1) :
+		fileLocation = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_"+channels[c]+"_"+folder+"/"+app+catstring+"/higgsCombine"+app+"_forLim_noTH.Asymptotic.mH"+str(m)+".root"
 		if plotByCategory :
-			fileLocation = "/home/llr/cms/ortona/diHiggs/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_Combined_"+folder+"/"+app+str(m)+tooLopOn[c]+"/higgsCombine"+app+str(m)+"_forLim_noTH.Asymptotic.mH"+str(m)+".root"
+			fileLocation = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_Combined_"+folder+"/"+app+tooLopOn[c]+"/higgsCombine"+app+"_forLim_noTH.Asymptotic.mH.root"
 		if not os.path.isfile(fileLocation) : 
 			print "FILE NOT FOUND: " , fileLocation
 			continue

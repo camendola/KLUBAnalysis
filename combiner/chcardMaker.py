@@ -75,13 +75,13 @@ def  writeCard(input,theLambda,select,region=-1) :
 	print "writing cards"
 	variables =[]
 	if opt.isResonant : variables.append('HHKin_mass_raw')
-	else : variables.append('HH_mass')
+	else : variables.append('MT2')
 
 	#out_dir = opt.outDir
-	theOutputDir = "{0}_{1}_{2}".format(theLambda,select,variables[0])
+	theOutputDir = "{0}{1}{2}".format(theLambda,select,variables[0])
 	dname = "_"+opt.channel+opt.outDir
 	out_dir = "cards{1}/{0}/".format(theOutputDir,dname)
-	print "@@@@@@@@@"+out_dir
+	print out_dir
 	#in_dir = "/grid_mnt/vol__vol_U__u/llr/cms/ortona/diHiggs/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_MuTauprova/HHSM2b0jMcutBDTMT2/";
 	cmb1 = ch.CombineHarvester()
 	cmb1.SetFlag('workspaces-use-clone', True)
@@ -96,10 +96,12 @@ def  writeCard(input,theLambda,select,region=-1) :
 	if opt.channel == "MuTau" : thechannel="2"
 	elif opt.channel == "TauTau" : thechannel = "3"
 
-	if "0b0j" in select : theCat = "0"
+	if "VBF" in select :
+            if not (( "2b0j" in select) or ("1b1j" in select) or ("boosted" in select)): theCat = "0"
 	if "2b0j" in select : theCat = "2"
 	elif "1b1j" in select : theCat = "1"
 	elif "boosted" in select : theCat = "3"
+
 
 	outFile = "hh_{0}_C{1}_L{2}_13TeV.txt".format(thechannel,theCat,theLambda)
 	file = open( "temp.txt", "wb")
@@ -120,7 +122,7 @@ def  writeCard(input,theLambda,select,region=-1) :
 		templateName = "{0}_{1}_SR_{2}".format(bkg,select,variables[0])
 		print templateName
 		template = inRoot.Get(templateName)
-                if template.Integral()>0.000001 :
+		if template.Integral()>0.000001 :
 			backgrounds.append(bkg)
 			processes.append(bkg)
 			if bkg is not "QCD" :
@@ -136,24 +138,13 @@ def  writeCard(input,theLambda,select,region=-1) :
 				if regionSuffix[regionsuff] == "SR" :
 					fname="QCD"
 				templateName = "{0}_{1}_{3}_{2}".format(fname,select,variables[0],regionSuffix[regionsuff])
-
-                                template = inRoot.Get(templateName)
+				template = inRoot.Get(templateName)
 				#allQCDs.append(template.Integral())
 				allQCDs[regionsuff]= allQCDs[regionsuff]+template.Integral()
 				iQCD = ichan
 			elif regionSuffix[regionsuff] is not "SR" :
 				templateName = "{0}_{1}_{3}_{2}".format(backgrounds[ichan],select,variables[0],regionSuffix[regionsuff])
-                                print "!!!!!! template "+templateName
-                                template = TH1F()
 				template = inRoot.Get(templateName)
-                                print template
-                                c1 = TCanvas()
-                                template.Draw()
-                                c1.Update()
-                                c1.Modified()
-                                c1.Draw()
-                            
-
 				allQCDs[regionsuff] = allQCDs[regionsuff] - template.Integral()
 
 	if allQCDs[0]>0 and allQCDs[1]>0 and allQCDs[2]>0 and allQCDs[3]>0 : allQCD = True
@@ -206,20 +197,21 @@ def  writeCard(input,theLambda,select,region=-1) :
 		if opt.shapeUnc > 0:
 			jesproc = MCbackgrounds
 			jesproc.append(lambdaName)
-			if "1b1j" in select and opt.channel == "TauTau" : jesproc.remove("DY0b")
+			#if "1b1j" in select and opt.channel == "TauTau" : jesproc.remove("DY0b")
 			cmb1.cp().process(jesproc).AddSyst(cmb1, "CMS_scale_j_13TeV","shape",ch.SystMap('channel','bin_id')([opt.channel],[0],1.000))
 			cmb1.cp().process(jesproc).AddSyst(cmb1, "CMS_scale_t_13TeV","shape",ch.SystMap('channel','bin_id')([opt.channel],[0],1.000))
 			cmb1.cp().process(["TT"]).AddSyst(cmb1, "top","shape",ch.SystMap('channel','bin_id')([opt.channel],[0],1.000))
-
-	    #	$BIN        --> proc.bin()
-	    #	$PROCESS    --> proc.process()
-	    #	$MASS       --> proc.mass()
-	    #	$SYSTEMATIC --> syst.name()
-#		cmb1.cp().ExtractShapes(
-#			opt.filename,
-#			"$PROCESS_$BIN_{1}_{0}".format(variables[0],regionSuffix[region+1]),
-#			"$PROCESS_$BIN_{1}_{0}_$SYSTEMATIC".format(variables[0],regionSuffix[region+1]))
-		cmb1.cp().backgrounds().ExtractShapes(
+                        
+	        #	$BIN        --> proc.bin()
+                #	$PROCESS    --> proc.process()
+	        #	$MASS       --> proc.mass()
+	        #	$SYSTEMATIC --> syst.name()
+                #		cmb1.cp().ExtractShapes(
+                #			opt.filename,
+                #			"$PROCESS_$BIN_{1}_{0}".format(variables[0],regionSuffix[region+1]),
+                #			"$PROCESS_$BIN_{1}_{0}_$SYSTEMATIC".format(variables[0],regionSuffix[region+1]))
+                
+                cmb1.cp().backgrounds().ExtractShapes(
 			opt.filename,
 			"$PROCESS_$BIN_{1}_{0}".format(variables[0],regionSuffix[region+1]),
 			"$PROCESS_$BIN_{1}_{0}_$SYSTEMATIC".format(variables[0],regionSuffix[region+1]))
@@ -322,13 +314,18 @@ ROOT.gSystem.Load("libHiggsAnalysisCombinedLimit.so")
 parseOptions()
 if(opt.config==""): configname = "../config/analysis_"+opt.channel+".cfg"
 else: configname = opt.config
+print configname
 input = configReader(configname)
 input.readInputs()
-
+print input.background
+print "input background"
 if opt.isResonant:
 	lambdaName="Radion"
 else:
-	lambdaName="ggHH_bbtt"
+    if opt.overLambda:
+        lambdaName = opt.overLambda
+    else:
+        lambdaName="ggHH"
 
 if opt.overSel == "" :
 	allSel = ["s1b1jresolvedMcut", "s2b0jresolvedMcut", "sboostedLLMcut"]
@@ -341,16 +338,19 @@ print input.signals
 for il in range(len(input.signals)) :
 	input.signals[il] = input.signals[il].replace("lambdarew","ggHH_bbtt")	
 	input.signals[il] = input.signals[il].replace("bidimrew","ggHH_bbtt")	
-print input.signals
 for theLambda in input.signals:
-#	if not lambdaName in theLambda : 
-#		continue
+        #import pdb; pdb.set_trace()
+        #  if not lambdaName in theLambda : 
+	#	continue
 	for sel in allSel : 
 		#if not "lambda" in theLambda and not "Radion" in theLambda : continue
-#		if opt.isResonant :
-#			if not "Radion" in theLambda : continue
-#		else :
-#			if not "ggHH_bbtt" in theLambda : continue
-	    for ireg in range(-1,3):
-                        print "scrivoooo"
-			writeCard(input,theLambda,sel,ireg)
+	    if opt.isResonant :
+		if not "Radion" in theLambda : continue
+		else :
+		    if not opt.overLambda in theLambda : continue
+	    for ireg in range(-1,3) :
+                print "chmaker"
+                print sel
+                print ireg
+                print theLambda
+		writeCard(input,theLambda,sel,ireg)

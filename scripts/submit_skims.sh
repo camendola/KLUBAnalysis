@@ -129,6 +129,13 @@ cp /home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/scripts/listAll.sh /data_
 #### MC ggHH SM non resonant
 #python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 10 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SM_nonresonant   -i inputFiles/Files_7Feb2016/38_GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt       -x 1.0 -a True
 
+#####################
+### MC VBF HH bbtt non resonant
+python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_VBFHH2b2T_nonres_C2V1_XS        -i inputFiles/VBF_signals_13Nov/1_VBFHHTo2B2Tau_CV_1_C2V_1_C3_1_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt -x 0.0001168
+#python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 100  -k False -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_VBFHH2b2T_nonres_C2V2        -i inputFiles/VBF_signals_13Nov/2_VBFHHTo2B2Tau_CV_1_C2V_2_C3_1_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt
+
+#### MC ggHH SM non resonant
+python scripts/skimNtuple.py -T $OUTDIRR -s True -c  config/skim_2016.cfg  -n 10 -k True -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SM_nonresonant_XS   -i inputFiles/Files_7Feb2016/38_GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph__RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1.txt       -x 0.0024455 -a True
 
 
 #####################

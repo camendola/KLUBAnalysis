@@ -2,27 +2,26 @@
 # make cards with all vars/selections
 
 #export OUTSTRING="2017_02_19_btag_$1"
-export OUTSTRING="test_2018_06_04"
-
+export OUTSTRING="22MayTest_$1"
 export STRINGLEPTONS="$1"
 #export SELECTIONS="s2b0jresolvedMcut${STRINGLEPTONS} s1b1jresolvedMcut${STRINGLEPTONS} sboostedLLMcut"
-
 #export SELECTIONS="s2b0jresolvedMcut s1b1jresolvedMcut sboostedLLMcut"
-export SELECTIONS='sboostedLL s2b0jresolved' 
-export NAMESAMPLE="ggHH_bbtt"
+export SELECTIONS="sboostedLLMcut s1b1jresolvedMcut${STRINGLEPTONS} s2b0jresolvedMcut${STRINGLEPTONS}"
+export NAMESAMPLE="ggHHXS"
+#export NAMESAMPLE="VBFC2V1XS"
 #"ggHH_bbtt"
 export RESONANT=$2
-#export LEPTONS="MuTau ETau TauTau"
-export LEPTONS="TauTau"
+export LEPTONS="MuTau ETau TauTau"
+#export LEPTONS="ETau"
 
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
 if [ "${RESONANT}" != "-r" ]
     then
-    #export VARIABLE="MT2"
-    export VARIABLE="HH_mass"
+    export VARIABLE="MT2"
         export LAMBDAS=""
         #export INSELECTIONS="s2b0jresolvedMcutlmr90 s1b1jresolvedMcutlmr90 s2b0jresolvedMcuthmr90 s1b1jresolvedMcuthmr90 sboostedLLMcut s1b1jresolvedMcutlmr70 s2b0jresolvedMcutlmr70 s1b1jresolvedMcutLepTauKine s2b0jresolvedMcutLepTauKine"
-        for il in {1}
+	#        for il in {0..51}
+	for il in {1..1}
         do 
         export LAMBDAS="$LAMBDAS ${il}"
     done
@@ -54,20 +53,11 @@ do
         fi
         if [ "${c}" == "TauTau" ]
             then
-            #export BASE=${ibase}_${STRINGLEPTONS}
-	    if ["${STRINGLEPTONS}" == ""]
-	       then
-	       export BASE=${ibase}
-	       else
-	       export BASE=${ibase}_${STRINGLEPTONS}
-	       fi
-	    echo "---------------> $BASE"
+            export BASE=${ibase/${STRINGLEPTONS}/}
+            echo "$BASE"
         fi
-    #python cardMaker.py -i ${SOURCE}/analysis_${c}_1Feb_lims/mainCfg_${c}.cfg -f ${SOURCE}/analysis_${c}_1Feb_lims/analyzedOutPlotter.root   -o $BASE -c ${c}   --dir "_$OUTSTRING" -t 0 ${RESONANT} 
-    #python chcardMaker.py -f ${SOURCE}/analysis_${c}_19Feb/analyzedOutPlotter.root -o ${OUTSTRING} -c ${c} -i ${SOURCE}/analysis_${c}_19Feb/mainCfg_TauTau.cfg -y -s ${BASE} ${RESONANT} -u 0
-    #python chcardMaker.py -f analyzedOutPlotter_01Mar_2D_${c}.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_1Mar_lims_2dscan/mainCfg_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t 
-    echo "mo fa le card"
-    python chcardMaker.py -f analyzedOutPlotter_${c}_test.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_VBF14March2018/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t 
+	echo "$BASE"
+	python chcardMaker.py -f analyzedOutPlotter_${c}_22MayTest.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_VBF22May2018_combineTest/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t -l ${NAMESAMPLE} 
 #done
 #for base in $SELECTIONSTAU
 #do
@@ -103,9 +93,10 @@ do
             then
                 export chanNum="3"
                 echo "${c} ${chanNum}" 
-                export BASE=${ibase/${STRINGLEPTONS}/}
+		export BASE=${ibase/${STRINGLEPTONS}/}
+		#export BASE="$ibase"
             fi
-            #cd ${CF}/cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${BASE}${VARIABLE}
+	    #            cd ${CF}/cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${BASE}${VARIABLE}
 	    cd ${CF}/cards_${c}_$OUTSTRING/${NAMESAMPLE}${BASE}${VARIABLE}
             pwd
  	        #combineCards.py -S hh_${chanNum}_*L${i}_13TeV.txt >> comb.txt 
@@ -115,7 +106,7 @@ do
             ln -ns ../../prepareHybrid.py .
             ln -ns ../../prepareGOF.py .
             ln -ns ../../prepareAsymptotic.py .
-            python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}$i
+            python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
             cd ${CF}
         done
     done
@@ -125,11 +116,11 @@ done
 for i in $LAMBDAS
 do
     cd ${CF}
-	mkdir -p cards_Combined_$OUTSTRING/${NAMESAMPLE}${i}${VARIABLE}
+	mkdir -p cards_Combined_$OUTSTRING/${NAMESAMPLE}${VARIABLE}
     #MAKE COMBINATION FOR CATEGORY [3 x mass point]
     for ibase in $SELECTIONS
     do
-        mkdir -p cards_Combined_$OUTSTRING/${NAMESAMPLE}${i}${ibase}${VARIABLE}
+        mkdir -p cards_Combined_$OUTSTRING/${NAMESAMPLE}${ibase}${VARIABLE}
         for c in $LEPTONS
         do
             if [ "${c}" == "MuTau" ]
@@ -144,60 +135,51 @@ do
             then
                 export BASE=${ibase/${STRINGLEPTONS}/}
             fi
-            mkdir -p cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${VARIABLE}
-            cp cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${BASE}${VARIABLE}/hh_*.* cards_Combined_$OUTSTRING/${NAMESAMPLE}${i}${ibase}${VARIABLE}/.
-            cp cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${BASE}${VARIABLE}/hh_*.* cards_Combined_$OUTSTRING/${NAMESAMPLE}${i}${VARIABLE}/.
-            cp cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${BASE}${VARIABLE}/hh_*.* cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${VARIABLE}/.
+	    mkdir -p cards_${c}_$OUTSTRING/${NAMESAMPLE}${VARIABLE}
+	    cp cards_${c}_$OUTSTRING/${NAMESAMPLE}${BASE}${VARIABLE}/hh_*.* cards_Combined_$OUTSTRING/${NAMESAMPLE}${ibase}${VARIABLE}/.
+            cp cards_${c}_$OUTSTRING/${NAMESAMPLE}${BASE}${VARIABLE}/hh_*.* cards_Combined_$OUTSTRING/${NAMESAMPLE}${VARIABLE}/.
+            cp cards_${c}_$OUTSTRING/${NAMESAMPLE}${BASE}${VARIABLE}/hh_*.* cards_${c}_$OUTSTRING/${NAMESAMPLE}${VARIABLE}/.
         done
-        cd cards_Combined_$OUTSTRING/${NAMESAMPLE}${i}${ibase}${VARIABLE}
+        cd cards_Combined_$OUTSTRING/${NAMESAMPLE}${ibase}${VARIABLE}
         pwd
-        if [ -a "hh_1_C1_L${NAMESAMPLE}${i}_13TeV.txt" ] #category 1
+        if [ -a "hh_3_C1_L${NAMESAMPLE}_13TeV.txt" ] #category 1
             then
-            combineCards.py -S hh_*_C1_L${NAMESAMPLE}${i}_13Te*.txt  >> comb.txt
+            combineCards.py -S hh_*_C1_L${NAMESAMPLE}_13Te*.txt  >> comb.txt
         fi
-        if [ -a "hh_1_C2_L${NAMESAMPLE}${i}_13TeV.txt" ]
+        if [ -a "hh_3_C2_L${NAMESAMPLE}_13TeV.txt" ]
             then
-            combineCards.py -S hh_*_C2_L${NAMESAMPLE}${i}_13Te*.txt >> comb.txt
+            combineCards.py -S hh_*_C2_L${NAMESAMPLE}_13Te*.txt >> comb.txt
         fi
-        if [ -a "hh_1_C3_L${NAMESAMPLE}${i}_13TeV.txt" ]
-         	then
-         	combineCards.py -S hh_*_C3_L${NAMESAMPLE}${i}_13Te*.txt >> comb.txt
+        if [ -a "hh_3_C3_L${NAMESAMPLE}_13TeV.txt" ]
+	then
+	    echo "copying to comb.txt in Combined folder"
+         	combineCards.py -S hh_*_C3_L${NAMESAMPLE}_13Te*.txt >> comb.txt
         fi
 #        if [ -a "hh_1_C999_L${i}_13TeV.txt" ]
 #           then
-#           combineCards.py -S hh_1_C999_L${i}_13TeV.txt hh_2_C999_L${i}_13TeV.txt hh_3_C999_L${i}_13TeV.txt >> comb.txt
+#           combineCards.py -S hh_1_C999_L_13TeV.txt hh_2_C999_L_13TeV.txt hh_3_C999_L_13TeV.txt >> comb.txt
 #        fi
          text2workspace.py -m ${i} comb.txt -o comb.root ;
          ln -ns ../../prepareHybrid.py .
          ln -ns ../../prepareGOF.py .
          ln -ns ../../prepareAsymptotic.py .
-         python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}$i
-#         if [ $i == "21" ]
-#            then
-#            for g in {0..20}
-#            do
-#               python prepareGOF.py -n $g 
-#           done
-#       fi
-         #combine -M HybridNew --frequentist -m 125.0 --testStat LHC comb.root  -H ProfileLikelihood -n ${i}_forLim --expectedFromGrid=0.5
-         #for q in $QUANTILES
-         #do
- 		#python prepareHybrid.py -n $q
- 	    #done
+         python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
+
         cd ${CF}
     done
 
 	#MAKE BIG COMBINATION [1 x mass point]
-    cd cards_Combined_$OUTSTRING/${NAMESAMPLE}${i}${VARIABLE}
+    cd cards_Combined_$OUTSTRING/${NAMESAMPLE}${VARIABLE}
+    pwd
     rm comb.*
-    combineCards.py -S hh_*_C1_L${NAMESAMPLE}${i}_13Te*.txt hh_*_C2_L${NAMESAMPLE}${i}_13Te*.txt hh_*_C3_L${NAMESAMPLE}${i}_13Te*.txt >> comb.txt #ah ma allora le wildcard funzionano?
+    combineCards.py -S hh_*_C1_L${NAMESAMPLE}_13Te*.txt hh_*_C2_L${NAMESAMPLE}_13Te*.txt hh_*_C3_L${NAMESAMPLE}_13Te*.txt >> comb.txt #ah ma allora le wildcard funzionano?
     #combineCards.py -S hh_*_C2_L${i}_13TeV.txt hh_*_C3_L${i}_13TeV.txt >> comb.txt
     text2workspace.py -m ${i} comb.txt -o comb.root ;
     ln -ns ../../prepareHybrid.py .
     ln -ns ../../prepareGOF.py .
     ln -ns ../../prepareAsymptotic.py .
     ln -ns ../../prepareImpacts.py .
-    python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}$i
+    python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
 #    if [ $i == "21" ]
 #    	then
 ##    	ln -ns ../../prepareImpacts.py .
@@ -220,16 +202,17 @@ do
 #		for base in $SELECTIONS
 #		do
 #			cp cards_${c}_$OUTSTRING/${i}${base}${VARIABLE}/hh_*C*.* cards_${c}_$OUTSTRING/${i}${VARIABLE}/.
-#		done
-		cd cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${VARIABLE}
+	    #		done
+	        cd cards_${c}_$OUTSTRING/${NAMESAMPLE}${VARIABLE}
+		pwd
 		rm comb.*
-		combineCards.py -S hh_*_C1_L${NAMESAMPLE}${i}_13Te*.txt hh_*_C2_L${NAMESAMPLE}${i}_13Te*.txt hh_*_C3_L${NAMESAMPLE}${i}_13Te*.txt >> comb.txt
+		combineCards.py -S hh_*_C1_L${NAMESAMPLE}_13Te*.txt hh_*_C2_L${NAMESAMPLE}_13Te*.txt hh_*_C3_L${NAMESAMPLE}_13Te*.txt >> comb.txt
 		#combineCards.py -S  hh_*_C2_L${i}_13TeV.txt hh_*_C3_L${i}_13TeV.txt >> comb.txt
 		text2workspace.py -m ${i} comb.txt -o comb.root ;
 		ln -ns ../../prepareHybrid.py .
 		ln -ns ../../prepareGOF.py .
 		ln -ns ../../prepareAsymptotic.py .
-		python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}$i
+		python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
 #         if [ $i == "21" ]
 #            then
 #            for g in {0..20}

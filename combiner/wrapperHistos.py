@@ -20,7 +20,7 @@ def parseOptions():
 listHistos = []
 systNamesOUT=["CMS_scale_t_13TeV","CMS_scale_j_13TeV"]
 systNames=["tau","jet"]
-yieldFolder="/home/llr/cms/cadamuro/testAnalysisHelper2/CMSSW_7_4_7/src/KLUBAnalysis/studies/GetScaleYieldSyst"
+yieldFolder="/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/studies/GetScaleYieldSyst"
 parseOptions()
 print "Running"
 inFile = TFile.Open(opt.filename)
@@ -41,7 +41,7 @@ for key in inFile.GetListOfKeys() :
 	#if "Radion" in newName in newName:
 	#	template.Scale(0.1)
 	#protection against empty bins
-	changedInt = False
+        changedInt = False
 	for ibin in range(1,template.GetNbinsX()+1) :
 		integral = template.Integral()
 		if template.GetBinContent(ibin) <= 0 :
@@ -65,26 +65,35 @@ for key in inFile.GetListOfKeys() :
 				found =0
 			if found>=0 :
 				names = kname.split("_")
-				if not names[1].startswith('s') :
+                                #print "names", names 
+				if not (names[1].startswith('s') or 'VBF' in names[1]) :
 					names[0] = names[0]+"_"+names[1]
-					names.remove(names[1]) 
+					names.remove(names[1])
+                                if ('noVBF' in names[2]) :
+					names[1] = names[1]+"_"+names[2]
+					names.remove(names[2]) 
 				proc = names[0]
 				if "bidimrew" in proc :
 					proc = "lambdarew21"
-				#print names
+                                #print names[1]
 				yieldName=yieldFolder+"/"+opt.channel+"_"+names[1]
 				if isyst == 0 :
 					yieldName = yieldName+"_tes.txt"
 				else :
 					yieldName = yieldName+"_jes.txt"
+
 				infile = open(yieldName)
 				scale = 1.000
 				for line in infile :
 					words = line.split()
-					if words[0] == proc :
-						#print "found ",words, proc,float(words[1+found])
+                                     	if words[0] == proc :
 						scale = float(words[1+found])
-						break
+                                                #if "ggHH" in proc:
+                                                #    scale *= float(33.49*0.001*0.073)
+                                                #    print scale
+                                                #if "VBF" in proc:
+                                                #    scale *= float(1.64*0.001*0.073)
+                                                break
 				template.Scale(scale)
 				#print proc,scale,yieldName
 				#if abs(1-scale)>0.02 : print "correct",yieldName, proc,scale
