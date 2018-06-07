@@ -2,21 +2,23 @@
 # make cards with all vars/selections
 #export out="incl_noVBF"
 export out="incl"
+export BDTSTRING="lmr70"
 #export CATEGORIES="sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
-export CATEGORIES="VBF sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
+#export CATEGORIES="${BDTSTRING}VBF sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
+
 export DELTAETA="3" 
 export sel="VBF sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF"
 #export sel="sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF" 
 
-export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_22May2018_onlyVBFsig"
-export INSTRING="XXXScan_newOrder_deltaEta${DELTAETA}_22May2018"
+export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_22May2018_onlyGGFsig_${BDTSTRING}"
+export instring="${BDTSTRING}XXXScan_newOrder_deltaEta${DELTAETA}_22May2018"
 
 export STRINGLEPTONS="$1"
 
 export SELECTION="mXXXeta${DELTAETA}"
 #export NAMESAMPLE="" #empty: both signals
-#export NAMESAMPLE="ggHHXS"
-export NAMESAMPLE="VBFC2V1XS"
+export NAMESAMPLE="ggHHXS"
+#export NAMESAMPLE="VBFC2V1XS"
 
 export LEPTONS="TauTau ETau MuTau"
 
@@ -26,12 +28,7 @@ export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
 
 export VARIABLE="MT2"
 export SELECTIONS=""
-export FOLDER=""
 
-for cat in $CATEGORIES
-do
-    export FOLDER="$FOLDER ${INSTRING/XXX/$cat}"
-done
 
 for m in $MASS
 do
@@ -40,7 +37,7 @@ do
 done
 echo $SELECTIONS
 echo $NAMESAMPLE
-echo $FOLDER
+
 export QUANTILES="0.025 0.16 0.5 0.84 0.975 -1.0"
 export SOURCE="/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis" 
 
@@ -58,16 +55,19 @@ do
 
 	
 	if [[ $s = *"s1b1j"* ]]
-	   then
-	       cp cards_Combined_${INSTRING/XXX/s1b1j_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
+	then
+	    export INSTRING=${instring/${BDTSTRING}/}
+	    cp cards_Combined_${INSTRING/XXX/s1b1j_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	fi
 	if [[ $s = *"s2b0j"* ]]
 	then
+	    export INSTRING=${instring/${BDTSTRING}/}
 	    cp cards_Combined_${INSTRING/XXX/s2b0j_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	fi
-
-		if [[ $s = *"sboost"* ]]
+	
+	if [[ $s = *"sboost"* ]]
 	then
+	    export INSTRING=${instring/${BDTSTRING}/}
 	    cp cards_Combined_${INSTRING/XXX/sboost_noVBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	fi
 
@@ -75,7 +75,8 @@ do
 	then
 	    if [[ $s != *"noVBF"* ]]
 	       then
-	    cp cards_Combined_${INSTRING/XXX/VBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
+		   export INSTRING=${instring}
+		   cp cards_Combined_${INSTRING/XXX/VBF}/${NAMESAMPLE}${s}${S}${VARIABLE}/hh*.* cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
 	    fi
 	    fi
     done
@@ -110,46 +111,5 @@ do
 done
 
 
-
-#
-#text2workspace.py -m ${i} comb.txt -o comb.root ;
-#ln -ns ../../prepareHybrid.py .
-#ln -ns ../../prepareGOF.py .
-#ln -ns ../../prepareAsymptotic.py .
-#python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
-#
-#cd ${CF}
-
-#
-#    text2workspace.py -m ${i} comb.txt -o comb.root ;
-#    ln -ns ../../prepareHybrid.py .
-#    ln -ns ../../prepareGOF.py .
-#    ln -ns ../../prepareAsymptotic.py .
-#    ln -ns ../../prepareImpacts.py .
-#    python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
-#
-# cd ${CF}
-#
-##MAKE COMBINATION FOR CHANNEL [3 x mass point]
-#	for c in $LEPTONS 
-#	do
-#
-#	        cd cards_${c}_$OUTSTRING/${NAMESAMPLE}${VARIABLE}
-#		pwd
-#		rm comb.*
-#		combineCards.py -S hh_*_C1_L${NAMESAMPLE}_13Te*.txt hh_*_C2_L${NAMESAMPLE}_13Te*.txt hh_*_C3_L${NAMESAMPLE}_13Te*.txt >> comb.txt
-#
-#		text2workspace.py -m ${i} comb.txt -o comb.root ;
-#		ln -ns ../../prepareHybrid.py .
-#		ln -ns ../../prepareGOF.py .
-#		ln -ns ../../prepareAsymptotic.py .
-#		python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}
-#
-#		cd ${CF}
-#   done
-#
-#
-#done
-#
 
 

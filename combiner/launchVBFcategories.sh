@@ -3,7 +3,12 @@
 #./makeVBFCategories.sh VBF VBF 2p5
 #./makeVBFCategories.sh VBF VBF 3
 
-./makeVBFCategories.sh sboost_noVBF sboostedLL_noVBF 2
+#./makeVBFCategories.sh VBF VBF 2 lmr70
+#./makeVBFCategories.sh VBF VBF 2p5 lmr70
+./makeVBFCategories.sh VBF VBF 3 lmr70
+    
+
+#./makeVBFCategories.sh sboost_noVBF sboostedLL_noVBF 2
 #./makeVBFCategories.sh sboost_noVBF sboostedLL_noVBF 2p5
 #./makeVBFCategories.sh sboost_noVBF sboostedLL_noVBF 3
 

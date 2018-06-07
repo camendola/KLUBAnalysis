@@ -4,9 +4,10 @@
 export cat="$1"
 export prefix="$2"
 export DELTAETA="$3" 
-export OUTSTRING="${cat}Scan_newOrder_deltaEta${DELTAETA}_22May2018"
-export INSTRING="VBF22May2018_combine_newOrder_${cat}scan"
-export intag="newOrder_22May2018_${cat}scan"
+export BDTSTRING="$4"
+export OUTSTRING="${BDTSTRING}${cat}Scan_newOrder_deltaEta${DELTAETA}_22May2018"
+export INSTRING="VBF22May2018_combine_newOrder_${BDTSTRING}${cat}scan"
+export intag="22May2018_${BDTSTRING}${cat}scan"
 
 
 #export SELECTION="s2b0jresolvedMcut_noVBFmXXXeta${DELTAETA}"
@@ -53,10 +54,11 @@ do
             if [ "${c}" == "TauTau" ]
             then
 		export BASE=${ibase/${STRINGLEPTONS}/}
-		echo "$BASE"
+		export instring=${INSTRING/${BDTSTRING}/}
+		export tag=${intag/${BDTSTRING}/}
             fi
 	    echo "$BASE"
-	    python chcardMaker.py -f analyzedOutPlotter_${c}_${intag}.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_${INSTRING}/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t -l $sample 
+	    python chcardMaker.py -f analyzedOutPlotter_${c}_${tag}.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_${instring}/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t -l $sample 
 	done
     done
 done

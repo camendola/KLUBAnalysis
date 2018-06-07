@@ -549,7 +549,7 @@ if __name__ == "__main__" :
 
             
     #################### REMOVE NEGARIVE BINS #######################
-    print "** INFO: removing all negative bins from bkg histos"
+    #print "** INFO: removing all negative bins from bkg histos"
     makeNonNegativeHistos (hBkgList)
 
 
@@ -861,7 +861,15 @@ if __name__ == "__main__" :
         c1.SaveAs (saveName+".png")
         scale = plotScale;
         if args.log: scale = plotScaleLog
+
+#        print "data events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hData.Integral(1,hData.GetNbinsX()+1))
+#        print "bkg events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(bkgStack.GetStack().Last().Integral(1,bkgStack.GetStack().Last().GetNbinsX()+1)*width)
+#        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)*width/scale[1])
+#        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)*width/scale[0])
+
         print "data events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hData.Integral(1,hData.GetNbinsX()+1))
-        print "bkg events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(bkgStack.GetStack().Last().Integral(1,bkgStack.GetStack().Last().GetNbinsX()+1)*width)
-        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)*width/scale[1])
-        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)*width/scale[0])
+        print "bkg events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(bkgStack.GetStack().Last().Integral(1,bkgStack.GetStack().Last().GetNbinsX()+1))
+        print "TT events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hTT.Integral(1,hTT.GetNbinsX()+1))
+        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)/scale[1])
+        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)/scale[0])
+        
