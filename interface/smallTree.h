@@ -48,6 +48,8 @@ struct smallTree
       m_genDecMode2 = -1;
 
       m_genMHH   = -1;
+      m_genPtHH   = -1;
+      m_genEtaHH   = -999;
       m_genCosth = -999;
 
       m_npv = -1. ;
@@ -132,6 +134,7 @@ struct smallTree
       m_bjet1_bID = -1. ;
       m_bjet1_bMVAID = -1. ;
       m_bjet1_flav = -1 ;
+      m_bjet1_PUJetID = -1 ;
       m_bjet1_pt_raw  = -1. ;
       m_bjet1_pt_raw_jetup  = -1. ;
       m_bjet1_pt_raw_jetdown  = -1. ;
@@ -144,6 +147,7 @@ struct smallTree
       m_bjet2_bID = -1. ;
       m_bjet2_bMVAID = -1. ;
       m_bjet2_flav = -1 ;
+      m_bjet2_PUJetID = -1 ;
       m_bjet2_pt_raw  = -1. ;
       m_bjet2_pt_raw_jetup  = -1. ;
       m_bjet2_pt_raw_jetdown  = -1. ;
@@ -194,6 +198,11 @@ struct smallTree
       m_tauH_phi = -1. ;
       m_tauH_e = -1. ;
       m_tauH_mass = -1. ;
+
+      m_tauHgen_pt = -1. ;
+      m_tauHgen_eta = -1. ;
+      m_tauHgen_mass = -1. ;
+
       m_tauH_SVFIT_mass = -1. ;
       m_tauH_SVFIT_pt = -1. ;
       m_tauH_SVFIT_eta = -1. ;
@@ -210,6 +219,10 @@ struct smallTree
       m_bH_phi = -1. ;
       m_bH_e = -1. ;
       m_bH_mass = -1. ;
+
+      m_bHgen_pt = -1. ;
+      m_bHgen_eta = -1. ;
+      m_bHgen_mass = -1. ;
       
       
       m_HHsvfit_pt = -1. ;
@@ -330,7 +343,8 @@ struct smallTree
       m_VBFjet1_phi= -999. ;
       m_VBFjet1_e= -999. ;
       m_VBFjet1_btag= -999. ;
-      m_VBFjet1_flav= 0 ;
+      m_VBFjet1_flav= -1 ;
+      m_VBFjet1_PUJetID = -1 ;
       m_VBFjet1_hasgenjet= false ;
 
       m_VBFgenjet1_pt= -999. ;
@@ -343,7 +357,8 @@ struct smallTree
       m_VBFjet2_phi= -999. ;
       m_VBFjet2_e= -999. ;
       m_VBFjet2_btag= -999. ;
-      m_VBFjet2_flav= 0 ;
+      m_VBFjet2_flav= -1 ;
+      m_VBFjet2_PUJetID = -1 ;
       m_VBFjet2_hasgenjet= false ;
 
 
@@ -354,6 +369,7 @@ struct smallTree
       
       m_VBFjj_mass = -999.;
       m_VBFjj_deltaEta = -999.;
+      m_VBFjj_etaProd = -999.;
       m_VBFjj_HT  = -999.;
 
       m_VBFjj_mass_log = -999.;
@@ -479,6 +495,8 @@ struct smallTree
       m_smallT->Branch("genDecMode2", &m_genDecMode2, "genDecMode2/I");
 
       m_smallT->Branch("genMHH", &m_genMHH, "m_genMHH/F");
+      m_smallT->Branch("genPtHH", &m_genPtHH, "m_genPtHH/F");
+      m_smallT->Branch("genEtaHH", &m_genEtaHH, "m_genEtaHH/F");
       m_smallT->Branch("genCosth", &m_genCosth, "m_genCosth/F");
 
       m_smallT->Branch ("npv", &m_npv, "npv/I") ;
@@ -562,6 +580,7 @@ struct smallTree
       m_smallT->Branch ("bjet1_bID", &m_bjet1_bID, "bjet1_bID/F") ;
       m_smallT->Branch ("bjet1_bMVAID", &m_bjet1_bMVAID, "bjet1_bMVAID/F") ;
       m_smallT->Branch ("bjet1_flav", &m_bjet1_flav, "bjet1_flav/I") ;
+      m_smallT->Branch ("bjet1_PUJetID", &m_bjet1_PUJetID, "bjet1_PUJetID/I") ;
       m_smallT->Branch ("bjet1_pt_raw", &m_bjet1_pt_raw, "bjet1_pt_raw/F") ;
       m_smallT->Branch ("bjet1_pt_raw_jetup", &m_bjet1_pt_raw_jetup, "bjet1_pt_raw_jetup/F") ;
       m_smallT->Branch ("bjet1_pt_raw_jetdown", &m_bjet1_pt_raw_jetdown, "bjet1_pt_raw_jetdown/F") ;
@@ -574,6 +593,7 @@ struct smallTree
       m_smallT->Branch ("bjet2_bID", &m_bjet2_bID, "bjet2m_bID/F") ;
       m_smallT->Branch ("bjet2_bMVAID", &m_bjet2_bMVAID, "bjet2m_bMVAID/F") ;
       m_smallT->Branch ("bjet2_flav", &m_bjet2_flav, "bjet2_flav/I") ;
+      m_smallT->Branch ("bjet2_PUJetID", &m_bjet2_PUJetID, "bjet2_PUJetID/I") ;
       m_smallT->Branch ("bjet2_pt_raw", &m_bjet2_pt_raw, "bjet2_pt_raw/F") ;
       m_smallT->Branch ("bjet2_pt_raw_jetup", &m_bjet2_pt_raw_jetup, "bjet2_pt_raw_jetup/F") ;
       m_smallT->Branch ("bjet2_pt_raw_jetdown", &m_bjet2_pt_raw_jetdown, "bjet2_pt_raw_jetdown/F") ;
@@ -633,12 +653,19 @@ struct smallTree
       m_smallT->Branch ("tauH_SVFIT_mass_up", &m_tauH_SVFIT_mass_up, "tauH_SVFIT_mass_up/F") ;
       m_smallT->Branch ("tauH_SVFIT_mass_down", &m_tauH_SVFIT_mass_down, "tauH_SVFIT_mass_down/F") ;
 
+      m_smallT->Branch ("tauHgen_pt", &m_tauHgen_pt, "tauHgen_pt/F") ;
+      m_smallT->Branch ("tauHgen_eta", &m_tauHgen_eta, "tauHgen_eta/F") ;
+      m_smallT->Branch ("tauHgen_mass", &m_tauHgen_mass, "tauHgen_mass/F") ;
+      
       m_smallT->Branch ("bH_pt", &m_bH_pt, "bH_pt/F") ;
       m_smallT->Branch ("bH_eta", &m_bH_eta, "bH_eta/F") ;
       m_smallT->Branch ("bH_phi", &m_bH_phi, "bH_phi/F") ;
       m_smallT->Branch ("bH_e", &m_bH_e, "bH_e/F") ;
       m_smallT->Branch ("bH_mass", &m_bH_mass, "bH_mass/F") ;
 
+      m_smallT->Branch ("bHgen_pt", &m_bHgen_pt, "bHgen_pt/F") ;
+      m_smallT->Branch ("bHgen_eta", &m_bHgen_eta, "bHgen_eta/F") ;
+      m_smallT->Branch ("bHgen_mass", &m_bHgen_mass, "bHgen_mass/F") ;
       
       m_smallT->Branch ("HHsvfit_pt", &m_HHsvfit_pt, "HHsvfit_pt/F") ;
       m_smallT->Branch ("HHsvfit_eta", &m_HHsvfit_eta, "HHsvfit_eta/F") ;
@@ -758,7 +785,9 @@ struct smallTree
       m_smallT->Branch ("VBFjet1_e",&m_VBFjet1_e,"VBFjet1_e/F");
       m_smallT->Branch ("VBFjet1_btag",&m_VBFjet1_btag,"VBFjet1_btag/F");
       m_smallT->Branch ("VBFjet1_flav",&m_VBFjet1_flav,"VBFjet1_flav/I");
+      m_smallT->Branch ("VBFjet1_PUJetID", &m_VBFjet1_PUJetID, "VBFjet1_PUJetID/I") ;
       m_smallT->Branch ("VBFjet1_hasgenjet",&m_VBFjet1_hasgenjet,"VBFjet1_hasgenjet/O");
+      
 
 
       m_smallT->Branch ("VBFgenjet1_pt",&m_VBFgenjet1_pt,"VBFgenjet1_pt/F");
@@ -773,6 +802,7 @@ struct smallTree
       m_smallT->Branch ("VBFjet2_e",&m_VBFjet2_e,"VBFjet2_e/F");
       m_smallT->Branch ("VBFjet2_btag",&m_VBFjet2_btag,"VBFjet2_btag/F");
       m_smallT->Branch ("VBFjet2_flav",&m_VBFjet2_flav,"VBFjet2_flav/I");
+      m_smallT->Branch ("VBFjet2_PUJetID", &m_VBFjet2_PUJetID, "VBFjet2_PUJetID/I") ;
       m_smallT->Branch ("VBFjet2_hasgenjet",&m_VBFjet2_hasgenjet,"VBFjet2_hasgenjet/O");
 
 
@@ -786,6 +816,7 @@ struct smallTree
       
       m_smallT->Branch ("VBFjj_mass", &m_VBFjj_mass ,"VBFjj_mass/F ");
       m_smallT->Branch ("VBFjj_deltaEta" , &m_VBFjj_deltaEta ,"VBFjj_deltaEta/F");
+      m_smallT->Branch ("VBFjj_etaProd" , &m_VBFjj_etaProd ,"VBFjj_etaProd/F");
       m_smallT->Branch ("VBFjj_HT" , &m_VBFjj_HT ,"VBFjj_HT/F");
 
       m_smallT->Branch ("jet3_pt", &m_jet3_pt,"jet3_pt/F");
@@ -896,6 +927,8 @@ struct smallTree
   Int_t m_genDecMode1 ;
   Int_t m_genDecMode2 ;
   Float_t m_genMHH ;
+    Float_t m_genPtHH ;
+    Float_t m_genEtaHH ;
   Float_t m_genCosth ;
 
   Int_t   m_npv ;
@@ -989,6 +1022,7 @@ struct smallTree
   Float_t m_bjet1_bID ;
   Float_t m_bjet1_bMVAID ;
   Int_t   m_bjet1_flav ;
+  Int_t   m_bjet1_PUJetID ;
   Float_t m_bjet1_pt_raw ;
   Float_t m_bjet1_pt_raw_jetup ;
   Float_t m_bjet1_pt_raw_jetdown ;
@@ -1002,6 +1036,7 @@ struct smallTree
   Float_t m_bjet2_bID ;
   Float_t m_bjet2_bMVAID ;
   Int_t   m_bjet2_flav ;
+  Int_t   m_bjet2_PUJetID ;
   Float_t m_bjet2_pt_raw ;
   Float_t m_bjet2_pt_raw_jetup ;
   Float_t m_bjet2_pt_raw_jetdown ;
@@ -1049,6 +1084,8 @@ struct smallTree
   Float_t m_genjet2_phi ;
   Float_t m_genjet2_e ;
 
+
+  
   // the tautau-H candidate
   Float_t m_tauH_pt ;
   Float_t m_tauH_eta ;
@@ -1056,6 +1093,9 @@ struct smallTree
   Float_t m_tauH_e ;
   Float_t m_tauH_mass ;
 
+  Float_t m_tauHgen_pt ;
+  Float_t m_tauHgen_eta ;
+  Float_t m_tauHgen_mass ;
   
   Float_t m_tauH_SVFIT_mass ;
   Float_t m_tauH_SVFIT_pt ;
@@ -1072,6 +1112,10 @@ struct smallTree
   Float_t m_bH_phi ;
   Float_t m_bH_e ;
   Float_t m_bH_mass ;
+
+  Float_t m_bHgen_pt ;
+  Float_t m_bHgen_eta ;
+  Float_t m_bHgen_mass ;
 
   
   // the di-higgs candidate
@@ -1199,6 +1243,7 @@ struct smallTree
   Float_t m_VBFjet1_e;
   Float_t m_VBFjet1_btag;
   Int_t m_VBFjet1_flav;
+  Int_t   m_VBFjet1_PUJetID ;
   Bool_t m_VBFjet1_hasgenjet;
 
   Float_t m_VBFgenjet1_pt;
@@ -1212,6 +1257,7 @@ struct smallTree
   Float_t m_VBFjet2_e;
   Float_t m_VBFjet2_btag;
   Int_t m_VBFjet2_flav;
+  Int_t   m_VBFjet2_PUJetID ;
   Bool_t m_VBFjet2_hasgenjet;
 
   Float_t m_VBFgenjet2_pt;
@@ -1221,6 +1267,7 @@ struct smallTree
   
   Float_t m_VBFjj_mass ;
   Float_t m_VBFjj_deltaEta ;
+  Float_t m_VBFjj_etaProd;
   Float_t m_VBFjj_HT ;
   
   Float_t m_VBFjj_mass_log;

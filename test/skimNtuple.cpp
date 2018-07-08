@@ -1114,6 +1114,8 @@ int main (int argc, char** argv)
 	  float mHH = -1;
 	  float ct1 = -999;
 	  // loop on gen to find Higgs
+	  int idxb1 = -1;
+	  int idxb2 = -1;
 	  int idx1 = -1;
 	  int idx2 = -1;
 	  int idx1last = -1;
@@ -1124,6 +1126,7 @@ int main (int argc, char** argv)
 	      bool isFirst     = CheckBit (theBigTree.genpart_flags->at(igen), 12) ; // 12 = isFirstCopy
 	      bool isLast      = CheckBit (theBigTree.genpart_flags->at(igen), 13) ; // 13 = isLastCopy
 	      bool isHardScatt = CheckBit (theBigTree.genpart_flags->at(igen), 5) ; //   3 = isPromptTauDecayProduct
+	      bool isHardProcess = CheckBit (theBigTree.genpart_flags->at(igen), 7) ; //  7 = isHardProcess, for b coming from H
 	      // bool isDirectPromptTauDecayProduct = CheckBit (theBigTree.genpart_flags->at(igen), 5) ; // 5 = isDirectPromptTauDecayProduct
 	      int pdg = theBigTree.genpart_pdg->at(igen);
 	      int mothIdx = theBigTree.genpart_TauMothInd->at(igen);
@@ -1142,7 +1145,16 @@ int main (int argc, char** argv)
 	      //   cout << "/// igen = " << igen << " pdgId " << pdg << " flag=" << bs << " mothidx=" <<  theBigTree.genpart_TauMothInd->at(igen) << " px=" << theBigTree.genpart_px->at(igen) << endl;
 	      //   // cout << "/// igen = " << igen << " pdgId " << pdg << " isFirst=" << isFirst << " isLast=" << isLast << " isHardScatt=" << isHardScatt << " mothIsHardScatt=" << mothIsHardScatt << " isDirectPromptTauDecayProduct=" << isDirectPromptTauDecayProduct << " mothIdx=" << theBigTree.genpart_TauMothInd->at(igen) << endl;
 	      // }
-
+	      if (TMath::Abs(pdg) == 5 && isHardProcess )
+		{
+		  //cout << igen << " b found "<<endl;
+		  if (idxb1 == -1) idxb1 = igen;
+		  else if (idxb2 == -1) idxb2 = igen;
+		  else
+		    {
+		      cout << "** ERROR: there are more than 2 hard scatter b: evt = " << theBigTree.EventNumber << endl;
+		    }
+		}
 
 	      if (abs(pdg) == 25)
 		{
@@ -1199,8 +1211,37 @@ int main (int argc, char** argv)
 	    {
 	      cout << "** ERROR: couldn't find 2 H (first)" << endl;
 	      continue;
-	    }
+	    }else{
 
+	    TLorentzVector vgendau1H (theBigTree.genpart_px->at(idx1hs),theBigTree.genpart_py->at(idx1hs),theBigTree.genpart_pz->at(idx1hs),theBigTree.genpart_e->at(idx1hs));
+	    TLorentzVector vgendau2H (theBigTree.genpart_px->at(idx2hs),theBigTree.genpart_py->at(idx2hs),theBigTree.genpart_pz->at(idx2hs),theBigTree.genpart_e->at(idx2hs));
+
+	    TLorentzVector tauHgen = vgendau1H + vgendau2H;
+
+	    theSmallTree.m_tauHgen_pt = tauHgen.Pt();
+	    theSmallTree.m_tauHgen_mass = tauHgen.M();
+	    theSmallTree.m_tauHgen_eta = tauHgen.Eta();
+
+	    
+	  }
+
+	  if (idxb1 == -1 || idxb2 == -1)
+	    {
+	      cout << "** ERROR: couldn't find 2 b" << endl;
+
+	    }else{
+
+	    TLorentzVector vgenb1H (theBigTree.genpart_px->at(idxb1),theBigTree.genpart_py->at(idxb1),theBigTree.genpart_pz->at(idxb1),theBigTree.genpart_e->at(idxb1));
+	    TLorentzVector vgenb2H (theBigTree.genpart_px->at(idxb2),theBigTree.genpart_py->at(idxb2),theBigTree.genpart_pz->at(idxb2),theBigTree.genpart_e->at(idxb2));
+
+	    TLorentzVector bHgen = vgenb1H + vgenb2H;
+
+	    theSmallTree.m_bHgen_pt = bHgen.Pt();
+	    theSmallTree.m_bHgen_mass = bHgen.M();
+	    theSmallTree.m_bHgen_eta = bHgen.Eta();
+
+	  }
+	  
 	  if (idx1last != -1 && idx2last != -1) // this is not critical if not found
 	    {
 	      // store gen decay mode of the two H identified
@@ -1244,11 +1285,12 @@ int main (int argc, char** argv)
 	  else
 	    cout << "** ERROR: couldn't find 2 H->tautau gen dec prod " << idx1hs << " " << idx2hs << endl;
 
-
+	  
 	  vH1.SetPxPyPzE (theBigTree.genpart_px->at(idx1), theBigTree.genpart_py->at(idx1), theBigTree.genpart_pz->at(idx1), theBigTree.genpart_e->at(idx1) );
 	  vH2.SetPxPyPzE (theBigTree.genpart_px->at(idx2), theBigTree.genpart_py->at(idx2), theBigTree.genpart_pz->at(idx2), theBigTree.genpart_e->at(idx2) );
 	  vSum = vH1+vH2;
 	  mHH = vSum.M();
+	  
 	  vH1.Boost(-vSum.BoostVector());                     
 	  ct1 = vH1.CosTheta();
 
@@ -1274,6 +1316,8 @@ int main (int argc, char** argv)
 	    }
 
 	  theSmallTree.m_genMHH = mHH;
+	  theSmallTree.m_genPtHH = vSum.Pt();
+	    theSmallTree.m_genEtaHH = vSum.Eta();
 	  theSmallTree.m_genCosth = ct1;
 
 	  // cout << " ........... GEN FINISHED ........... " << " evt=" << theBigTree.EventNumber << " run=" << theBigTree.RunNumber << " lumi=" << theBigTree.lumi << endl;
@@ -2392,6 +2436,7 @@ int main (int argc, char** argv)
 	    theSmallTree.m_bjet1_bID  = theBigTree.bCSVscore->at (bjet1idx) ;
 	    theSmallTree.m_bjet1_bMVAID  = theBigTree.pfCombinedMVAV2BJetTags->at (bjet1idx) ;
 	    theSmallTree.m_bjet1_flav = theBigTree.jets_HadronFlavour->at (bjet1idx) ;
+	    theSmallTree.m_bjet1_PUJetID = theBigTree.jets_PUJetID->at (bjet1idx) ;
 
 	    theSmallTree.m_bjet2_pt   = tlv_secondBjet.Pt () ;
 	    theSmallTree.m_bjet2_eta  = tlv_secondBjet.Eta () ;
@@ -2400,7 +2445,7 @@ int main (int argc, char** argv)
 	    theSmallTree.m_bjet2_bID  = theBigTree.bCSVscore->at (bjet2idx) ;
 	    theSmallTree.m_bjet2_bMVAID  = theBigTree.pfCombinedMVAV2BJetTags->at (bjet2idx) ;
 	    theSmallTree.m_bjet2_flav = theBigTree.jets_HadronFlavour->at (bjet2idx) ;
-
+	    theSmallTree.m_bjet2_PUJetID = theBigTree.jets_PUJetID->at (bjet2idx) ;
 	    theSmallTree.m_bjets_bID  = theBigTree.bCSVscore->at (bjet1idx) +theBigTree.bCSVscore->at (bjet2idx) ;
 	    bool hasgj1 = false;
 	    bool hasgj2 = false;          
@@ -3004,6 +3049,7 @@ int main (int argc, char** argv)
 		theSmallTree.m_VBFjj_mass = std::get<0>(*(VBFcand_Mjj.rbegin()));
 		theSmallTree.m_VBFjj_mass_log = log(std::get<0>(*(VBFcand_Mjj.rbegin())));
 		theSmallTree.m_VBFjj_deltaEta = fabs(VBFjet1.Eta()-VBFjet2.Eta());
+		theSmallTree.m_VBFjj_etaProd = VBFjet1.Eta()*VBFjet2.Eta();
 
 		theSmallTree.m_VBFjet1_pt = VBFjet1.Pt() ;
 		theSmallTree.m_VBFjet1_eta = VBFjet1.Eta();
@@ -3011,6 +3057,7 @@ int main (int argc, char** argv)
 		theSmallTree.m_VBFjet1_e = VBFjet1.E();
 		theSmallTree.m_VBFjet1_btag =  (theBigTree.bCSVscore->at (VBFidx1)) ;
 		theSmallTree.m_VBFjet1_flav =  (theBigTree.jets_HadronFlavour->at (VBFidx1)) ;
+		theSmallTree.m_VBFjet1_PUJetID =  (theBigTree.jets_PUJetID->at (VBFidx1)) ;
 		theSmallTree.m_VBFjet1_hasgenjet= hasgj1_VBF ;
 	
 		theSmallTree.m_VBFjet2_pt= VBFjet2.Pt() ;
@@ -3019,6 +3066,7 @@ int main (int argc, char** argv)
 		theSmallTree.m_VBFjet2_e= VBFjet2.E();
 		theSmallTree.m_VBFjet2_btag=  (theBigTree.bCSVscore->at (VBFidx2)) ;
 		theSmallTree.m_VBFjet2_flav=  (theBigTree.jets_HadronFlavour->at (VBFidx2)) ;
+		theSmallTree.m_VBFjet2_PUJetID =  (theBigTree.jets_PUJetID->at (VBFidx2)) ;
 		theSmallTree.m_VBFjet2_hasgenjet= hasgj2_VBF ;
 
 		theSmallTree.m_VBFjj_HT = VBFjet1.Pt()+VBFjet2.Pt();

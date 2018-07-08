@@ -2,17 +2,18 @@
 # make cards with all vars/selections
 
 #export OUTSTRING="2017_02_19_btag_$1"
-export OUTSTRING="22MayTest_$1"
+export OUTSTRING="18Jun2018TestOld_$1"
 export STRINGLEPTONS="$1"
 #export SELECTIONS="s2b0jresolvedMcut${STRINGLEPTONS} s1b1jresolvedMcut${STRINGLEPTONS} sboostedLLMcut"
 #export SELECTIONS="s2b0jresolvedMcut s1b1jresolvedMcut sboostedLLMcut"
+#export SELECTIONS="sboostedLLMcut s1b1jresolvedMcut${STRINGLEPTONS} s2b0jresolvedMcut${STRINGLEPTONS}"
 export SELECTIONS="sboostedLLMcut s1b1jresolvedMcut${STRINGLEPTONS} s2b0jresolvedMcut${STRINGLEPTONS}"
 export NAMESAMPLE="ggHHXS"
 #export NAMESAMPLE="VBFC2V1XS"
 #"ggHH_bbtt"
 export RESONANT=$2
-export LEPTONS="MuTau ETau TauTau"
-#export LEPTONS="ETau"
+#export LEPTONS="MuTau ETau TauTau"
+export LEPTONS="TauTau"
 
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
 if [ "${RESONANT}" != "-r" ]
@@ -57,8 +58,9 @@ do
             echo "$BASE"
         fi
 	echo "$BASE"
-	python chcardMaker.py -f analyzedOutPlotter_${c}_22MayTest.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_VBF22May2018_combineTest/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t -l ${NAMESAMPLE} 
-#done
+	#python chcardMaker.py -f analyzedOutPlotter_${c}_18Jun2018Test_old.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_VBF18Jun2018_combineTest_old_noMcut/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t -l ${NAMESAMPLE} 
+	python chcardMaker.py -f analyzedOutPlotter_${c}_18Jun2018Test_1jetCat.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_VBF18Jun2018_combine_1jetCat/mainCfg_VBF_${c}.cfg -y -s ${BASE} ${RESONANT} -u 1 -t -l ${NAMESAMPLE}
+	#done
 #for base in $SELECTIONSTAU
 #do
     #python cardMaker.py -i ${SOURCE}/analysis_TauTau_26Gen/mainCfg_TauTau.cfg   -f ${SOURCE}/analysis_TauTau_26Gen/analyzedOutPlotter.root -o $BASE -c TauTau --dir "_$OUTSTRING" -t 0 # -r #-S /home/llr/cms/cadamuro/FittedHHKinFit/outPlotter_fit_sigs_TauTau.root

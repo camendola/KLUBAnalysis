@@ -1,4 +1,4 @@
-tag=22May2018_BDTtest
+tag=18Jun2018_combine_1jetCat
 
 log=(--log)
 
@@ -16,8 +16,8 @@ reg=SR
 
 #baseline=baselineVBF_btagM
 #baseline=baselineVBF_btagM_bVetoM
-
-baseline=baselineVBF_T_btagMfirst
+baseline=baselinejet301b
+#baseline=baselineVBF_T_btagMfirst
 #baseline=baselineVBF_L_btagMfirstlmr70
 
 #baseline=baseline_noVBFT_sboostedLL
@@ -36,15 +36,15 @@ other="--no-binwidth"
 for i in `seq 0 1`;
 do
    #VBF variables: jets with highest mjj are chosen
-  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjj_mass     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m^{VBF}_{jj} [GeV]"
+  #python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjj_mass     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m^{VBF}_{jj} [GeV]"
  # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjj_mass_log     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjj_deltaEta --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "|#Delta#eta^{VBF}_{jj}|"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet1_eta    --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#eta^{VBF}_{jet1}"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet2_eta    --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#eta^{VBF}_{jet2}"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet1_pt     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#p^{VBF}_{T jet1} [GeV]"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet2_pt     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "p^{VBF}_{T jet2} [GeV]"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet1_btag   --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "btag ID jet^{VBF}_{T1}"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet2_btag   --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "btag ID jet^{VBF}_{T2}"
+  # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjj_deltaEta --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "|#Delta#eta^{VBF}_{jj}|"
+  # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet1_eta    --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#eta^{VBF}_{jet1}"
+  # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet2_eta    --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#eta^{VBF}_{jet2}"
+  # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet1_pt     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#p^{VBF}_{T jet1} [GeV]"
+  # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet2_pt     --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "p^{VBF}_{T jet2} [GeV]"
+ #  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet1_btag   --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "btag ID jet^{VBF}_{T1}"
+ #  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjet2_btag   --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "btag ID jet^{VBF}_{T2}"
   # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var VBFjj_HT       --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "H^{VBF}_{Tjj} [GeV]"
   #
   #
@@ -73,11 +73,11 @@ do
 #  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_z            --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "z_{HH}"
 #   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_zV           --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "\zeta_{HH}"
 #   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_A            --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "A_{HH}"
-#  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_mass         --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m_{HH} [GeV]"
+  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_mass         --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m_{HH} [GeV]"
   # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_pt           --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "p^{HH}_{T}"
   # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var HH_deltaR       --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#Delta R(H, H)"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var tauH_mass       --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m_{H#tau#tau} [GeV]"
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var bH_mass         --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m_{Hbb} [GeV]"
+ #  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var tauH_mass       --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m_{H#tau#tau} [GeV]"
+ #  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var bH_mass         --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "m_{Hbb} [GeV]"
 #   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var bH_pt           --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "p_{T}^{Hbb} [GeV]"
  #  python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var tauH_pt         --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "p_{T}^{H#tau#tau} [GeV]"
 #   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var ditau_deltaPhi  --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "#Delta#phi(#tau,#tau)"
@@ -117,7 +117,7 @@ do
   # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var top_Wjj_b_mass      --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag
    # python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var top_Wjj_bclose_mass      --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag
 
-   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var BDTResonantLM      --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "BDT output"
+#   python scripts/makeFinalPlots.py --dir analysis_$channel\_VBF$tag --var BDTResonantLM      --reg $reg --sel $baseline --channel $channel --lymin 0.7 --lumi 35.9 --quit ${log[i]} --ratio $other   --tag $tag --label "BDT output"
   
 
 done

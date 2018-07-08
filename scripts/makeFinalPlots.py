@@ -400,8 +400,8 @@ if __name__ == "__main__" :
 
 
     sigColors = {}
-    sigColors["VBFC2V1"] = 2
-    sigColors["ggHH"] = kCyan
+    sigColors["VBFC2V1XS"] = 2
+    sigColors["ggHHXS"] = kCyan
 
 
 
@@ -478,9 +478,11 @@ if __name__ == "__main__" :
     plotScale = [10000, 1000]
     plotScaleLog = [plotScale[0]/100, plotScale[1]/100]
     if not args.log: 
-            sigScale = [1.64*0.073*0.001*plotScale[0],33.49*0.073*0.001*plotScale[1]]
+            #sigScale = [1.64*0.073*0.001*plotScale[0],33.49*0.073*0.001*plotScale[1]]
+            sigScale = [plotScale[0],plotScale[1]]
     else:
-            sigScale = [1.64*0.073*0.001*plotScaleLog[0],33.49*0.073*0.001*plotScaleLog[1]]
+            #sigScale = [1.64*0.073*0.001*plotScaleLog[0],33.49*0.073*0.001*plotScaleLog[1]]
+            sigScale = [plotScaleLog[0],plotScaleLog[1]]
             
     doOverflow = args.overflow
     
@@ -870,6 +872,6 @@ if __name__ == "__main__" :
         print "data events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hData.Integral(1,hData.GetNbinsX()+1))
         print "bkg events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(bkgStack.GetStack().Last().Integral(1,bkgStack.GetStack().Last().GetNbinsX()+1))
         print "TT events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hTT.Integral(1,hTT.GetNbinsX()+1))
-        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHH"].Integral(1,hSigs["ggHH"].GetNbinsX()+1)/scale[1])
-        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1"].Integral(1,hSigs["VBFC2V1"].GetNbinsX()+1)/scale[0])
+        print "ggF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["ggHHXS"].Integral(1,hSigs["ggHHXS"].GetNbinsX()+1)/scale[1])
+        print "VBF events in plot_" + args.var + "_" + args.sel +"_" + args.reg+ tagch+": "+str(hSigs["VBFC2V1XS"].Integral(1,hSigs["VBFC2V1XS"].GetNbinsX()+1)/scale[0])
         

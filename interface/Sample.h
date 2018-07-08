@@ -8,7 +8,6 @@
 
 #ifndef SAMPLE_H
 #define SAMPLE_H
-
 #include <memory>
 #include <string>
 #include <vector>

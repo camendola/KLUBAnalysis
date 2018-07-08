@@ -2,27 +2,29 @@
 # make cards with all vars/selections
 #export out="incl_noVBF"
 export out="incl"
-export BDTSTRING="lmr70"
+#export BDTSTRING="lmr70"
+export BDTSTRING=""
 #export CATEGORIES="sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
 #export CATEGORIES="${BDTSTRING}VBF sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
 
-export DELTAETA="3" 
+export DELTAETA="2" 
 export sel="VBF sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF"
 #export sel="sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF" 
 
-export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_22May2018_onlyGGFsig_${BDTSTRING}"
-export instring="${BDTSTRING}XXXScan_newOrder_deltaEta${DELTAETA}_22May2018"
+#export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_18Jun2018_onlyGGFsig"
+export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_18Jun2018"
+export instring="${BDTSTRING}XXXScan_newOrder_deltaEta${DELTAETA}_18Jun2018"
 
 export STRINGLEPTONS="$1"
 
 export SELECTION="mXXXeta${DELTAETA}"
-#export NAMESAMPLE="" #empty: both signals
-export NAMESAMPLE="ggHHXS"
+export NAMESAMPLE="" #empty: both signals
+#export NAMESAMPLE="ggHHXS"
 #export NAMESAMPLE="VBFC2V1XS"
 
 export LEPTONS="TauTau ETau MuTau"
 
-export MASS="300 400 500 600 650 700 750 800 900 1000"
+export MASS="300 400 500 600 650 700 750 800 900 1000 1500 2000"
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
 
 
@@ -84,19 +86,19 @@ do
     export toCombine=""
     if [[ $out != *"noVBF"* ]]
     then
-	export toCombine="$toCombine hh_*_C0_*_13Te*.txt"
+	export toCombine="$toCombine hh_*_C0_*13Te*.txt"
     fi
     if [[ $sel = *"s1b1j"* ]]
     then 
-	export toCombine="$toCombine hh_*_C1_*_13Te*.txt"
+	export toCombine="$toCombine hh_*_C1_*13Te*.txt"
     fi
     if [[ $sel = *"s2b0j"* ]]
     then 
-	export toCombine="$toCombine hh_*_C2_*_13Te*.txt"
+	export toCombine="$toCombine hh_*_C2_*13Te*.txt"
     fi
     if [[ $sel = *"sboost"* ]]
     then 
-	export toCombine="$toCombine hh_*_C3_*_13Te*.txt"
+	export toCombine="$toCombine hh_*_C3_*13Te*.txt"
     fi
     cd cards_Combined_$OUTSTRING/${out}${S}${VARIABLE}
     pwd

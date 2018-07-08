@@ -30,8 +30,12 @@ drawEY = False
 outFormats = [".pdf",".png",".root",".C"]
 
 drawHig2016 = False
-drawHig2016VBF = True
+drawHig2016VBF = False
 drawHig2016Both = False
+
+drawHig2016 = True
+#drawHig2016VBF = True
+drawHig2016Both = True
 
 channels ="Combined"
 channelsName = "bb #mu#tau_{h} + bb e#tau_{h} + bb #tau_{h}#tau_{h}"
@@ -65,13 +69,14 @@ catName = "Inclusive (with VBF)"
 cat = "incl"
 sel = "incl"
 
-plotsFolder ="_newOrder_22May2018"
+plotsFolder ="_newOrder_18Jun2018"
 
 tag=''
 #tag = '_onlyVBFsig_lmr70'
 #tag = '_onlyGGFsig_lmr70'
-tag = '_onlyVBFsig'
+#tag = '_onlyVBFsig'
 #tag = '_onlyGGFsig'
+
 
 sig=''
 #sig='ggHHXS'
@@ -86,11 +91,11 @@ else:
     sigName = "ggF and VBF signals"
 
     
-DeltaEta=["2","2p5","3"]
+DeltaEta=["2","3","4"]
 #DeltaEta=["2p5","3"]
 #DeltaEta=["2"]
 
-mCut=[300,400,500,600,650,700,750,800,900,1000]
+mCut=[300,400,500,600,650,700,750,800,900,1000,1500,2000]
 
 def Frame(gPad,width=2):
     gPad.Update()
@@ -191,9 +196,9 @@ legEY.SetFillColor(0)
 legEY.SetBorderSize(0)
     
 if not "incl" in cat:
-    fileHistosTauTau = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/analyzedOutPlotter_TauTau_newOrder_22May2018_"+cat.replace('lmr70','')+"scan.root"
-    fileHistosMuTau = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/analyzedOutPlotter_MuTau_newOrder_22May2018_"+cat+"scan.root"
-    fileHistosETau = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/analyzedOutPlotter_ETau_newOrder_22May2018_"+cat+"scan.root"
+    fileHistosTauTau = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/analyzedOutPlotter_TauTau_18Jun2018_newOrder_"+cat.replace('lmr70','')+"scan.root"
+    fileHistosMuTau = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/analyzedOutPlotter_MuTau_18Jun2018_newOrder_"+cat+"scan.root"
+    fileHistosETau = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/analyzedOutPlotter_ETau_18Jun2018_newOrder_"+cat+"scan.root"
     print fileHistosTauTau
     if not os.path.isfile(fileHistosTauTau) : 
         print "FILE HISTOS NOT FOUND: " , fileHistosTauTau
@@ -211,7 +216,7 @@ if not "incl" in cat:
 
 
 for k,deltaEta in enumerate(DeltaEta):
-    folder ="{0}Scan_newOrder_deltaEta{1}_22May2018{2}".format(cat,deltaEta, tag)
+    folder ="{0}Scan_newOrder_deltaEta{1}_18Jun2018{2}".format(cat,deltaEta, tag)
     npoints = len(mCut)
     gExp = TGraph()
     if drawEY and not "incl" in cat:
@@ -279,7 +284,7 @@ for k,deltaEta in enumerate(DeltaEta):
         if not sig:
             sigtag="SM_HHbbtt"
         else:
-            stigtag=sig
+            sigtag=sig
         
         fileLocation = "/home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_"+channels+"_"+folder+"/"+sig+sel+"m"+str(m)+"eta"+str(deltaEta)+"MT2/higgsCombine"+sigtag+"_forLim_noTH.Asymptotic.mH"+str(m)+".root"
         print fileLocation
@@ -329,7 +334,7 @@ for k,deltaEta in enumerate(DeltaEta):
 if drawHig2016:
     l2016 = TGraph()
     for i,m in enumerate(mCut):
-       l2016.SetPoint(i,m,20.81)
+       l2016.SetPoint(i,m,19.81)
 
     
     l2016.SetLineStyle(10)
@@ -341,7 +346,7 @@ if drawHig2016:
 if drawHig2016VBF:
     l2016VBF = TGraph()
     for i,m in enumerate(mCut):
-       l2016VBF.SetPoint(i,m,1452.5)
+       l2016VBF.SetPoint(i,m,1301.0)
 
     
     l2016VBF.SetLineStyle(10)
@@ -354,7 +359,7 @@ if drawHig2016VBF:
 if drawHig2016Both:
     l2016both = TGraph()
     for i,m in enumerate(mCut):
-       l2016both.SetPoint(i,m,19.91)
+       l2016both.SetPoint(i,m,19.44)
 
     
     l2016both.SetLineStyle(10)
@@ -378,12 +383,13 @@ sigLabel = Text(gPad, sigName, size = 0.03,align = 13)
 channelsLabel = Text(gPad, channelsName, 0.03, align = 31)
 
 
-    
+legend.SetFillColor(0)
+legend.SetBorderSize(0)
 legend.Draw("same")
 Frame(gPad)
 canvas.Update()
 canvas.Modified()
-#raw_input()
+raw_input()
 canvas.SaveAs("plots"+plotsFolder+"/limits_"+cat+"_"+channels+tag+sig+".pdf")
 if drawEY and not "incl" in cat:
     #canvas event yelds
