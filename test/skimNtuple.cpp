@@ -2907,7 +2907,8 @@ int main (int argc, char** argv)
 	    theSmallTree.m_dib_deltaEta = fabs(tlv_firstBjet.Eta()-tlv_secondBjet.Eta ()) ;
 	    theSmallTree.m_dib_deltaR = tlv_firstBjet.DeltaR(tlv_secondBjet) ;
 	    theSmallTree.m_dib_deltaR_per_bHpt = theSmallTree.m_dib_deltaR * tlv_bH_raw.Pt();
-
+	    theSmallTree.m_dib_dEtaSign = tlv_firstBjet.Eta() * tlv_secondBjet.Eta(); // VBF BDT
+	    
 	    vector <float> dRBTau;
 	    dRBTau.push_back (tlv_firstLepton.DeltaR(tlv_firstBjet));
 	    dRBTau.push_back (tlv_firstLepton.DeltaR(tlv_secondBjet));
@@ -3070,7 +3071,9 @@ int main (int argc, char** argv)
 		theSmallTree.m_VBFjet2_hasgenjet= hasgj2_VBF ;
 
 		theSmallTree.m_VBFjj_HT = VBFjet1.Pt()+VBFjet2.Pt();
-	
+		theSmallTree.m_VBFjj_dEtaSign = VBFjet1.Eta() * VBFjet2.Eta();
+		theSmallTree.m_VBFjet2_PUjetID    = (theBigTree.jets_PUJetID->at (VBFidx2)); // VBF BDT
+	        theSmallTree.m_bH_VBF1_deltaEta   = fabs(tlv_bH.Eta() - VBFjet1.Eta()); // VBF BDT
 		theSmallTree.m_dau1_z = getZ(tlv_firstLepton.Eta(),VBFjet1.Eta(),VBFjet2.Eta());
 		theSmallTree.m_dau2_z = getZ(tlv_secondLepton.Eta(),VBFjet1.Eta(),VBFjet2.Eta());
 

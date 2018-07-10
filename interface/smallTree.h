@@ -463,6 +463,11 @@ struct smallTree
       m_top_Wjj_b_mass = -1.;
       m_top_Wjj_bclose_mass = -1.;
 
+
+      m_VBFjj_dEtaSign   = -99.;
+      m_VBFjet2_PUjetID  = -99.;
+      m_bH_VBF1_deltaEta = -99.;
+      m_dib_dEtaSign     = -99.;
       
       return 0 ;    
     }
@@ -894,6 +899,13 @@ struct smallTree
       m_smallT->Branch ("top_Wmass_bclose_mass",&m_top_Wmass_bclose_mass,"top_Wmass_bclose_mass/F");
       m_smallT->Branch ("top_Wjj_b_mass",&m_top_Wjj_b_mass,"top_Wjj_b_mass/F");
       m_smallT->Branch ("top_Wjj_bclose_mass",&m_top_Wjj_bclose_mass,"top_Wjj_bclose_mass/F");
+
+
+
+      m_smallT->Branch ("VBFjj_dEtaSign",   &m_VBFjj_dEtaSign   , "VBFjj_dEtaSign/F");
+      m_smallT->Branch ("VBFjet2_PUjetID",  &m_VBFjet2_PUjetID  , "VBFjet2_PUjetID/F");
+      m_smallT->Branch ("bH_VBF1_deltaEta", &m_bH_VBF1_deltaEta , "bH_VBF1_deltaEta/F");
+      m_smallT->Branch ("dib_dEtaSign",     &m_dib_dEtaSign     , "dib_dEtaSign/F");
       
       return 0 ;
     }
@@ -1350,6 +1362,12 @@ struct smallTree
   Float_t m_top_Wmass_bclose_mass;
   Float_t m_top_Wjj_b_mass;
   Float_t m_top_Wjj_bclose_mass;
+
+  Float_t m_VBFjj_dEtaSign   ;
+  Float_t m_VBFjet2_PUjetID  ;
+  Float_t m_bH_VBF1_deltaEta ;
+  Float_t m_dib_dEtaSign     ;
+
   
 } ;
 
