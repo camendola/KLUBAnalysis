@@ -1114,8 +1114,8 @@ int main (int argc, char** argv)
 	  float mHH = -1;
 	  float ct1 = -999;
 	  // loop on gen to find Higgs
-	  int idxb1 = -1;
-	  int idxb2 = -1;
+	  //	  int idxb1 = -1;
+	  // int idxb2 = -1;
 	  int idx1 = -1;
 	  int idx2 = -1;
 	  int idx1last = -1;
@@ -1126,7 +1126,7 @@ int main (int argc, char** argv)
 	      bool isFirst     = CheckBit (theBigTree.genpart_flags->at(igen), 12) ; // 12 = isFirstCopy
 	      bool isLast      = CheckBit (theBigTree.genpart_flags->at(igen), 13) ; // 13 = isLastCopy
 	      bool isHardScatt = CheckBit (theBigTree.genpart_flags->at(igen), 5) ; //   3 = isPromptTauDecayProduct
-	      bool isHardProcess = CheckBit (theBigTree.genpart_flags->at(igen), 7) ; //  7 = isHardProcess, for b coming from H
+	      //	      bool isHardProcess = CheckBit (theBigTree.genpart_flags->at(igen), 7) ; //  7 = isHardProcess, for b coming from H
 	      // bool isDirectPromptTauDecayProduct = CheckBit (theBigTree.genpart_flags->at(igen), 5) ; // 5 = isDirectPromptTauDecayProduct
 	      int pdg = theBigTree.genpart_pdg->at(igen);
 	      int mothIdx = theBigTree.genpart_TauMothInd->at(igen);
@@ -1145,7 +1145,7 @@ int main (int argc, char** argv)
 	      //   cout << "/// igen = " << igen << " pdgId " << pdg << " flag=" << bs << " mothidx=" <<  theBigTree.genpart_TauMothInd->at(igen) << " px=" << theBigTree.genpart_px->at(igen) << endl;
 	      //   // cout << "/// igen = " << igen << " pdgId " << pdg << " isFirst=" << isFirst << " isLast=" << isLast << " isHardScatt=" << isHardScatt << " mothIsHardScatt=" << mothIsHardScatt << " isDirectPromptTauDecayProduct=" << isDirectPromptTauDecayProduct << " mothIdx=" << theBigTree.genpart_TauMothInd->at(igen) << endl;
 	      // }
-	      if (TMath::Abs(pdg) == 5 && isHardProcess )
+	      /* if (TMath::Abs(pdg) == 5 && isHardProcess )
 		{
 		  //cout << igen << " b found "<<endl;
 		  if (idxb1 == -1) idxb1 = igen;
@@ -1155,7 +1155,7 @@ int main (int argc, char** argv)
 		      cout << "** ERROR: there are more than 2 hard scatter b: evt = " << theBigTree.EventNumber << endl;
 		    }
 		}
-
+	      */
 	      if (abs(pdg) == 25)
 		{
 		  // cout << igen << " H boson: Px " << theBigTree.genpart_px->at(igen) << " first? " << isFirst << " decMode : " << theBigTree.genpart_HZDecayMode->at(igen) << endl;
@@ -1211,7 +1211,8 @@ int main (int argc, char** argv)
 	    {
 	      cout << "** ERROR: couldn't find 2 H (first)" << endl;
 	      continue;
-	    }else{
+	    }
+	  /*}else{
 
 	    TLorentzVector vgendau1H (theBigTree.genpart_px->at(idx1hs),theBigTree.genpart_py->at(idx1hs),theBigTree.genpart_pz->at(idx1hs),theBigTree.genpart_e->at(idx1hs));
 	    TLorentzVector vgendau2H (theBigTree.genpart_px->at(idx2hs),theBigTree.genpart_py->at(idx2hs),theBigTree.genpart_pz->at(idx2hs),theBigTree.genpart_e->at(idx2hs));
@@ -1224,8 +1225,8 @@ int main (int argc, char** argv)
 
 	    
 	  }
-
-	  if (idxb1 == -1 || idxb2 == -1)
+	  */
+	  /*if (idxb1 == -1 || idxb2 == -1)
 	    {
 	      cout << "** ERROR: couldn't find 2 b" << endl;
 
@@ -1241,7 +1242,7 @@ int main (int argc, char** argv)
 	    theSmallTree.m_bHgen_eta = bHgen.Eta();
 
 	  }
-	  
+	  */
 	  if (idx1last != -1 && idx2last != -1) // this is not critical if not found
 	    {
 	      // store gen decay mode of the two H identified
@@ -1316,8 +1317,8 @@ int main (int argc, char** argv)
 	    }
 
 	  theSmallTree.m_genMHH = mHH;
-	  theSmallTree.m_genPtHH = vSum.Pt();
-	    theSmallTree.m_genEtaHH = vSum.Eta();
+	  //	  theSmallTree.m_genPtHH = vSum.Pt();
+	  //  theSmallTree.m_genEtaHH = vSum.Eta();
 	  theSmallTree.m_genCosth = ct1;
 
 	  // cout << " ........... GEN FINISHED ........... " << " evt=" << theBigTree.EventNumber << " run=" << theBigTree.RunNumber << " lumi=" << theBigTree.lumi << endl;
@@ -3715,7 +3716,7 @@ int main (int argc, char** argv)
 
 
   // VBF BDT
-  bool computeVBFBDT = (gConfigParser->isDefined("BDTVBF::computeMVA") ? gConfigParser->readBoolOption ("BDTVBF::computeMVA") : false);
+   bool computeVBFBDT = (gConfigParser->isDefined("BDTVBF::computeMVA") ? gConfigParser->readBoolOption ("BDTVBF::computeMVA") : false);
 
   if (computeVBFBDT)
   {
@@ -3799,8 +3800,8 @@ int main (int argc, char** argv)
     treenew->Write ("", TObject::kOverwrite) ;
     delete readerVBF;
 
-  } // End new BDT
-
+} // End new BDT
+ 
   cout << "... SKIM finished, exiting." << endl;
   return 0 ;
 }
