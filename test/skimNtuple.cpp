@@ -3469,23 +3469,24 @@ int main (int argc, char** argv)
 
 
 
-  bool computeMVA    = (gConfigParser->isDefined("TMVA::computeMVA")        ? gConfigParser->readBoolOption ("TMVA::computeMVA")        : false);
-  bool computeMVARes = (gConfigParser->isDefined("BDTResonant::computeMVA") ? gConfigParser->readBoolOption ("BDTResonant::computeMVA") : false);
+  //bool computeMVA    = (gConfigParser->isDefined("TMVA::computeMVA")        ? gConfigParser->readBoolOption ("TMVA::computeMVA")        : false);
+  //bool computeMVARes = (gConfigParser->isDefined("BDTResonant::computeMVA") ? gConfigParser->readBoolOption ("BDTResonant::computeMVA") : false);
   bool computeMVAResHM = (gConfigParser->isDefined("BDTResonantHM::computeMVA") ? gConfigParser->readBoolOption ("BDTResonantHM::computeMVA") : false);
   bool computeMVAResLM = (gConfigParser->isDefined("BDTResonantLM::computeMVA") ? gConfigParser->readBoolOption ("BDTResonantLM::computeMVA") : false);
-  bool computeMVANonRes = (gConfigParser->isDefined("BDTNonResonant::computeMVA") ? gConfigParser->readBoolOption ("BDTNonResonant::computeMVA") : false);
+  //bool computeMVANonRes = (gConfigParser->isDefined("BDTNonResonant::computeMVA") ? gConfigParser->readBoolOption ("BDTNonResonant::computeMVA") : false);
   bool computeVBFBDT = (gConfigParser->isDefined("BDTVBF::computeMVA") ? gConfigParser->readBoolOption ("BDTVBF::computeMVA") : false);
 
-  if (computeMVA || computeMVARes || computeMVAResHM || computeMVAResLM || computeVBFBDT)
+  //if (computeMVA || computeMVARes || computeMVAResHM || computeMVAResLM || computeVBFBDT)
+  if ( computeMVAResHM || computeMVAResLM || computeVBFBDT)
     {  
-      bool doMuTau  = gConfigParser->isDefined("TMVA::weightsMuTau");
-      bool doETau   = gConfigParser->isDefined("TMVA::weightsETau");
-      bool doTauTau = gConfigParser->isDefined("TMVA::weightsTauTau");
-      bool doLepTau = gConfigParser->isDefined("TMVA::weightsLepTau");
-      bool doResonant = computeMVARes;
+     // bool doMuTau  = gConfigParser->isDefined("TMVA::weightsMuTau");
+     // bool doETau   = gConfigParser->isDefined("TMVA::weightsETau");
+     // bool doTauTau = gConfigParser->isDefined("TMVA::weightsTauTau");
+     // bool doLepTau = gConfigParser->isDefined("TMVA::weightsLepTau");
+      //  bool doResonant = computeMVARes;
       bool doResonantHM = computeMVAResHM;
       bool doResonantLM = computeMVAResLM;
-      bool doNonResonant = computeMVANonRes;
+      // bool doNonResonant = computeMVANonRes;
       bool doVBF = computeVBFBDT;
 
       string TMVAweightsTauTau   = "";
@@ -3498,27 +3499,27 @@ int main (int argc, char** argv)
       string TMVAweightsNonResonant = "";
       string TMVAweightsVBF = "";
     
-      if (doMuTau)    TMVAweightsMuTau  = gConfigParser->readStringOption ("TMVA::weightsMuTau");
-      if (doETau)     TMVAweightsETau   = gConfigParser->readStringOption ("TMVA::weightsETau");
-      if (doTauTau)   TMVAweightsTauTau = gConfigParser->readStringOption ("TMVA::weightsTauTau");
-      if (doLepTau)   TMVAweightsLepTau = gConfigParser->readStringOption ("TMVA::weightsLepTau");
-      if (doResonant) TMVAweightsResonant = gConfigParser->readStringOption ("BDTResonant::weights");
+      //if (doMuTau)    TMVAweightsMuTau  = gConfigParser->readStringOption ("TMVA::weightsMuTau");
+      //if (doETau)     TMVAweightsETau   = gConfigParser->readStringOption ("TMVA::weightsETau");
+      //if (doTauTau)   TMVAweightsTauTau = gConfigParser->readStringOption ("TMVA::weightsTauTau");
+      //if (doLepTau)   TMVAweightsLepTau = gConfigParser->readStringOption ("TMVA::weightsLepTau");
+      //if (doResonant) TMVAweightsResonant = gConfigParser->readStringOption ("BDTResonant::weights");
       if (doResonantHM) TMVAweightsResonantHM = gConfigParser->readStringOption ("BDTResonantHM::weights");
       if (doResonantLM) TMVAweightsResonantLM = gConfigParser->readStringOption ("BDTResonantLM::weights");
-      if (doNonResonant) TMVAweightsNonResonant = gConfigParser->readStringOption ("BDTNonResonant::weights");
+      // if (doNonResonant) TMVAweightsNonResonant = gConfigParser->readStringOption ("BDTNonResonant::weights");
       if (doVBF)         TMVAweightsVBF = gConfigParser->readStringOption ("BDTVBF::weights");
 
       // bool TMVAspectatorsIn      = gConfigParser->readBoolOption   ("TMVA::spectatorsPresent");
-      vector<string> TMVAspectators = ( computeMVA ? gConfigParser->readStringListOption   ("TMVA::spectators") : vector<string>(0) );
-      vector<string> TMVAvariables  = ( computeMVA ? gConfigParser->readStringListOption   ("TMVA::variables") : vector<string>(0) );
-      vector<string> TMVAvariablesResonant   = ( doResonant ? gConfigParser->readStringListOption   ("BDTResonant::variables") : vector<string>(0) );
+      // vector<string> TMVAspectators = ( computeMVA ? gConfigParser->readStringListOption   ("TMVA::spectators") : vector<string>(0) );
+      // vector<string> TMVAvariables  = ( computeMVA ? gConfigParser->readStringListOption   ("TMVA::variables") : vector<string>(0) );
+      // vector<string> TMVAvariablesResonant   = ( doResonant ? gConfigParser->readStringListOption   ("BDTResonant::variables") : vector<string>(0) );
       vector<string> TMVAvariablesResonantHM = ( doResonantHM ? gConfigParser->readStringListOption   ("BDTResonantHM::variables") : vector<string>(0) );
       vector<string> TMVAvariablesResonantLM = ( doResonantLM ? gConfigParser->readStringListOption   ("BDTResonantLM::variables") : vector<string>(0) );
-      vector<string> TMVAvariablesNonResonant = ( doNonResonant ? gConfigParser->readStringListOption   ("BDTNonResonant::variables") : vector<string>(0) );
+      //vector<string> TMVAvariablesNonResonant = ( doNonResonant ? gConfigParser->readStringListOption   ("BDTNonResonant::variables") : vector<string>(0) );
       vector<string> TMVAvariablesVBF = ( doVBF ? gConfigParser->readStringListOption ("BDTVBF::variables") : vector<string>(0) );
 
       // split the resonant name in two strings
-      vector<pair<string, string>> splitTMVAvariablesResonant;
+      /*      vector<pair<string, string>> splitTMVAvariablesResonant;
       for (unsigned int iv = 0 ; iv < TMVAvariablesResonant.size () ; ++iv)
 	{
 	  // split my_name:BDT_name in two strings
@@ -3530,7 +3531,7 @@ int main (int argc, char** argv)
 
 	  splitTMVAvariablesResonant.push_back(make_pair(unpackedNames.at(0), unpackedNames.at(1))); 
 	} 
-
+      */
       // split the resonant name in two strings
       cout << "BDT resonant HIGH MASS vars:" << endl;
       vector<pair<string, string>> splitTMVAvariablesResonantHM;
@@ -3573,7 +3574,7 @@ int main (int argc, char** argv)
 	} 
 
       // split the non resonant name in two strings
-      vector<pair<string, string>> splitTMVAvariablesNonResonant;
+      /*vector<pair<string, string>> splitTMVAvariablesNonResonant;
       cout << "BDT non resonant vars:" << endl;
       for (unsigned int iv = 0 ; iv < TMVAvariablesNonResonant.size () ; ++iv)
 	{
@@ -3591,7 +3592,7 @@ int main (int argc, char** argv)
 	  splitTMVAvariablesNonResonant.push_back(make_pair(unpackedNames.at(0), unpackedNames.at(1))); 
 	  cout << " ... " << iv << " " << unpackedNames.at(0) << " --> " << unpackedNames.at(1) << endl;
 	}
-
+      */
     // split the non resonant name in two strings
     vector<pair<string, string>> splitTMVAvariablesVBF;
     for (unsigned int iv = 0 ; iv < TMVAvariablesVBF.size () ; ++iv)
@@ -3610,16 +3611,16 @@ int main (int argc, char** argv)
 
       // now merge all names into a vector to get a list of uniquely needed elements
       std::vector<string> allVars;
-      allVars.insert(allVars.end(), TMVAspectators.begin(), TMVAspectators.end());
-      allVars.insert(allVars.end(), TMVAvariables.begin(), TMVAvariables.end());
-      for (unsigned int iv = 0; iv < splitTMVAvariablesResonant.size(); ++iv)
-	allVars.push_back(splitTMVAvariablesResonant.at(iv).first);
+      //allVars.insert(allVars.end(), TMVAspectators.begin(), TMVAspectators.end());
+      //allVars.insert(allVars.end(), TMVAvariables.begin(), TMVAvariables.end());
+      //      for (unsigned int iv = 0; iv < splitTMVAvariablesResonant.size(); ++iv)
+      //	allVars.push_back(splitTMVAvariablesResonant.at(iv).first);
       for (unsigned int iv = 0; iv < splitTMVAvariablesResonantHM.size(); ++iv)
 	allVars.push_back(splitTMVAvariablesResonantHM.at(iv).first);
       for (unsigned int iv = 0; iv < splitTMVAvariablesResonantLM.size(); ++iv)
 	allVars.push_back(splitTMVAvariablesResonantLM.at(iv).first);
-      for (unsigned int iv = 0; iv < splitTMVAvariablesNonResonant.size(); ++iv)
-	allVars.push_back(splitTMVAvariablesNonResonant.at(iv).first);
+      //      for (unsigned int iv = 0; iv < splitTMVAvariablesNonResonant.size(); ++iv)
+      //	allVars.push_back(splitTMVAvariablesNonResonant.at(iv).first);
       for (unsigned int iv = 0; iv < splitTMVAvariablesVBF.size(); ++iv)
     allVars.push_back(splitTMVAvariablesVBF.at(iv).first);
 
@@ -3633,24 +3634,25 @@ int main (int argc, char** argv)
       TFile *outFile = TFile::Open(outputFile,"UPDATE");
       TTree *treenew = (TTree*)outFile->Get("HTauTauTree");
 
-      TMVA::Reader * reader = new TMVA::Reader () ;
-      TMVA::Reader * readerResonant = new TMVA::Reader () ;
+      //TMVA::Reader * reader = new TMVA::Reader () ;
+      //TMVA::Reader * readerResonant = new TMVA::Reader () ;
       TMVA::Reader * readerResonantHM = new TMVA::Reader () ;
       TMVA::Reader * readerResonantLM = new TMVA::Reader () ;
-      TMVA::Reader * readerNonResonant = new TMVA::Reader () ;
+      // TMVA::Reader * readerNonResonant = new TMVA::Reader () ;
       TMVA::Reader * readerVBF = new TMVA::Reader () ;
-      Float_t mvatautau,mvamutau, mvaetau, mvaleptau, mvaresonant, mvaresonantHM, mvaresonantLM, mvanonresonant, mvaVBF;
-      TBranch *mvaBranchmutau;
-      TBranch *mvaBranchtautau;
-      TBranch *mvaBranchetau;
-      TBranch *mvaBranchleptau;
-      TBranch *mvaBranchResonant;
+      //Float_t mvatautau,mvamutau, mvaetau, mvaleptau, mvaresonant, mvaresonantHM, mvaresonantLM, mvanonresonant, mvaVBF;
+      Float_t  mvaresonantHM, mvaresonantLM, mvaVBF;
+      //TBranch *mvaBranchmutau;
+      //TBranch *mvaBranchtautau;
+      //TBranch *mvaBranchetau;
+      //TBranch *mvaBranchleptau;
+      //  TBranch *mvaBranchResonant;
       TBranch *mvaBranchResonantHM;
       TBranch *mvaBranchResonantLM;
-      TBranch *mvaBranchNonResonant;
+      // TBranch *mvaBranchNonResonant;
       TBranch *mvaBranchVBF;
 
-      for (string var : TMVAvariables)
+      /*   for (string var : TMVAvariables)
 	{
 	  treenew->SetBranchAddress (var.c_str (), &(allVarsMap.at (var))) ;
 	  reader->AddVariable (var, &(allVarsMap.at (var))) ;
@@ -3661,12 +3663,12 @@ int main (int argc, char** argv)
 	  treenew->SetBranchAddress (var.c_str (), &(allVarsMap.at (var))) ;
 	  reader->AddSpectator (var, &(allVarsMap.at (var))) ;
 	}  
-
-      for (pair<string, string> vpair : splitTMVAvariablesResonant)
+      */
+      /*      for (pair<string, string> vpair : splitTMVAvariablesResonant)
 	{
 	  treenew->SetBranchAddress (vpair.first.c_str (), &(allVarsMap.at (vpair.first))) ;
 	  readerResonant->AddVariable (vpair.second.c_str (), &(allVarsMap.at (vpair.first))) ;      
-	}
+	  }*/
 
       for (pair<string, string> vpair : splitTMVAvariablesResonantHM)
 	{
@@ -3681,36 +3683,36 @@ int main (int argc, char** argv)
 	  readerResonantLM->AddVariable (vpair.second.c_str (), &(allVarsMap.at (vpair.first))) ;      
 	}
 
-      for (pair<string, string> vpair : splitTMVAvariablesNonResonant)
+      /*for (pair<string, string> vpair : splitTMVAvariablesNonResonant)
 	{
 	  treenew->SetBranchAddress (vpair.first.c_str (), &(allVarsMap.at (vpair.first))) ;
 	  readerNonResonant->AddVariable (vpair.second.c_str (), &(allVarsMap.at (vpair.first))) ;      
-	}
+	}*/
 
       for (pair<string, string> vpair : splitTMVAvariablesVBF)
 	{
 	  treenew ->SetBranchAddress (vpair.first.c_str (), &(allVarsMap.at (vpair.first))) ;
 	  readerVBF->AddVariable (vpair.second.c_str (), &(allVarsMap.at (vpair.first))) ;
-	}
+	  }
 
-      if (doMuTau)  mvaBranchmutau = treenew->Branch ("MuTauKine", &mvamutau, "MuTauKine/F") ;
-      if (doETau)   mvaBranchetau = treenew->Branch ("ETauKine", &mvaetau, "ETauKine/F") ;
-      if (doTauTau) mvaBranchtautau = treenew->Branch ("TauTauKine", &mvatautau, "TauTauKine/F") ;
-      if (doLepTau) mvaBranchleptau = treenew->Branch ("LepTauKine", &mvaleptau, "LepTauKine/F") ;
-      if (doResonant) mvaBranchResonant = treenew->Branch ("BDTResonant", &mvaresonant, "BDTResonant/F") ;
+      //if (doMuTau)  mvaBranchmutau = treenew->Branch ("MuTauKine", &mvamutau, "MuTauKine/F") ;
+      //if (doETau)   mvaBranchetau = treenew->Branch ("ETauKine", &mvaetau, "ETauKine/F") ;
+      //if (doTauTau) mvaBranchtautau = treenew->Branch ("TauTauKine", &mvatautau, "TauTauKine/F") ;
+      //if (doLepTau) mvaBranchleptau = treenew->Branch ("LepTauKine", &mvaleptau, "LepTauKine/F") ;
+      // if (doResonant) mvaBranchResonant = treenew->Branch ("BDTResonant", &mvaresonant, "BDTResonant/F") ;
       if (doResonantHM) mvaBranchResonantHM = treenew->Branch ("BDTResonantHM", &mvaresonantHM, "BDTResonantHM/F") ;
       if (doResonantLM) mvaBranchResonantLM = treenew->Branch ("BDTResonantLM", &mvaresonantLM, "BDTResonantLM/F") ;
-      if (doNonResonant) mvaBranchNonResonant = treenew->Branch ("BDTNonResonant", &mvanonresonant, "BDTNonResonant/F") ;
+      // if (doNonResonant) mvaBranchNonResonant = treenew->Branch ("BDTNonResonant", &mvanonresonant, "BDTNonResonant/F") ;
       if (doVBF)         mvaBranchVBF = treenew->Branch("BDToutVBF", &mvaVBF, "BDToutVBF/F") ;
       //}
-      if (doMuTau)   reader->BookMVA ("MuTauKine",  TMVAweightsMuTau.c_str ()) ;
-      if (doETau)    reader->BookMVA ("ETauKine",  TMVAweightsETau.c_str ()) ;
-      if (doTauTau)  reader->BookMVA ("TauTauKine",  TMVAweightsTauTau.c_str ()) ;
-      if (doLepTau)  reader->BookMVA ("LepTauKine",  TMVAweightsLepTau.c_str ()) ;
-      if (doResonant)  readerResonant->BookMVA ("BDT_full_mass_iso_nodrbbsv",  TMVAweightsResonant.c_str ()) ;
+      //if (doMuTau)   reader->BookMVA ("MuTauKine",  TMVAweightsMuTau.c_str ()) ;
+      //if (doETau)    reader->BookMVA ("ETauKine",  TMVAweightsETau.c_str ()) ;
+      //if (doTauTau)  reader->BookMVA ("TauTauKine",  TMVAweightsTauTau.c_str ()) ;
+      //if (doLepTau)  reader->BookMVA ("LepTauKine",  TMVAweightsLepTau.c_str ()) ;
+      //if (doResonant)  readerResonant->BookMVA ("BDT_full_mass_iso_nodrbbsv",  TMVAweightsResonant.c_str ()) ;
       if (doResonantHM)  readerResonantHM->BookMVA ("500t_PU_mass_newvars_HIGH_oldvars",  TMVAweightsResonantHM.c_str ()) ;
       if (doResonantLM)  readerResonantLM->BookMVA ("500t_PU_mass_newvars_LOW",  TMVAweightsResonantLM.c_str ()) ;
-      if (doNonResonant)  readerNonResonant->BookMVA ("BDT_nonres_SM",  TMVAweightsNonResonant.c_str ()) ;
+      // if (doNonResonant)  readerNonResonant->BookMVA ("BDT_nonres_SM",  TMVAweightsNonResonant.c_str ()) ;
       if (doVBF)          readerVBF->BookMVA("VBF", TMVAweightsVBF.c_str() );
 
 
@@ -3718,24 +3720,24 @@ int main (int argc, char** argv)
       for(int i=0;i<nentries;i++){
 	treenew->GetEntry(i);
 
-	if (doMuTau)   mvamutau= reader->EvaluateMVA ("MuTauKine") ;  
-	if (doETau)    mvaetau= reader->EvaluateMVA ("ETauKine") ;  
-	if (doTauTau)  mvatautau= reader->EvaluateMVA ("TauTauKine") ;  
-	if (doLepTau)  mvaleptau= reader->EvaluateMVA ("LepTauKine") ;  
-	if (doResonant)  mvaresonant= readerResonant->EvaluateMVA ("BDT_full_mass_iso_nodrbbsv") ;  
+	//if (doMuTau)   mvamutau= reader->EvaluateMVA ("MuTauKine") ;  
+	//if (doETau)    mvaetau= reader->EvaluateMVA ("ETauKine") ;  
+	//if (doTauTau)  mvatautau= reader->EvaluateMVA ("TauTauKine") ;  
+	//if (doLepTau)  mvaleptau= reader->EvaluateMVA ("LepTauKine") ;  
+	//if (doResonant)  mvaresonant= readerResonant->EvaluateMVA ("BDT_full_mass_iso_nodrbbsv") ;  
 	if (doResonantHM)  mvaresonantHM= readerResonantHM->EvaluateMVA ("500t_PU_mass_newvars_HIGH_oldvars") ;  
 	if (doResonantLM)  mvaresonantLM= readerResonantLM->EvaluateMVA ("500t_PU_mass_newvars_LOW") ;  
-	if (doNonResonant)  mvanonresonant= readerNonResonant->EvaluateMVA ("BDT_nonres_SM") ;
+	//if (doNonResonant)  mvanonresonant= readerNonResonant->EvaluateMVA ("BDT_nonres_SM") ;
     if (doVBF)          mvaVBF = readerVBF->EvaluateMVA("VBF") ;
 
-	if (doMuTau)    mvaBranchmutau->Fill();
-	if (doETau)     mvaBranchetau->Fill();
-	if (doTauTau)   mvaBranchtautau->Fill();
-	if (doLepTau)   mvaBranchleptau->Fill();
-	if (doResonant)  mvaBranchResonant->Fill();
+	//if (doMuTau)    mvaBranchmutau->Fill();
+	//if (doETau)     mvaBranchetau->Fill();
+	//if (doTauTau)   mvaBranchtautau->Fill();
+	//if (doLepTau)   mvaBranchleptau->Fill();
+	//if (doResonant)  mvaBranchResonant->Fill();
 	if (doResonantHM)  mvaBranchResonantHM->Fill();
 	if (doResonantLM)  mvaBranchResonantLM->Fill();
-	if (doNonResonant)  mvaBranchNonResonant->Fill();
+	//if (doNonResonant)  mvaBranchNonResonant->Fill();
     if (doVBF)          mvaBranchVBF->Fill();
       }
 
@@ -3743,11 +3745,11 @@ int main (int argc, char** argv)
       h_eff.Write () ;
       treenew->Write ("", TObject::kOverwrite) ;
 
-      delete reader;
-      delete readerResonant;
+      //delete reader;
+      //delete readerResonant;
       delete readerResonantHM;
       delete readerResonantLM;
-      delete readerNonResonant;
+      // delete readerNonResonant;
       delete readerVBF;
     }
  

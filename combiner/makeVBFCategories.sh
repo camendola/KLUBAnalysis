@@ -5,9 +5,9 @@ export cat="$1"
 export prefix="$2"
 export DELTAETA="$3" 
 export BDTSTRING="$4"
-export OUTSTRING="${BDTSTRING}${cat}Scan_newOrder_deltaEta${DELTAETA}_18Jun2018"
-export INSTRING="VBF18Jun2018_combine_newOrder_${BDTSTRING}${cat}scan"
-export intag="18Jun2018_newOrder_${BDTSTRING}${cat}scan"
+export OUTSTRING="${BDTSTRING}${cat}Scan_newOrder_deltaEta${DELTAETA}_11Jul2018"
+export INSTRING="VBF11Jul2018_combine_newOrder_${BDTSTRING}${cat}scan"
+export intag="11Jul2018_newOrder_${BDTSTRING}${cat}scan"
 
 
 #export SELECTION="s2b0jresolvedMcut_noVBFmXXXeta${DELTAETA}"
@@ -18,7 +18,8 @@ export RESONANT=$2
 export LEPTONS="TauTau ETau MuTau"
 #export LEPTONS="TauTau"
 
-export MASS="300 400 500 600 650 700 750 800 900 1000 1500 2000"
+#export MASS="300 400 500 600 650 700 750 800 900 1000 1500 2000"
+export MASS="400 600 800 1000"
 #export MASS="300"
 
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"

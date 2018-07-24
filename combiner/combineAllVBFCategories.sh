@@ -7,24 +7,25 @@ export BDTSTRING=""
 #export CATEGORIES="sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
 #export CATEGORIES="${BDTSTRING}VBF sboost_noVBF s1b1j_noVBF s2b0j_noVBF"
 
-export DELTAETA="2" 
+export DELTAETA="6" 
 export sel="VBF sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF"
 #export sel="sboostedLL_noVBF s1b1jresolvedMcut_noVBF s2b0jresolvedMcut_noVBF" 
 
-#export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_18Jun2018_onlyGGFsig"
-export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_18Jun2018"
-export instring="${BDTSTRING}XXXScan_newOrder_deltaEta${DELTAETA}_18Jun2018"
+export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_11Jul2018_onlyVBFsig"
+#export OUTSTRING="${out}Scan_newOrder_deltaEta${DELTAETA}_11Jul2018"
+export instring="${BDTSTRING}XXXScan_newOrder_deltaEta${DELTAETA}_11Jul2018"
 
 export STRINGLEPTONS="$1"
 
 export SELECTION="mXXXeta${DELTAETA}"
 export NAMESAMPLE="" #empty: both signals
 #export NAMESAMPLE="ggHHXS"
-#export NAMESAMPLE="VBFC2V1XS"
+export NAMESAMPLE="VBFC2V1XS"
 
 export LEPTONS="TauTau ETau MuTau"
 
-export MASS="300 400 500 600 650 700 750 800 900 1000 1500 2000"
+#export MASS="300 400 500 600 650 700 750 800 900 1000 1500 2000"
+export MASS="400 600 800 1000"
 export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
 
 
