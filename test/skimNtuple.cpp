@@ -2025,8 +2025,26 @@ int main (int argc, char** argv)
 
 	  Long64_t trgNotOverlapFlag = (Long64_t) theBigTree.mothers_trgSeparateMatch->at(chosenTauPair);
 	  bool passTrg = trigReader.checkOR (pairType,triggerbit, matchFlag1, matchFlag2, trgNotOverlapFlag, goodTriggerType1, goodTriggerType2, tlv_firstLepton.Pt(), tlv_secondLepton.Pt(), tlv_secondLepton.Eta()) ;
-      isVBFfired = trigReader.isVBFfired(triggerbit, matchFlag1, matchFlag2, trgNotOverlapFlag, goodTriggerType1, goodTriggerType2, tlv_firstLepton.Pt(), tlv_secondLepton.Pt());
+	  if (isMC){
+	    
+	    if (pairType == 2){
+	      bool passL1IsoTau32 = false;
+	      if (theBigTree.daughters_highestEt_L1IsoTauMatched->at(firstDaughterIndex) > 32 && theBigTree.daughters_highestEt_L1IsoTauMatched->at(secondDaughterIndex) > 32){
+		passL1IsoTau32 = true;
+	      }
+	      if (!passL1IsoTau32) passTrg = false;
+	    }
+	  }
+	  isVBFfired = trigReader.isVBFfired(triggerbit, matchFlag1, matchFlag2, trgNotOverlapFlag, goodTriggerType1, goodTriggerType2, tlv_firstLepton.Pt(), tlv_secondLepton.Pt());
 
+	  ////
+
+
+	  if (isMC && pairType == 2 && passTrg){
+	    cout << "passTrg? "<< trigReader.checkOR (pairType,triggerbit, matchFlag1, matchFlag2, trgNotOverlapFlag, goodTriggerType1, goodTriggerType2, tlv_firstLepton.Pt(), tlv_secondLepton.Pt(), tlv_secondLepton.Eta())<<endl;
+	    cout << "L1 pt1 "<<theBigTree.daughters_highestEt_L1IsoTauMatched->at(firstDaughterIndex) << "L1 pt2 "<<theBigTree.daughters_highestEt_L1IsoTauMatched->at(secondDaughterIndex)<<endl;
+	    cout << "---> passTrg? "<<passTrg<<endl;
+	  }
       /* // Old version used with single triggers
       bool isCrossTrg = true;
 	  bool trgNotOverlap = trigReader.checkOR (pairType, trgNotOverlapFlag) ;
@@ -2039,7 +2057,7 @@ int main (int argc, char** argv)
 	  }
       */
 	  bool triggerAccept = false;
-	    triggerAccept = passTrg;
+	  triggerAccept = passTrg;
 
 	  // require trigger + legs matched
 	  //bool triggerAccept = (passTrg && passMatch1 && passMatch2 && trgNotOverlap) ; //FRA: with crossTrigs match1&match2 are together
@@ -2329,8 +2347,9 @@ int main (int argc, char** argv)
         //float idAndIsoSF_leg1 = idSF_leg1 * isoSF_leg1;
         float idAndIsoSF_leg1 = myIDandISOScaleFactor[0]->get_ScaleFactor(mu1pt, mu1eta);
 
-        float idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
-        
+        float idAndIsoSF_leg2 = 1.;
+        if (lep2HasTES) idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
+
         idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
       }
 
@@ -2343,8 +2362,9 @@ int main (int argc, char** argv)
         //float idAndIsoSF_leg1 = getContentHisto2D(hElePOGSF_TightID_80WP, ele1eta, ele1pt);  // EMVATight == 80% eff WP
         float idAndIsoSF_leg1 = myIDandISOScaleFactor[1]->get_ScaleFactor(ele1pt, ele1eta);
 
-        float idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
-        
+        float idAndIsoSF_leg2 = 1.;
+        if (lep2HasTES) idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
+
         idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
       }
 

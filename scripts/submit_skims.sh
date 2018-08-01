@@ -1,5 +1,5 @@
 AMESSAGE="Run2017 full production"
-OUTDIRR="SKIMS_11Jul2018_Run2017"
+OUTDIRR="SKIMS_31Jul2018_Run2017"
 
 source /opt/exp_soft/cms/t3/t3setup
 mkdir /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/
@@ -23,17 +23,17 @@ cp /home/llr/cms/amendola/CMSSW_7_4_7/src/KLUBAnalysis/scripts/listAll.sh /data_
 #python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleMuon2017E        -i inputFiles/Data2017_26Jun2018/4_SingleMuon__Run2017E-31Mar2018-v1.txt
 #python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleMuon2017F        -i inputFiles/Data2017_26Jun2018/5_SingleMuon__Run2017F-31Mar2018-v1.txt
 
-python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017B        -i inputFiles/Data2017_26Jun2018/1_SingleElectron__Run2017B-31Mar2018-v1.txt
-python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017C        -i inputFiles/Data2017_26Jun2018/2_SingleElectron__Run2017C-31Mar2018-v1.txt
-python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017D        -i inputFiles/Data2017_26Jun2018/3_SingleElectron__Run2017D-31Mar2018-v1.txt
-python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017E        -i inputFiles/Data2017_26Jun2018/4_SingleElectron__Run2017E-31Mar2018-v1.txt
-python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017F        -i inputFiles/Data2017_26Jun2018/5_SingleElectron__Run2017F-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017B        -i inputFiles/Data2017_26Jun2018/1_SingleElectron__Run2017B-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017C        -i inputFiles/Data2017_26Jun2018/2_SingleElectron__Run2017C-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017D        -i inputFiles/Data2017_26Jun2018/3_SingleElectron__Run2017D-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017E        -i inputFiles/Data2017_26Jun2018/4_SingleElectron__Run2017E-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_SingleElectron2017F        -i inputFiles/Data2017_26Jun2018/5_SingleElectron__Run2017F-31Mar2018-v1.txt
 
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017B        -i inputFiles/Data2017_26Jun2018/1_Tau__Run2017B-31Mar2018-v1.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017C        -i inputFiles/Data2017_26Jun2018/2_Tau__Run2017C-31Mar2018-v1.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017D        -i inputFiles/Data2017_26Jun2018/3_Tau__Run2017D-31Mar2018-v1.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017E        -i inputFiles/Data2017_26Jun2018/4_Tau__Run2017E-31Mar2018-v1.txt
-# python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017F        -i inputFiles/Data2017_26Jun2018/5_Tau__Run2017F-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017B        -i inputFiles/Data2017_26Jun2018/1_Tau__Run2017B-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017C        -i inputFiles/Data2017_26Jun2018/2_Tau__Run2017C-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017D        -i inputFiles/Data2017_26Jun2018/3_Tau__Run2017D-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017E        -i inputFiles/Data2017_26Jun2018/4_Tau__Run2017E-31Mar2018-v1.txt
+#python scripts/skimNtuple.py -T $OUTDIRR -d True  -s True -c  config/skim_2017.cfg  -n 200   -o /data_CMS/cms/amendola/HH2017Skims/$OUTDIRR/SKIM_Tau2017F        -i inputFiles/Data2017_26Jun2018/5_Tau__Run2017F-31Mar2018-v1.txt
 
 
 

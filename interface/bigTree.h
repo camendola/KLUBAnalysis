@@ -56,6 +56,14 @@ public :
    std::vector<float>   *daughters_e_TauDown;
    std::vector<int>     *daughters_TauUpExists;
    std::vector<int>     *daughters_charge;
+   std::vector<float>   *L1_tauEt;
+   std::vector<float>   *L1_tauEta;
+   std::vector<float>   *L1_tauPhi;
+   std::vector<short>   *L1_tauIso;
+   std::vector<float>   *L1_jetEt;
+   std::vector<float>   *L1_jetEta;
+   std::vector<float>   *L1_jetPhi;
+   std::vector<float>   *daughters_highestEt_L1IsoTauMatched;
    std::vector<int>     *daughters_genindex;
    Float_t         MC_weight;
    Float_t         lheHt;
@@ -390,6 +398,14 @@ public :
    TBranch        *b_daughters_e_TauDown;   //!
    TBranch        *b_daughters_TauUpExists;   //!
    TBranch        *b_daughters_charge;   //!
+   TBranch        *b_L1_tauEt;   //!
+   TBranch        *b_L1_tauEta;   //!
+   TBranch        *b_L1_tauPhi;   //!
+   TBranch        *b_L1_tauIso;   //!
+   TBranch        *b_L1_jetEt;   //!
+   TBranch        *b_L1_jetEta;   //!
+   TBranch        *b_L1_jetPhi;   //!
+   TBranch        *b_daughters_highestEt_L1IsoTauMatched;   //!   
    TBranch        *b_daughters_genindex;   //!
    TBranch        *b_MC_weight;   //!
    TBranch        *b_lheHt;   //!
@@ -717,6 +733,14 @@ public :
        daughters_e_TauDown = 0;
        daughters_TauUpExists = 0;
        daughters_charge = 0;
+       L1_tauEt = 0;
+       L1_tauEta = 0;
+       L1_tauPhi = 0;
+       L1_tauIso = 0;
+       L1_jetEt = 0;
+       L1_jetEta = 0;
+       L1_jetPhi = 0;
+       daughters_highestEt_L1IsoTauMatched = 0;
        daughters_genindex = 0;
        genpart_px = 0;
        genpart_py = 0;
