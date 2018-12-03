@@ -639,10 +639,11 @@ if __name__ == "__main__" :
     
 
 
-    hDY = getHisto("DY", hBkgs,doOverflow)
+    #hDY = getHisto("DY", hBkgs,doOverflow)
     #hDYbb = getHisto("DYbb", hBkgs,doOverflow)
     #hDY.Scale(1./6.)
     hTT = getHisto("TT", hBkgs,doOverflow)
+    hDY = getHisto("DY", hBkgs,doOverflow)
     hWJets = getHisto("WJets", hBkgs,doOverflow)
     hothers = getHisto("other", hBkgs,doOverflow)
     #hsingleT = getHisto("singleT", hBkgs,doOverflow)
@@ -652,11 +653,13 @@ if __name__ == "__main__" :
 
     #hBkgList = [hothers, hSM, hVV, hEWKW, hsingleT, hWJets, hTT, hDY] ## full list for stack
     hBkgList = [hothers, hWJets, hTT, hDY] ## full list for stack
+    
     #hBkgList = [hVV, hEWKW, hsingleT, hWJets, hTT, hDY] ## full list for stack
     #hBkgList = [hsingleT, hTT, hDY]
 
     #hBkgNameList = ["Others","SM Higgs", "VV", "EWK", "Single top", "W + jets", "t#bar{t}","DY + jets"] # list for legend
     hBkgNameList = ["Others", "W + jets", "t#bar{t}" , "DY + jets"] # list for legend
+    
     #hBkgNameList = ["VV", "EWK", "single top", "W + jets", "t#bar{t}","DY + jets"] # list for legend
     #hBkgNameList = ["Single top", "t#bar{t}", "DY + jets"]
 
@@ -671,6 +674,11 @@ if __name__ == "__main__" :
         bkgColors["QCD"] = col2.GetColor("#F29563") #(TColor(242,149,99)).GetNumber() #gROOT.GetColor("#F29563")
         bkgLineColors["QCD"] = col2.GetColor("#DC885A")
 
+
+
+    #PisaOrder = [0, 1, 4, 3, 2]
+    #hBkgList = [hBkgList[i] for i in PisaOrder]
+    #hBkgNameList = [hBkgNameList[i] for i in PisaOrder]
 
 
     hData = getHisto("data_obs", hDatas , doOverflow).Clone("hData")
@@ -742,6 +750,7 @@ if __name__ == "__main__" :
 
     #################### DO STACK AND PLOT #######################
 
+    
     bkgStack = makeStack ("bkgStack", hBkgList)
     bkgSum = makeSum ("bkgSum", hBkgList)
     

@@ -12,15 +12,16 @@ import itertools
 tag = "3Oct2018_DYsep_goodPU_goodXS"
 channel = "MuMu" 
 
-selection="baseline_noQCD"
+selection="baseline" 
+#selection="baseline_noQCD"
 #selection="baseline_MET40"
 #selection="baseline_pt0to50"
 #selection="baseline_pt50to150"
 #selection="baseline_pt150"
 
 
-doNpv = True
-doPt = False
+doNpv = False
+doPt = True
 
 def subtractBkg(inFile, var,sel,hBkg):
     hname = "data_obs_" + sel + "_" +var
@@ -202,7 +203,8 @@ if doPt:
     print "data ", hData.Integral(-1,- 1)        
     print "DY ", hDY[0].Integral(-1,-1)
     print ""
-    weight = hData.Integral(-1, -1)/ hDY[0].Integral(-1,-1)
+    #weight = hData.Integral(-1, -1)/ hDY[0].Integral(-1,-1)
+    weight = hData.Integral(hData.GetXaxis().FindBin(40), 2000)/ hDY[0].Integral(hData.GetXaxis().FindBin(40),2000)
     print "data/DY = ", weight 
     
     

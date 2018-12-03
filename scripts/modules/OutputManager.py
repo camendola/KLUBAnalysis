@@ -226,10 +226,7 @@ class OutputManager:
                 # if var == 'MT2' and sel == 'defaultBtagLLNoIsoBBTTCut' :  print qcdYield
                 ## now scale
                 qcdYield = hyieldQCD.Integral()
-                #SBtoSRfactor=1.34
-                #if "pt0to50" in sel: SBtoSRfactor = 1.25
-                #if "pt50to150" in sel: SBtoSRfactor = 1.38
-                #if "pt150" in sel: SBtoSRfactor = 1.90
+                
                 
                 sc = SBtoSRfactor*qcdYield/hQCD.Integral() if hQCD.Integral() > 0 else 0.0
                 hQCD.Scale(sc)
@@ -318,6 +315,7 @@ class OutputManager:
     def saveToFile(self, fOut, saveQCDFit=True):
         fOut.cd()
         for elem in self.histos:
+            #print elem, self.histos[elem]
             self.histos[elem].Write()
         for elem in self.histos2D:
             self.histos2D[elem].Write()
@@ -348,3 +346,14 @@ class OutputManager:
                         h = self.histos[htoscale_name]
                         h.Scale(factor)
 
+
+    def addHistos(self, strBkg, fExt):
+        print '... taking histos for bkg: ' , strBkg, 'from file : ', fExt
+        inFile = ROOT.TFile.Open(fExt)
+        for sel in self.selections:
+            for var in self.variables:
+                htoadd_name = makeHistoName(strBkg, sel, var)
+                #print htoadd_name
+                htoadd = inFile.Get(htoadd_name)
+                self.histos[htoadd_name] = htoadd.Clone(htoadd_name)
+                return self.histos[htoadd_name]

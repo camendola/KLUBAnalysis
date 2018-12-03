@@ -54,9 +54,16 @@ parser.add_argument('--moreDY', type=float, dest='moreDY', help='increase DY by 
 parser.add_argument('--moreDY0', type=float, dest='moreDY0', help='increase DY by factor moreDY0', default=None)
 parser.add_argument('--moreDY1', type=float, dest='moreDY1', help='increase DY by factor moreDY1', default=None)
 parser.add_argument('--moreDY2', type=float, dest='moreDY2', help='increase DY by factor moreDY2', default=None)
+parser.add_argument('--moreTT', type=float, dest='moreTT', help='increase TT by factor moreTT', default=None)
 parser.add_argument('--moreDYbin0', type=float, dest='moreDYbin0', help='increase DY by factor moreDY0', default=None)
 parser.add_argument('--moreDYbin1', type=float, dest='moreDYbin1', help='increase DY by factor moreDY1', default=None)
 parser.add_argument('--moreDYbin2', type=float, dest='moreDYbin2', help='increase DY by factor moreDY2', default=None)
+parser.add_argument('--SBtoSR', type=float, dest='SBtoSR', help='specity manually the SBtoSR factor', default=None)
+
+
+
+parser.add_argument('--extBkg',  dest='extBkg', help='add a bkg from external file', default=None)
+parser.add_argument('--extFile', dest='extFile', help='add a bkg from external file', default=None)
 args = parser.parse_args()
 
 cfgName        = findInFolder  (args.dir+"/", 'mainCfg_*.cfg')
@@ -107,6 +114,20 @@ if cfg.hasSection('pp_merge'):
     for groupname in cfg.config['pp_merge']:
         omngr.groupTogether(groupname, cfg.readListOption('pp_merge::'+groupname))
 
+if args.extBkg:
+    if not args.extFile: print "** Error: no external file provided"
+    print '... taking histos for bkg: ' , args.extBkg, 'from file : ',args.extFile
+    #omngr.addHistos(args.extBkg, args.extFile)
+    inFile = ROOT.TFile.Open(args.extFile)
+    for sel in omngr.selections:
+        for var in omngr.variables:
+            htoadd_name = args.extBkg +  "_" + sel + "_" + var
+            htoadd = inFile.Get(htoadd_name)
+
+            omngr.histos[htoadd_name] = htoadd.Clone(htoadd_name)
+
+                                                                                                                              
+            
 if cfg.hasSection('pp_rebin'):
     for ri in cfg.config['pp_rebin']:
         opts = cfg.readListOption('pp_rebin::'+ri)
@@ -128,6 +149,8 @@ if cfg.hasSection('pp_rebin'):
 
 if args.moreDY:
     omngr.scaleHistos("DY", args.moreDY)
+if args.moreTT:
+    omngr.scaleHistos("TT", args.moreTT)
 if args.moreDY0:
     omngr.scaleHistos("DY0", args.moreDY0)
 if args.moreDY1:
@@ -140,13 +163,18 @@ if args.moreDYbin1:
     omngr.scaleHistos("DY", args.moreDYbin1, "pt50to150")
 if args.moreDYbin2:
     omngr.scaleHistos("DY", args.moreDYbin2, "pt150")
-            
+
+    
+
+    
 if cfg.hasSection('pp_QCD'):
+    SBtoSRforQCD =float(cfg.readOption('pp_QCD::SBtoSRfactor'))
+    if args.SBtoSR: SBtoSRforQCD = args.SBtoSR
     omngr.makeQCD(
         SR           = cfg.readOption('pp_QCD::SR'),
         yieldSB      = cfg.readOption('pp_QCD::yieldSB'),
         shapeSB      = cfg.readOption('pp_QCD::shapeSB'),
-        SBtoSRfactor = float(cfg.readOption('pp_QCD::SBtoSRfactor')),
+        SBtoSRfactor = SBtoSRforQCD,
         doFitIf      = cfg.readOption('pp_QCD::doFitIf'),
         fitFunc      = cfg.readOption('pp_QCD::fitFunc')
         )

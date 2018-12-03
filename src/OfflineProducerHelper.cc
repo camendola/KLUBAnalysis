@@ -844,8 +844,8 @@ int OfflineProducerHelper::getBestPairHTauTau (bigTree* tree, TString whatApply,
     }
 
     float dR = DeltaRDau(tree, dau1index, dau2index);
-    bool drMin = (dR > 0.1);    
-    // bool drMin = (dR > 0.5);
+    //bool drMin = (dR > 0.1);    
+    bool drMin = (dR > 0.5); //CHIA: synch to HTauTau, nov 2018
     
     if (leg1 && leg2 && drMin)
     {
@@ -948,8 +948,8 @@ int OfflineProducerHelper::getBestPairPtAndRawIsoOrd (bigTree* tree, TString wha
     }
 
     float dR = DeltaRDau(tree, dau1index, dau2index);
-    bool drMin = (dR > 0.1);    
-    // bool drMin = (dR > 0.5);
+    //bool drMin = (dR > 0.1);
+    bool drMin = (dR > 0.5);    //CHIA: synch to HTauTau, nov 2018     
     
     if (leg1 && leg2 && drMin)
     {

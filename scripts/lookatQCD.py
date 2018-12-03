@@ -7,21 +7,22 @@ import argparse
 import fnmatch
 import itertools
 
-tag = "13Nov2018"
+
+#tag = "30Jul2018_newPU_oldSF"
+#tag = "28Aug2018_cross"
+tag = "20Nov2018_TauTauIncl"
 channel = "TauTau" #"ETau" "MuTau" "TauTau"
 isIsoBin = False
 isMakeRatio = True
-isMakeComparison = False
-ratioHist = ["isoDau2_QCD_SS_base","isoDau2_QCD_OSblind_base"] #["isoDau2_QCD_T_SS_base_T","isoDau2_QCD_T_OSblind_base_T"]
-#ratioHist = ["isoDau2_QCD_SS_base","isoDau2_QCD_OS_base"] # D/C
-#ratioHist = ["isoDau2_SR_SS_base","isoDau2_SR_OS_base"] # B/A
-isoHist= ["SS_base", "OSblind_base"] #["SS_base_T", "OSblind_base_T"] #["SS_VBFTbtagM","OSblind_VBFTbtagM"]
+#ratioHist = ["isoDau2_QCD_SS_base","isoDau2_QCD_OSblind_base"] #["isoDau2_SR_SS_antiB","isoDau2_SR_OSblind_antiB"] #["isoDau2_QCD_SS_antiB","isoDau2_QCD_OSblind_antiB"]
+ratioHist = ["isoDau2_QCD_SS_base","isoDau2_QCD_OSblind_base"] # C/D
+#ratioHist = ["isoDau2_SR_SS_base","isoDau2_SR_OS_base"] # A/B
+isoHist= ["SS_base", "OSblind_base"] #["SS_VBFTbtagM","OSblind_VBFTbtagM"]
 isoSelHist=["0","1","2","SR"]
 #isoSelHist=["0","1","2"]
-#var = "dau2_pt"
-comparHisto = ["isoDau2_SR_OS_base","isoDau2_SR_SS_base","isoDau2_QCD_OS_base","isoDau2_QCD_SS_base"] # A-B-C-D
-vars = ["dau1_pt","dau1_eta","dau1_phi","dau2_pt","dau2_eta","dau2_phi","tauH_SVFIT_mass","tauH_mass","bH_mass", "bjet1_pt", "bjet2_pt", "bjet1_eta", "bjet2_eta", "met_et", "met_phi", "bH_pt", "tauH_pt", "njets"]
 vars = ["bH_mass"]
+#vars = ["dau1_pt","dau1_eta","dau1_phi","dau2_pt","dau2_eta","dau2_phi","tauH_SVFIT_mass","tauH_mass","bH_mass", "bjet1_pt", "bjet2_pt", "bjet1_eta", "bjet2_eta", "met_et", "met_phi", "bH_pt", "tauH_pt", "njets"]
+
 #vars = ["njets","dau1_pt", "dau2_pt", "tauH_mass", "bH_mass", "bH_pt", "tauH_pt"]
 #vars = ["dau1_pt","dau2_pt","tauH_SVFIT_mass","tauH_mass","bH_mass"]
 #TT_isoDau2_5_OSblind_bH_mass
@@ -43,7 +44,7 @@ def sumBkg(inFile, var,sel,bkgList):
     hname = bkgList[0] + "_" + sel + "_" +var
     hnameTot = "bkgTot_" + sel + "_" +var
     hstack = THStack(hnameTot+"_stack",hnameTot+"_stack")
-
+    print hnameTot
     hsum = inFile.Get(hname).Clone(hnameTot)
     hsum.SetTitle(hsum.GetName())
     hstack.Add(inFile.Get(hname))
@@ -52,6 +53,7 @@ def sumBkg(inFile, var,sel,bkgList):
         
         #        inFile.Get(hname).SetFillColor(30+i)
         hbkg = inFile.Get(hname)
+        if "DY" in hname: hbkg.Scale(0.95)
         hstack.Add(hbkg)
         hsum.Add(hbkg)
         

@@ -3,9 +3,9 @@ from subprocess import Popen, PIPE
 
 
 #tag = "MC_PU2017_12Apr2018_15May2018"
-tag = "Tau2017_26Jun2018"
+tag = "MC_16Oct2018"
 
-outFolder = '/home/llr/cms/amendola/HH2017/CMSSW_9_0_0/src/KLUBAnalysis/inputFiles/Data2017_26Jun2018'
+outFolder = '/home/llr/cms/amendola/HH2017/CMSSW_9_0_0/src/KLUBAnalysis/inputFiles/MC_16Oct2018'
 
 areEnrichedMiniAOD = False; # if true:  add a header and the /store.. etc to run ntuplizer on Tier3 on CMSSW
                                  # if false: only add the polgrid server to run the skim and submit on root

@@ -94,15 +94,19 @@ bool Sample::openFileAndTree()
         while (line.find("\r") != std::string::npos) line = line.erase(line.find("\r"), 1); // remove carriage return characters
         if (!line.empty()) // skip empty lines
         {
+
             ++counter;
             tree_->Add(line.c_str());
             
             TFile* f = new TFile (line.c_str());
             TH1F* h = (TH1F*) f->Get(histoname_.c_str());
+
+	    
             evt_num_  += h->GetBinContent (2) ;
             evt_den_  += h->GetBinContent (bin_eff_den_) ;
-            nentries_ += h->GetBinContent (4) ; // NB! rounding errors could make this different from the actual entries in the tree --> better to use TH1D
-            delete h;
+	    nentries_ += h->GetBinContent (4) ; // NB! rounding errors could make this different from the actual entries in the tree --> better to use TH1D
+	    //cout << "  -----> read " << line.c_str() << " file, " <<  h->GetBinContent (4) << " events" << endl;
+	    delete h;
             delete f;
         }
     }

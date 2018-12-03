@@ -3,13 +3,13 @@ import os, sys
 import pandas as pd
 
 fileNames = pd.read_csv('datasetNames.txt', sep = " ", header = None, comment='#')
-
+print "alive"
 fileNames.columns = ["name", "filelist"]
 
 
 for i, row in fileNames.iterrows():
     print row["name"], row["filelist"]
-    filepath = "../../inputFiles/Files_June2018/"+row["filelist"]
+    filepath = "../../inputFiles/MC_16Oct2018/"+row["filelist"]
     name  = row["name"]
     command = "root -l -b \"ratioPU.C(0, 50000000, \\\""+filepath+"\\\", \\\""+name+"\\\")\" -q ; root -l \"makeRatio.C(\\\""+name+"\\\")\" > outputs/"+name+".txt -q"
 

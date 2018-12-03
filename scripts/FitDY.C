@@ -152,7 +152,7 @@ void printYields(
 
 void FitDY(bool medTag = true)
 {
-    TFile* inFile = new TFile ("../analysis_MuMu_3Oct2018_DYsep_goodPU_goodXS/outPlotter.root") ;
+    TFile* inFile = new TFile ("../analysis_MuMu_3Oct2018_DYNLO/outPlotter.root") ;
 
     string sel0tag;
     string sel1tag;
@@ -196,7 +196,7 @@ void FitDY(bool medTag = true)
     // leave in the order 0b, 1b, 2b
     vector<string> vDY = {"DY0b", "DY1b", "DY2b"};
     // vector<string> vBkgs = {"TT", "WJets", "TWtop", "TWantitop", "WWToLNuQQ", "WZTo1L1Nu2Q", "WZTo1L3Nu", "WZTo2L2Q", "ZZTo2L2Q"};
-    vector<string> vBkgs = {"TT", "WJets" , "others"};
+    vector<string> vBkgs = {"TT", "WJets" , "other"};
     vector<string> vData = {"data_obs"};
     // vector<string> vData = {"DsingleMu"};
 

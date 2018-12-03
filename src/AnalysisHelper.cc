@@ -1042,8 +1042,8 @@ void AnalysisHelper::fillHistosSample(Sample& sample)
             {   
                 wEvSel *= boost::apply_visitor(get_variant_as_double(), valuesMap[currSel.getWeights().at(iw).getName()]);
                 
-                 if (sample.getType() == Sample::kBkg)
-                    cout << "~~~~~~~  : ~~~ " << iEv << " / evt sel: " << currSel.getWeights().at(iw).getName() << " = " << boost::apply_visitor(get_variant_as_double(), valuesMap[currSel.getWeights().at(iw).getName()]) << endl;
+		//         if (sample.getType() == Sample::kBkg)
+		   //cout << "~~~~~~~  : ~~~ " << iEv << " / evt sel: " << currSel.getWeights().at(iw).getName() << " = " << boost::apply_visitor(get_variant_as_double(), valuesMap[currSel.getWeights().at(iw).getName()]) << endl;
             }
             
             // loop on all vars to fill
@@ -1102,9 +1102,11 @@ void AnalysisHelper::fillHistosSample(Sample& sample)
     }
 
     // filling is finished, scale to the sample denominator evt sum to include acceptance
-    if (sample.getType() != Sample::kData)
+    if (sample.getType() != Sample::kData){
         sample.scaleAll(lumi_/sample.getEffDenom());
-}
+	cout << "scaled by " << lumi_<<"/"<< sample.getEffDenom()<<endl;
+    }
+    }
 
 void AnalysisHelper::activateBranches(Sample& sample)
 {
