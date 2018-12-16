@@ -166,17 +166,28 @@ if args.moreDYbin2:
 
     
 
+# C/D factor:
+# if not specified by --SBtoSRforQCD, 
+# the number inserted manually in config is used
+# if SBtoSRfactor == 1 in config and --SBtoSRforQCD is not specified, C/D computed dynamically
+# 
     
 if cfg.hasSection('pp_QCD'):
     SBtoSRforQCD =float(cfg.readOption('pp_QCD::SBtoSRfactor'))
+    computeSBtoSRdyn = False
+    if SBtoSRforQCD == 1 and not args.SBtoSR: 
+        computeSBtoSRdyn = True
     if args.SBtoSR: SBtoSRforQCD = args.SBtoSR
     omngr.makeQCD(
         SR           = cfg.readOption('pp_QCD::SR'),
         yieldSB      = cfg.readOption('pp_QCD::yieldSB'),
         shapeSB      = cfg.readOption('pp_QCD::shapeSB'),
         SBtoSRfactor = SBtoSRforQCD,
+        regionC      = cfg.readOption('pp_QCD::regionC'),   
+        regionD      = cfg.readOption('pp_QCD::regionD'),   
         doFitIf      = cfg.readOption('pp_QCD::doFitIf'),
-        fitFunc      = cfg.readOption('pp_QCD::fitFunc')
+        fitFunc      = cfg.readOption('pp_QCD::fitFunc'),
+        computeSBtoSR = computeSBtoSRdyn
         )
 
 fOut = ROOT.TFile(args.dir+"/" + 'analyzedOutPlotter.root', 'recreate')

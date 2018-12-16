@@ -99,22 +99,22 @@ void AnalysisHelper::saveOutputsToFile()
     fOut->cd();
     for (uint itype = 0; itype < allToSave.size(); ++itype)        
     {
-       cout << "itype " << itype << "/" << allToSave.size() << endl;
+      // cout << "itype " << itype << "/" << allToSave.size() << endl;
         for (uint isample = 0; isample < allToSave.at(itype)->size(); ++isample)
         {
-            cout << "isample " << isample << "/" << allToSave.at(itype)->size() << endl;
+	  //cout << "isample " << isample << "/" << allToSave.at(itype)->size() << endl;
             Sample::selColl& plotSet = allToSave.at(itype)->at(isample)->plots();
             for (uint isel = 0; isel < plotSet.size(); ++isel)
             {
-                 cout << "isel " << isel << "/" << plotSet.size() << endl;
+	      //cout << "isel " << isel << "/" << plotSet.size() << endl;
                 for (uint ivar = 0; ivar < plotSet.at(isel).size(); ++ivar)
                 {
-                    cout << "ivar " << ivar << "/" << plotSet.at(isel).size() << endl;
+		  //cout << "ivar " << ivar << "/" << plotSet.at(isel).size() << endl;
                     for (uint isyst = 0; isyst < plotSet.at(isel).at(ivar).size(); ++isyst)
                     {
                          cout << "isyst " << isyst << "/" << plotSet.at(isel).at(ivar).size() << endl;
                         plotSet.at(isel).at(ivar).at(isyst)->Write();
-                        cout << "DONE" << endl;
+			//   cout << "DONE" << endl;
                     }
                 }
             }
