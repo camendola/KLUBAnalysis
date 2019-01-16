@@ -255,7 +255,7 @@ if __name__ == "__main__":
         os.system ('chmod u+rwx %s/skimJob_%d.sh'% (jobsDir,n))
 
         # command = ('/opt/exp_soft/cms/t3/t3submit -q ' + opt.queue + ' \'' + jobsDir + '/skimJob_' + str (n) + '.sh\'')
-        command = '/opt/exp_soft/cms/t3/t3submit -' + opt.queue + ' ' + jobsDir + '/skimJob_' + str (n) + '.sh'
+        command = '/opt/exp_soft/cms/t3/t3submit_el7 -' + opt.queue + ' ' + jobsDir + '/skimJob_' + str (n) + '.sh'
         if opt.sleep : time.sleep (0.1)
         os.system (command)
         commandFile.write (command + '\n')
