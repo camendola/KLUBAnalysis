@@ -1988,8 +1988,32 @@ int main (int argc, char** argv)
       const int isOS  = theBigTree.isOSCand->at (chosenTauPair) ;
       bool lep1HasTES = false;
       bool lep2HasTES = false;
+      
 
-      if (isMC)
+      //save decaymode
+      if(pairType == 0){ //mutauh
+	theSmallTree.m_dau1_decayMode = -1;
+	theSmallTree.m_dau2_decayMode = theBigTree.decayMode->at(secondDaughterIndex);
+      }
+
+      if(pairType == 1){ //etauh
+	theSmallTree.m_dau1_decayMode = -1;
+	theSmallTree.m_dau2_decayMode = theBigTree.decayMode->at(secondDaughterIndex);
+      }
+
+      if(pairType == 2){ //tauhtauh
+	theSmallTree.m_dau1_decayMode = theBigTree.decayMode->at(firstDaughterIndex);
+	theSmallTree.m_dau2_decayMode = theBigTree.decayMode->at(secondDaughterIndex);
+      }
+
+      if(pairType > 2){ //pairs without tauh
+	theSmallTree.m_dau1_decayMode = -1;
+	theSmallTree.m_dau2_decayMode = -1;
+      }
+
+
+
+	if (isMC)
 	{
 	  int nRealTaus= 0;
 	  lep1HasTES = (theBigTree.daughters_TauUpExists->at(firstDaughterIndex) == 1 ? true : false);
@@ -2104,14 +2128,28 @@ int main (int argc, char** argv)
 	      if (!passL1IsoTau32) passTrg = false;
 	    }
 	  }
-	  /*
+	  
+	  // using the same method also to mimic the monitoring mu-tau cross trigger (MC and Data)
+	  if (pairType == 0){
+	    bool passL1IsoTau32 = false;
+	    if (theBigTree.daughters_highestEt_L1IsoTauMatched->at(secondDaughterIndex) > 32){
+	      passL1IsoTau32 = true;
+	    }	
+	    theSmallTree.m_cross_monitoring_trig = (passL1IsoTau32 && (pass_triggerbit >> 7)&1) ; // the 7th bit corresponds to our mu-tau cross trigger 
+	  }else{                                                                                  // if ever we change the trigger list, this should be updated 
+	    theSmallTree.m_cross_monitoring_trig = false;
+	  }
+	  
+	  
+	  
 	  if(DEBUG){
 	    if (isMC && pairType == 2 && passTrg){
 	      cout << "passTrg? "<< trigReader.checkOR (pairType,triggerbit, &pass_triggerbit, matchFlag1, matchFlag2, trgNotOverlapFlag, goodTriggerType1, goodTriggerType2, tlv_firstLepton.Pt(), tlv_secondLepton.Pt(), tlv_secondLepton.Eta())<<endl;
 	      cout << "L1 pt1 "<<theBigTree.daughters_highestEt_L1IsoTauMatched->at(firstDaughterIndex) << "L1 pt2 "<<theBigTree.daughters_highestEt_L1IsoTauMatched->at(secondDaughterIndex)<<endl;
 	      cout << "---> passTrg? "<<passTrg<<endl;
 	    }
-	    }*/
+	  }
+	  
 	  isVBFfired = trigReader.isVBFfired(triggerbit, matchFlag1, matchFlag2, trgNotOverlapFlag, goodTriggerType1, goodTriggerType2, tlv_firstLepton.Pt(), tlv_secondLepton.Pt());
 	  
 	  bool triggerAccept = false;

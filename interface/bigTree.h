@@ -195,6 +195,9 @@ public :
    std::vector<bool>    *daughters_iseleWPLoose;
    std::vector<bool>    *daughters_iseleWP80;
    std::vector<bool>    *daughters_iseleWP90;
+   std::vector<bool>    *daughters_iseleNoIsoWPLoose;
+   std::vector<bool>    *daughters_iseleNoIsoWP80;
+   std::vector<bool>    *daughters_iseleNoIsoWP90;
    std::vector<float>   *daughters_eleMVAnt;
    std::vector<bool>    *daughters_passConversionVeto;
    std::vector<int>     *daughters_eleMissingHits;
@@ -530,6 +533,9 @@ public :
    TBranch        *b_daughters_iseleWPLoose;   //!
    TBranch        *b_daughters_iseleWP80;   //!
    TBranch        *b_daughters_iseleWP90;   //!
+   TBranch        *b_daughters_iseleNoIsoWPLoose;   //!
+   TBranch        *b_daughters_iseleNoIsoWP80;   //!
+   TBranch        *b_daughters_iseleNoIsoWP90;   //!
    TBranch        *b_daughters_eleMVAnt;   //!
    TBranch        *b_daughters_passConversionVeto;   //!
    TBranch        *b_daughters_eleMissingHits;   //!
@@ -857,6 +863,9 @@ public :
        daughters_iseleWPLoose = 0;
        daughters_iseleWP80 = 0;
        daughters_iseleWP90 = 0;
+       daughters_iseleNoIsoWPLoose = 0;
+       daughters_iseleNoIsoWP80 = 0;
+       daughters_iseleNoIsoWP90 = 0;
        daughters_eleMVAnt = 0;
        daughters_passConversionVeto = 0;
        daughters_eleMissingHits = 0;
@@ -1099,6 +1108,9 @@ public :
        fChain->SetBranchAddress("daughters_iseleWPLoose", &daughters_iseleWPLoose, &b_daughters_iseleWPLoose);
        fChain->SetBranchAddress("daughters_iseleWP80", &daughters_iseleWP80, &b_daughters_iseleWP80);
        fChain->SetBranchAddress("daughters_iseleWP90", &daughters_iseleWP90, &b_daughters_iseleWP90);
+       fChain->SetBranchAddress("daughters_iseleNoIsoWPLoose", &daughters_iseleNoIsoWPLoose, &b_daughters_iseleNoIsoWPLoose);
+       fChain->SetBranchAddress("daughters_iseleNoIsoWP80", &daughters_iseleNoIsoWP80, &b_daughters_iseleNoIsoWP80);
+       fChain->SetBranchAddress("daughters_iseleNoIsoWP90", &daughters_iseleNoIsoWP90, &b_daughters_iseleNoIsoWP90);
        fChain->SetBranchAddress("daughters_eleMVAnt", &daughters_eleMVAnt, &b_daughters_eleMVAnt);
        fChain->SetBranchAddress("daughters_passConversionVeto", &daughters_passConversionVeto, &b_daughters_passConversionVeto);
        fChain->SetBranchAddress("daughters_eleMissingHits", &daughters_eleMissingHits, &b_daughters_eleMissingHits);

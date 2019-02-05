@@ -70,6 +70,7 @@ struct smallTree
       m_lumi = -1. ;
       m_triggerbit = -1. ;
       m_pass_triggerbit = -1. ;
+      m_cross_monitoring_trig = false ;
       m_rho = -1. ;
 
       m_pairType = -1. ;
@@ -116,6 +117,7 @@ struct smallTree
       m_dau1_flav  = -1. ;
       m_dau1_dxy  = -1. ;
       m_dau1_dz  = -1. ;
+      m_dau1_decayMode  = -1 ;
       
       
       m_genmatched1_pt  = -1.;
@@ -150,6 +152,7 @@ struct smallTree
       m_dau2_flav  = -1. ;
       m_dau2_dxy  = -1. ;
       m_dau2_dz  = -1. ;
+      m_dau2_decayMode  = -1 ;
 
       m_bjet1_pt  = -1. ;
       m_bjet1_eta  = -1. ;
@@ -589,6 +592,7 @@ struct smallTree
 
       m_smallT->Branch ("triggerbit", &m_triggerbit, "triggerbit/L") ;
       m_smallT->Branch ("pass_triggerbit", &m_pass_triggerbit, "pass_triggerbit/I") ;
+      m_smallT->Branch ("cross_monitoring_trig", &m_cross_monitoring_trig, "cross_monitoring_trig/O") ;
       m_smallT->Branch ("rho", &m_rho, "rho/F") ;
 
       m_smallT->Branch ("pairType", &m_pairType, "pairType/I") ;
@@ -635,6 +639,7 @@ struct smallTree
       m_smallT->Branch ("dau1_flav", &m_dau1_flav, "dau1_flav/F") ;
       m_smallT->Branch ("dau1_dxy", &m_dau1_dxy, "dau1_dxy/F") ;
       m_smallT->Branch ("dau1_dz", &m_dau1_dz, "dau1_dz/F") ;
+      m_smallT->Branch ("dau1_decayMode", &m_dau1_decayMode, "dau1_decayMode/I") ;
 
       m_smallT->Branch("genmatched1_pt", &m_genmatched1_pt, "genmatched1_pt/F");
       m_smallT->Branch("genmatched1_eta", &m_genmatched1_eta, "genmatched1_eta/F");
@@ -668,6 +673,7 @@ struct smallTree
       m_smallT->Branch ("dau2_flav", &m_dau2_flav, "dau2_flav/F") ;
       m_smallT->Branch ("dau2_dxy", &m_dau2_dxy, "dau2_dxy/F") ;
       m_smallT->Branch ("dau2_dz", &m_dau2_dz, "dau2_dz/F") ;
+      m_smallT->Branch ("dau2_decayMode", &m_dau2_decayMode, "dau2_decayMode/I") ;
 
       m_smallT->Branch ("bjet1_pt", &m_bjet1_pt, "bjet1_pt/F") ;
       m_smallT->Branch ("bjet1_eta", &m_bjet1_eta, "bjet1_eta/F") ;
@@ -1094,6 +1100,7 @@ struct smallTree
   Int_t m_lumi ;
   Long64_t m_triggerbit ;
   int m_pass_triggerbit ;
+  Bool_t m_cross_monitoring_trig ;
   Float_t m_rho ;
 
   Int_t m_pairType ;
@@ -1148,6 +1155,7 @@ struct smallTree
   Float_t m_dau1_flav ; // let this contain also whether it's a hadronic dau
   Float_t m_dau1_dxy ;
   Float_t m_dau1_dz ;
+  Int_t   m_dau1_decayMode ;
 
   Float_t m_genmatched1_pt ;
   Float_t m_genmatched1_eta ;
@@ -1182,6 +1190,7 @@ struct smallTree
   Float_t m_dau2_flav ; // let this contain also whether it's a hadronic dau
   Float_t m_dau2_dxy ;
   Float_t m_dau2_dz ;
+  Int_t m_dau2_decayMode ;
 
   // the largest pT b visible candidate /  highest CSV score
   Float_t m_bjet1_pt ;
