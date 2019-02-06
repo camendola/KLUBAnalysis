@@ -676,7 +676,7 @@ cout << "--- MAIN reading and filling OS histos with relaxed ISO" << endl ;
       
       cout << "FITTING "<<selections_SS.at (icut).first.Data ()<<" FOR VAR "<<variablesList.at (ivar) <<endl;
       //TF1 *fit = new TF1()
-      
+      int fitStatus = g->Fit(fit);
       TF1 *fitcheck = new TF1("dummy0","pol0");
       g->Fit(fitcheck);
 
@@ -786,10 +786,10 @@ cout << "--- MAIN reading and filling OS histos with relaxed ISO" << endl ;
       htight->Sumw2();
       TF2 *fit = new TF2("dummy1","[0]+[1]*x+[2]*y");
       TGraph2DErrors *g = FitShape2D(htight,hloose);
-      
+
       //cout << "FITTING "<<selections_SS.at (icut).first.Data ()<<" FOR VAR "<<variables2DList.at (ivar) <<endl;
       //TF1 *fit = new TF1()
-      int fitStatus = g->Fit(fit);
+      //int fitStatus = g->Fit(fit);
       /*   //need to check ho to do the 2D check
       TF2 *fitcheck = new TF1("dummy0","[0]");
       g->Fit(fitcheck);

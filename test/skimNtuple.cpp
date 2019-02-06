@@ -1884,8 +1884,6 @@ int main (int argc, char** argv)
 		       << " iso="  << getIso (iLep, tlv_dummyLepton.Pt (), theBigTree)
 		       << " dxy="  << theBigTree.dxy->at(iLep)
 		       << " dz="   << theBigTree.dz->at(iLep)
-		       << " elePassConvVeto=" << theBigTree.daughters_passConversionVeto->at(iLep)
-		       << " eleMissingHits="  << theBigTree.daughters_eleMissingHits->at(iLep)
 		       << endl;
 		}
           
@@ -2434,6 +2432,7 @@ int main (int argc, char** argv)
       
       float idAndIsoSF = 1.0;
       float idAndIsoSF_vtight = 1.0;
+      float idAndIsoSF_decayMode = 1.0;
 
       // MuTau Channel
       if (pType == 0 && isMC)
@@ -2447,17 +2446,23 @@ int main (int argc, char** argv)
 	  float idAndIsoSF_leg1 = 1.;
 	  float idAndIsoSF_leg2 = 1.;
 	  float idAndIsoSF_leg2_vtight = 1.;
+	  float idAndIsoSF_leg2_decayMode = 1.;
 	  if (fabs(mu1eta < 2.4)){
 	    idAndIsoSF_leg1 = myIDandISOScaleFactor[0]->get_ScaleFactor(mu1pt, mu1eta);
 	  }
 	  
 	  if (lep2HasTES) {
 	    idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
-        idAndIsoSF_leg2_vtight = 0.86; // TauPOG recommendation for 2017 data (vtight WP)
-	    isFakeJet2 = false;}
+	    idAndIsoSF_leg2_vtight = 0.86; // TauPOG recommendation for 2017 data (vtight WP)
+	    if(theSmallTree.m_dau2_decayMode == 0) idAndIsoSF_leg2_decayMode = 1.06;
+	    if(theSmallTree.m_dau2_decayMode == 1) idAndIsoSF_leg2_decayMode = 1.;
+	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.91;
+	    isFakeJet2 = false;
+	  }
 	  
 	  idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
 	  idAndIsoSF_vtight = idAndIsoSF_leg1 * idAndIsoSF_leg2_vtight;
+	  idAndIsoSF_decayMode = idAndIsoSF_leg1 * idAndIsoSF_leg2_decayMode;
 
       if (DEBUG)
       {
@@ -2479,6 +2484,7 @@ int main (int argc, char** argv)
 	  float idAndIsoSF_leg1 = 1.;
 	  float idAndIsoSF_leg2 = 1.;
 	  float idAndIsoSF_leg2_vtight = 1.;
+	  float idAndIsoSF_leg2_decayMode = 1.;
 
 	  if (fabs(ele1eta < 2.4)){
 	    idAndIsoSF_leg1 = myIDandISOScaleFactor[1]->get_ScaleFactor(ele1pt, ele1eta);
@@ -2486,11 +2492,15 @@ int main (int argc, char** argv)
 	  
 	  if (lep2HasTES){
 	    idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
-        idAndIsoSF_leg2_vtight = 0.86; // https://indico.cern.ch/event/776359/contributions/3229380/attachments/1759348/2853860/tauID.pdf
+	    idAndIsoSF_leg2_vtight = 0.86; // https://indico.cern.ch/event/776359/contributions/3229380/attachments/1759348/2853860/tauID.pdf
+	    if(theSmallTree.m_dau2_decayMode == 0)  idAndIsoSF_leg2_decayMode = 1.06;
+	    if(theSmallTree.m_dau2_decayMode == 1)  idAndIsoSF_leg2_decayMode = 1.;
+	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.91;
 	    isFakeJet2 = false;
 	  }
 	  idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
 	  idAndIsoSF_vtight = idAndIsoSF_leg1 * idAndIsoSF_leg2_vtight;
+	  idAndIsoSF_decayMode = idAndIsoSF_leg1* idAndIsoSF_leg2_decayMode;
 
       if (DEBUG)
       {
@@ -2510,28 +2520,38 @@ int main (int argc, char** argv)
 	  float idAndIsoSF_leg2 = 1.;
 	  float idAndIsoSF_leg1_vtight = 1.;
 	  float idAndIsoSF_leg2_vtight = 1.;
+	  float idAndIsoSF_leg1_decayMode = 1.;
+	  float idAndIsoSF_leg2_decayMode = 1.;
+
 
 	  if (lep1HasTES) {
 	    idAndIsoSF_leg1 = 0.89;
 	    idAndIsoSF_leg1_vtight = 0.86;
+	    if(theSmallTree.m_dau1_decayMode == 0)  idAndIsoSF_leg2_decayMode = 1.06;
+	    if(theSmallTree.m_dau1_decayMode == 1)  idAndIsoSF_leg2_decayMode = 1.;
+	    if(theSmallTree.m_dau1_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.91;
 	    isFakeJet1 = false;
 	  }
 	  if (lep2HasTES) {
 	    idAndIsoSF_leg2 = 0.89;
-        idAndIsoSF_leg2_vtight = 0.86;
+	    idAndIsoSF_leg2_vtight = 0.86;
+	    if(theSmallTree.m_dau2_decayMode == 0)  idAndIsoSF_leg2_decayMode = 1.06;
+	    if(theSmallTree.m_dau2_decayMode == 1)  idAndIsoSF_leg2_decayMode = 1.;
+	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.91;
 	    isFakeJet2 = false;
 	  }
 	  idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
-      idAndIsoSF_vtight = idAndIsoSF_leg1_vtight * idAndIsoSF_leg2_vtight;
-
-      if (DEBUG)
-      {
-        cout << "--- DEBUG idAndIsoSF ---" << endl;
-        cout << "pairType: " << pType << endl;
-        cout << "leg1 : " << idAndIsoSF_leg1 << endl;
-        cout << "leg2 : " << idAndIsoSF_leg2 << endl;
-        cout << "totSF: " << idAndIsoSF << endl;
-      }
+	  idAndIsoSF_vtight = idAndIsoSF_leg1_vtight * idAndIsoSF_leg2_vtight;
+	  idAndIsoSF_decayMode = idAndIsoSF_leg1_decayMode * idAndIsoSF_leg2_decayMode;
+	  
+	  if (DEBUG)
+	    {
+	      cout << "--- DEBUG idAndIsoSF ---" << endl;
+	      cout << "pairType: " << pType << endl;
+	      cout << "leg1 : " << idAndIsoSF_leg1 << endl;
+	      cout << "leg2 : " << idAndIsoSF_leg2 << endl;
+	      cout << "totSF: " << idAndIsoSF << endl;
+	    }
 	}
       
       // MuMu Channel
@@ -2555,14 +2575,14 @@ int main (int argc, char** argv)
 	  
 	  idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
 
-      if (DEBUG)
-      {
-        cout << "--- DEBUG idAndIsoSF ---" << endl;
-        cout << "pairType: " << pType << endl;
-        cout << "leg1 : " << idAndIsoSF_leg1 << endl;
-        cout << "leg2 : " << idAndIsoSF_leg2 << endl;
-        cout << "totSF: " << idAndIsoSF << endl;
-      }
+	  if (DEBUG)
+	    {
+	      cout << "--- DEBUG idAndIsoSF ---" << endl;
+	      cout << "pairType: " << pType << endl;
+	      cout << "leg1 : " << idAndIsoSF_leg1 << endl;
+	      cout << "leg2 : " << idAndIsoSF_leg2 << endl;
+	      cout << "totSF: " << idAndIsoSF << endl;
+	    }
 	}
       
       // EleEle Channel
@@ -2598,6 +2618,7 @@ int main (int argc, char** argv)
       // Save the IDandISO SF (event per event)
       theSmallTree.m_IdAndIsoSF = (isMC ? idAndIsoSF : 1.0);
       theSmallTree.m_IdAndIsoSF_vtight = (isMC ? idAndIsoSF_vtight : 1.0);
+      theSmallTree.m_IdAndIsoSF_decayMode = (isMC ? idAndIsoSF_decayMode : 1.0);
       
       
       // DATA/MC e, mu fake rate Scale Factors
@@ -3055,8 +3076,6 @@ int main (int argc, char** argv)
 		   << " iso="  << getIso (iLep, tlv_dummyLepton.Pt (), theBigTree)
 		   << " dxy="  << theBigTree.dxy->at(iLep)
 		   << " dz="   << theBigTree.dz->at(iLep)
-		   << " elePassConvVeto=" << theBigTree.daughters_passConversionVeto->at(iLep)
-		   << " eleMissingHits="  << theBigTree.daughters_eleMissingHits->at(iLep)
 		   << endl;
 	    }
 
