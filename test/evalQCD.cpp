@@ -676,7 +676,7 @@ cout << "--- MAIN reading and filling OS histos with relaxed ISO" << endl ;
       
       cout << "FITTING "<<selections_SS.at (icut).first.Data ()<<" FOR VAR "<<variablesList.at (ivar) <<endl;
       //TF1 *fit = new TF1()
-      int fitStatus = g->Fit(fit);
+      
       TF1 *fitcheck = new TF1("dummy0","pol0");
       g->Fit(fitcheck);
 

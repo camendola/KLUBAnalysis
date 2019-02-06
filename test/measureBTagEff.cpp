@@ -372,8 +372,9 @@ int main(int argc, char** argv)
 //cout << " ON More Jest: " << jets_pt->size() << endl;
                 for (unsigned int ijet = 0; ijet < jets_pt->size(); ijet++)
                 {
-                    bool hasgenjet = jets_hasgenjet->at(ijet);
-                    if (hasgenjet)
+		  //bool hasgenjet = jets_hasgenjet->at(ijet);
+                  //  if (hasgenjet)
+		  if (true)
                     {
                         //bTag[0] = (jets_btag->at(ijet) > WPtag[0]) ;
                         //bTag[1] = (jets_btag->at(ijet) > WPtag[1]) ;
