@@ -10,7 +10,7 @@ observation    _NDATA_regD_
 bin             _DM_	_DM_	_DM_	_DM_	_DM_
 process         0taus  1taus   2taus 	QCD	sig
 process         1      2       3	4	0	
-rate            _N0TAUS_regD_  _N1TAUS_regD_	_N2TAUS_regD_	_QCD_	0
+rate            _N0TAUS_regD_  _N1TAUS_regD_	_N2TAUS_regD_	_QCD_regD_	0
 ------------
-QCD_regD rateParam  _DM_ QCD 1
+QCD_regD rateParam  _DM_ QCD _QCD_regD_
 

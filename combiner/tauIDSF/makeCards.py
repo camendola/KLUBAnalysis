@@ -71,7 +71,7 @@ inFileDir = "../../analysis_TauTau_"+args.tag
 inFileName = "/analyzedOutPlotter.root"
 inFile = TFile.Open(inFileDir+inFileName)
 
-cfgName  =  inFileDir + "/mainCfg_TauTau.cfg"
+cfgName  =  inFileDir + "/mainCfg_TauTau_tauIDSF.cfg"
 cfg        = cfgr.ConfigReader (cfgName)
 bkgList    = cfg.readListOption("general::backgrounds")
 dataList   = ["data_obs"]
@@ -147,7 +147,7 @@ for reg in regions:
         card = card.replace('_N0TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(1),2)))    
         card = card.replace('_N1TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(2),2)))    
         card = card.replace('_N2TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(3),2)))
-        card = card.replace('_QCD'+suffix+'_', "1")
+        card = card.replace('_QCD'+suffix+'_',   str(round(hData.GetBinContent(0)-bkgSum.Integral(),2)))
         card = card.replace('_DM_', args.decay)    
         card = card.replace('_SF_', 'SF_'+args.decay)    
 
@@ -158,5 +158,5 @@ for reg in regions:
 if not args.qcd:
     os.chdir(args.tag+'/'+sel)
     os.system('echo $PWD')    
-    os.system('combineCards.py datacard.txt datacard_regC.txt datacard_regD.txt datacard_regB.txt > combined.txt')
+    os.system('combineCards.py SR=datacard.txt regC=datacard_regC.txt regD=datacard_regD.txt regB=datacard_regB.txt > combined.txt')
     os.chdir('../..')
