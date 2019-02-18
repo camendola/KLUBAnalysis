@@ -87,6 +87,11 @@ def writeCombCommand(decay, isqcd):
             param = ["SF_" + decay1, "SF_" + decay2]
             paramRange = ["0.5,1.5", "0.5,1.5"]
             algo="cross"
+        else:
+            datacard = "combined"
+            param = ["SF_" + decay1, "SF_" + decay2,"QCD_regC", "QCD_regD", "QCD_regB" ]
+            paramRange = ["0.5,1.5","0.5,1.5", "0,1000", "0,1000", "0,1000"]
+            algo="cross"
 
 
    # create workspace
@@ -238,21 +243,23 @@ for reg in regions:
     	                if not line.startswith("alpha") : 
     	                    outfile.write(line)
     	
-    	#else:
-    	#    with open("templates/datacard_template"+suffix+".txt","r") as template:
-    	#        card = template.read()
-    	#
-    	#    card = card.replace('_NDATA'+suffix+'_',  str(round(hData.GetBinContent(0),2)))    
-    	#    card = card.replace('_N0TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(1),2)))    
-    	#    card = card.replace('_N1TAUS1'+suffix+'_', str(round(bkgSum.GetBinContent(2),2)))    
-        #    card = card.replace('_N1TAUS2'+suffix+'_', str(round(bkgSum.GetBinContent(2),2)))    
-    	#    card = card.replace('_N2TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(3),2)))
-    	#    card = card.replace('_QCD'+suffix+'_',   str(round(hData.GetBinContent(0)-bkgSum.Integral(),2)))
-    	#    card = card.replace('_DM_', args.decay)    
-    	#    card = card.replace('_SF_', 'SF_'+args.decay)    
-    	#
-    	#    with open(args.tag+"/"+sel+"/datacard"+suffix+".txt", "w+") as outfile:
-    	#        outfile.write(card)
+    	else:
+    	    with open("templates/datacard_template_cross"+suffix+".txt","r") as template:
+    	        card = template.read()
+    	
+    	    card = card.replace('_NDATA'+suffix+'_',  str(round(hData.GetBinContent(0),2)))    
+    	    card = card.replace('_N0TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(1),2)))    
+    	    card = card.replace('_N1TAUS1'+suffix+'_', str(round((bkgSum.GetBinContent(2) + bkgSum.GetBinContent(3) - bkgSum2.GetBinContent(2)),2)))    
+            card = card.replace('_N1TAUS2'+suffix+'_', str(round((bkgSum.GetBinContent(2) + bkgSum.GetBinContent(3) - bkgSum1.GetBinContent(2)),2)))    
+    	    card = card.replace('_N2TAUS'+suffix+'_', str(round(bkgSum.GetBinContent(3),2)))
+    	    card = card.replace('_QCD'+suffix+'_',   str(round(hData.GetBinContent(0)-bkgSum.Integral(),2)))
+            card = card.replace('_NQCD_', "1")
+            card = card.replace('_SF1_', 'SF_'+decay1)    
+            card = card.replace('_SF2_', 'SF_'+decay2)    
+            card = card.replace('_SFcross_', 'SF_'+decay1+"_"+decay2)    
+    	
+    	    with open(args.tag+"/"+sel+"/datacard"+suffix+".txt", "w+") as outfile:
+    	        outfile.write(card)
 
 
     ### SYSTEMATICS
