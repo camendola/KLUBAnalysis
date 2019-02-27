@@ -63,9 +63,22 @@ const double bTopRW = -0.0005;
 // const float DYscale_MM[3] = {9.44841e-01, 1.29404e+00, 1.28542e+00} ;
 const float DYscale_LL[3] = {1.13604, 0.784789, 1.06947} ; // computed from fit for LL and MM b tag - to be updated for DY LO once the disagreement is fixed
 const float DYscale_MM[3] = {1.11219, 1.11436, 0.743777} ; // for now we use the same numbers computed with DY NLO sample
-const float DYscale_LL_NLO[3] = {1.13604, 0.784789, 1.06947} ; // computed from fit for LL and MM b tag for the DYNLO sample
+//const float DYscale_LL_NLO[3] = {1.13604, 0.784789, 1.06947} ; // computed from fit for LL and MM b tag for the DYNLO sample
 //const float DYscale_MM_NLO[3] = {1.11219, 1.11436, 0.743777} ;
-const float DYscale_MM_NLO[3] = {1.03277, 1.03968, 0.742346} ;
+//const float DYscale_MM_NLO[3] = {1.03277, 1.03968, 0.742346} ;
+
+// Computed from PI group for DY NLO binned
+// - number of b-jets [0b, 1b, 2b]
+// - pT(MuMu):
+//   - < 20 GeV
+//   - between 20 and 40 GeV
+//   - between 40 and 100 GeV
+//   - > 100 GeV
+const float DYscale_NLO_VLowPt[3] = {1.283, 0.699, 1.103};
+const float DYscale_NLO_LowPt [3] = {  1.1, 0.938,  0.81};
+const float DYscale_NLO_MedPt [3] = {1.006, 1.187, 0.524};
+const float DYscale_NLO_HighPt[3] = {0.918, 1.322, 0.654};
+
 
 /* NOTE ON THE COMPUTATION OF STITCH WEIGHTS:
 ** - to be updated at each production, using the number of processed events N_inclusive and N_njets for each sample
@@ -902,8 +915,20 @@ int main (int argc, char** argv)
   //tau legs trigger SF for data and mc 2017
   //TauTriggerSFs2017 * tauTrgSF = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root","medium");
   //updated: https://hypernews.cern.ch/HyperNews/CMS/get/tauid/858.html
-  TauTriggerSFs2017 * tauTrgSF = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017_New.root","weights/trigger_SF_2017/tauTriggerEfficiencies2017.root","medium","MVA");
-  TauTriggerSFs2017 * tauTrgSFvtight = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017_New.root","weights/trigger_SF_2017/tauTriggerEfficiencies2017.root","vtight","MVA");
+  //TauTriggerSFs2017 * tauTrgSF = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017_New.root","weights/trigger_SF_2017/tauTriggerEfficiencies2017.root","medium","MVA");
+  //TauTriggerSFs2017 * tauTrgSFvtight = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017_New.root","weights/trigger_SF_2017/tauTriggerEfficiencies2017.root","vtight","MVA");
+  //updated February 2019
+  TauTriggerSFs2017 * tauTrgSF_ditau = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root", "ditau", "2017", "medium", "MVAv2");
+  TauTriggerSFs2017 * tauTrgSF_ditau_vtight = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root", "ditau", "2017", "vtight", "MVAv2");
+
+  TauTriggerSFs2017 * tauTrgSF_mutau = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root", "mutau", "2017", "medium", "MVAv2");
+  TauTriggerSFs2017 * tauTrgSF_mutau_vtight = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root", "mutau", "2017", "vtight", "MVAv2");
+
+  TauTriggerSFs2017 * tauTrgSF_etau = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root", "etau", "2017", "medium", "MVAv2");
+  TauTriggerSFs2017 * tauTrgSF_etau_vtight = new TauTriggerSFs2017("weights/trigger_SF_2017/tauTriggerEfficiencies2017.root", "etau", "2017", "vtight", "MVAv2");
+
+
+  // electron/muon leg trigger SF for data and mc 2017
   ScaleFactor * muTauTrgSF = new ScaleFactor();
   ScaleFactor * eTauTrgSF = new ScaleFactor();
   ScaleFactor * muTrgSF = new ScaleFactor();
@@ -1343,62 +1368,85 @@ int main (int argc, char** argv)
       theSmallTree.m_DYscale_MM_NLO = 1.0;
 
       if (isMC && isDY) //to be done both for DY NLO and DY in jet bins
-	{
-	  TLorentzVector vgj;
-	  int nbs = 0;
-	  for (unsigned int igj = 0; igj < theBigTree.genjet_px->size(); igj++)
+      {
+        TLorentzVector vgj;
+        int nbs = 0;
+        for (unsigned int igj = 0; igj < theBigTree.genjet_px->size(); igj++)
+        {
+          vgj.SetPxPyPzE(theBigTree.genjet_px->at(igj), theBigTree.genjet_py->at(igj), theBigTree.genjet_pz->at(igj), theBigTree.genjet_e->at(igj));
+          if (vgj.Pt() > 20 && TMath::Abs(vgj.Eta()) < 2.5)
+          {
+            int theFlav = theBigTree.genjet_hadronFlavour->at(igj);
+            if (abs(theFlav) == 5) nbs++;
+          }
+
+          if(DEBUG)
+          {
+            cout << " -- gen jet : " << igj << " pt=" << vgj.Pt() << " eta=" << vgj.Eta() <<  " hadFlav=" << theBigTree.genjet_hadronFlavour->at(igj) << endl;
+          }
+        }
+        if (nbs > 2) nbs = 2;
+
+        theSmallTree.m_nBhadrons = nbs;
+        theSmallTree.m_DYscale_LL = DYscale_LL[nbs];
+        theSmallTree.m_DYscale_MM = DYscale_MM[nbs];
+
+        // loop through gen parts ot identify Z boson
+        int idx1 = -1;
+        for (unsigned int igen = 0; igen < theBigTree.genpart_px->size(); igen++)
 	    {
-	      vgj.SetPxPyPzE(theBigTree.genjet_px->at(igj), theBigTree.genjet_py->at(igj), theBigTree.genjet_pz->at(igj), theBigTree.genjet_e->at(igj));
-	      if (vgj.Pt() > 20 && TMath::Abs(vgj.Eta()) < 2.5)
-		{
-
-		  int theFlav = theBigTree.genjet_hadronFlavour->at(igj);
-		  if (abs(theFlav) == 5) nbs++;
-              
-		  // about 2% of DY events print the following message :-(
-		  // if (theFlav == -999) cout << "** warning: gen jet with flav = -999 of pt: " << vgj.Pt() << " eta: " << vgj.Eta() << endl;
-		}
-
-	      if(DEBUG)
-		{
-		  cout << " -- gen jet : " << igj << " pt=" << vgj.Pt() << " eta=" << vgj.Eta() <<  " hadFlav=" << theBigTree.genjet_hadronFlavour->at(igj) << endl;
-		}
-
-	    }
-	  if (nbs > 2) nbs = 2;
-	  theSmallTree.m_nBhadrons = nbs;
-	  theSmallTree.m_DYscale_LL = DYscale_LL[nbs];
-	  theSmallTree.m_DYscale_MM = DYscale_MM[nbs];
-	  theSmallTree.m_DYscale_LL_NLO = DYscale_LL_NLO[nbs];
-	  theSmallTree.m_DYscale_MM_NLO = DYscale_MM_NLO[nbs];
-
-	  // loop through gen parts ot identify Z boson
-	  int idx1 = -1;
-	  for (unsigned int igen = 0; igen < theBigTree.genpart_px->size(); igen++)
-	    {
-	      if (theBigTree.genpart_pdg->at(igen) == 23) // Z0
-		{
-		  // bool isFirst = CheckBit (theBigTree.genpart_flags->at(igen), 12) ; // 12 = isFirstCopy
-		  if (idx1 >= 0)
-		    {
-		      cout << "** ERROR: more than 1 Z identified " << endl;
-		      // continue; // no need to skip the event for errors in gen info
-		    }
-		  idx1 = igen;
-		}
+          if (theBigTree.genpart_pdg->at(igen) == 23) // Z0
+          {
+            idx1 = igen;
+          }
 	    }
 
-	  if (idx1 >= 0)
+	    // if found, Build the genZ TLorentzVector
+	    float genZ_pt = -999.;
+	    if (idx1 >= 0)
 	    {
-	      // cout << "** GOOD: could find 1 Z" << endl;
 	      // store gen decay mode of the Z identified
 	      theSmallTree.m_genDecMode1 = theBigTree.genpart_HZDecayMode->at(idx1);
+
+	      // build the genZ TLorentzVector
+	      TLorentzVector genZ;
+	      genZ.SetPxPyPzE(theBigTree.genpart_px->at(idx1), theBigTree.genpart_py->at(idx1), theBigTree.genpart_pz->at(idx1), theBigTree.genpart_e->at(idx1));
+	      genZ_pt = genZ.Pt();
+
+	      // Fill DY NLO weights according to nbs and pT(Z)
+          if (genZ_pt < 20.)
+          {
+            theSmallTree.m_DYscale_LL_NLO = DYscale_NLO_VLowPt[nbs];
+            theSmallTree.m_DYscale_MM_NLO = DYscale_NLO_VLowPt[nbs];
+          }
+          else if (genZ_pt >= 20. && genZ_pt < 40.)
+          {
+            theSmallTree.m_DYscale_LL_NLO = DYscale_NLO_LowPt[nbs];
+            theSmallTree.m_DYscale_MM_NLO = DYscale_NLO_LowPt[nbs];
+          }
+          else if (genZ_pt >= 40. && genZ_pt < 100.)
+          {
+            theSmallTree.m_DYscale_LL_NLO = DYscale_NLO_MedPt[nbs];
+            theSmallTree.m_DYscale_MM_NLO = DYscale_NLO_MedPt[nbs];
+          }
+          else /* pT(Z)>=100. */
+          {
+            theSmallTree.m_DYscale_LL_NLO = DYscale_NLO_HighPt[nbs];
+            theSmallTree.m_DYscale_MM_NLO = DYscale_NLO_HighPt[nbs];
+          }
 	    }
-	  // else // probably these are events mediated by a photon where I do not have Z info
-	  // {
-	  //   cout << "** ERROR: couldn't find 1 Z" << endl;
-	  // }
-	}
+
+        // Debug printout
+        if(DEBUG)
+        {
+            cout << "------- DY NLO reweight ------" << endl;
+            cout << " - nbs  : " << nbs << endl;
+            cout << " - pT(Z): " << genZ_pt << endl;
+            cout << " - DYscale_MM     : " << theSmallTree.m_DYscale_MM << endl;
+            cout << " - DYscale_MM_NLO : " << theSmallTree.m_DYscale_MM_NLO << endl;
+            cout << "--------------------------" << endl;
+        }
+      }
 
       // New DY reweight
       if (isMC && doDYLOtoNLOreweight)
@@ -1458,12 +1506,6 @@ int main (int argc, char** argv)
             {
                 if (theBigTree.genpart_pdg->at(igen) == 23) // Z0
                 {
-                    // bool isFirst = CheckBit (theBigTree.genpart_flags->at(igen), 12) ; // 12 = isFirstCopy
-                    if (idx1 >= 0)
-                    {
-                        //cout << "** ERROR: more than 1 Z identified " << endl;
-                        // continue; // no need to skip the event for errors in gen info
-                    }
                     idx1 = igen;
                 }
             }
@@ -1878,6 +1920,8 @@ int main (int argc, char** argv)
       
 		  cout << " idx="  << iLep
 		       << " type=" << theBigTree.particleType->at(iLep)
+		       << " DM="   << theBigTree.decayMode->at(iLep)
+		       << " DMold="<< theBigTree.daughters_decayModeFindingOldDMs->at(iLep)
 		       << " pt="   << tlv_dummyLepton.Pt()
 		       << " eta="  << tlv_dummyLepton.Eta()
 		       << " phi="  << tlv_dummyLepton.Phi()
@@ -1987,21 +2031,25 @@ int main (int argc, char** argv)
       bool lep1HasTES = false;
       bool lep2HasTES = false;
       
+      int DM1 = theBigTree.decayMode->at(firstDaughterIndex);
+      int DM2 = theBigTree.decayMode->at(secondDaughterIndex);
+      if (DM1 == 2) DM1 = 1;
+      if (DM2 == 2) DM2 = 1;
 
       //save decaymode
       if(pairType == 0){ //mutauh
 	theSmallTree.m_dau1_decayMode = -1;
-	theSmallTree.m_dau2_decayMode = theBigTree.decayMode->at(secondDaughterIndex);
+	theSmallTree.m_dau2_decayMode = DM2;
       }
 
       if(pairType == 1){ //etauh
 	theSmallTree.m_dau1_decayMode = -1;
-	theSmallTree.m_dau2_decayMode = theBigTree.decayMode->at(secondDaughterIndex);
+	theSmallTree.m_dau2_decayMode = DM2;
       }
 
       if(pairType == 2){ //tauhtauh
-	theSmallTree.m_dau1_decayMode = theBigTree.decayMode->at(firstDaughterIndex);
-	theSmallTree.m_dau2_decayMode = theBigTree.decayMode->at(secondDaughterIndex);
+	theSmallTree.m_dau1_decayMode = DM1;
+	theSmallTree.m_dau2_decayMode = DM2;
       }
 
       if(pairType > 2){ //pairs without tauh
@@ -2914,6 +2962,13 @@ int main (int argc, char** argv)
 	  if (pType == 0 && isMC)
 	    {
 	      if(fabs(tlv_secondLepton.Eta()) < 2.1){ //eta region covered both by cross-trigger and single lepton trigger
+		
+		int passCross = 1;
+		int passSingle = 1;
+		
+		if (tlv_firstLepton.Pt() < 26.) passSingle = 0;  
+		if (tlv_secondLepton.Pt() < 32.) passCross = 0;  
+
 		//lepton trigger
 		double SFL_Data = muTrgSF->get_EfficiencyData(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
 		double SFL_MC = muTrgSF->get_EfficiencyMC(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
@@ -2924,40 +2979,46 @@ int main (int argc, char** argv)
 		double SFl_MC = muTauTrgSF->get_EfficiencyMC(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
 
 		//tau leg
-		double SFtau_Data = tauTrgSF->getMuTauEfficiencyData(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
-		double SFtau_MC = tauTrgSF->getMuTauEfficiencyMC(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
+		double SFtau_Data = tauTrgSF_mutau->getTriggerEfficiencyData(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
+		double SFtau_MC = tauTrgSF_mutau->getTriggerEfficiencyMC(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
 		
-		double Eff_Data =  SFL_Data * (1 - SFtau_Data) + SFl_Data * SFtau_Data;
-		double Eff_MC =  SFL_MC * (1 - SFtau_MC) + SFl_MC * SFtau_MC;
+		double Eff_Data =  passSingle * SFL_Data * (1 - passCross * SFtau_Data) + passCross * SFl_Data * SFtau_Data;
+		double Eff_MC   =  passSingle * SFL_MC * (1 - passCross * SFtau_MC) + passCross * SFl_MC * SFtau_MC;
 
 		trigSF = Eff_Data / Eff_MC;
 
-		double SFtau_Data_vtight = tauTrgSFvtight->getMuTauEfficiencyData(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
-		double SFtau_MC_vtight = tauTrgSFvtight->getMuTauEfficiencyMC(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
+		double SFtau_Data_vtight = tauTrgSF_mutau_vtight->getTriggerEfficiencyData(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
+		double SFtau_MC_vtight = tauTrgSF_mutau_vtight->getTriggerEfficiencyMC(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
 
-		double Eff_Data_vtight =  SFL_Data * (1 - SFtau_Data_vtight) + SFl_Data * SFtau_Data_vtight;
-		double Eff_MC_vtight =  SFL_MC * (1 - SFtau_MC_vtight) + SFl_MC * SFtau_MC_vtight;
+		double Eff_Data_vtight =  passSingle * SFL_Data * (1 - passCross * SFtau_Data_vtight) + passCross * SFl_Data * SFtau_Data_vtight;
+		double Eff_MC_vtight   =  passSingle * SFL_MC * (1 - passCross * SFtau_MC_vtight) + passCross * SFl_MC * SFtau_MC_vtight;
 
 		trigSF_vtight = Eff_Data_vtight / Eff_MC_vtight;
 
 		//trig SF for analysis only with cross-trigger
 		double SFl = muTauTrgSF->get_ScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
-		double SFtau = tauTrgSF->getMuTauScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi()); 
+		double SFtau = tauTrgSF_mutau->getTriggerScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi(),DM2);
 		trigSF_cross = SFl*SFtau;
-		double SFtau_vtight = tauTrgSFvtight->getMuTauScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
+		double SFtau_vtight = tauTrgSF_mutau_vtight->getTriggerScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi(),DM2);
 		trigSF_cross_vtight = SFl*SFtau_vtight;
 	      }else{ //eta region covered only by single lepton trigger
 		double SF = muTrgSF->get_ScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
 		trigSF = SF;
 	      }
 	      //trig SF for analysis only with single-mu trigger
-		trigSF_single =  muTrgSF->get_ScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
+	      trigSF_single =  muTrgSF->get_ScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
 	    }
 	  
 	  // EleTau Channel
 	  else if (pType == 1 && isMC)
 	    {
 	      if(fabs(tlv_secondLepton.Eta()) < 2.1){ //eta region covered both by cross-trigger and single lepton trigger
+		int passCross = 1;
+		int passSingle = 1;
+		
+		if (tlv_firstLepton.Pt() < 35.) passSingle = 0;  
+		if (tlv_secondLepton.Pt() < 35.) passCross = 0;  
+
 		//lepton trigger
 		double SFL_Data = eTrgSF->get_EfficiencyData(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
 		double SFL_MC = eTrgSF->get_EfficiencyMC(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
@@ -2968,27 +3029,27 @@ int main (int argc, char** argv)
 		double SFl_MC = eTauTrgSF->get_EfficiencyMC(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
 		
 		//tau leg
-		double SFtau_Data = tauTrgSF->getETauEfficiencyData(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
-		double SFtau_MC = tauTrgSF->getETauEfficiencyMC(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi()); 
+		double SFtau_Data = tauTrgSF_etau->getTriggerEfficiencyData(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
+		double SFtau_MC = tauTrgSF_etau->getTriggerEfficiencyMC(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
 		
-		double Eff_Data =  SFL_Data * (1 - SFtau_Data) + SFl_Data * SFtau_Data;
-		double Eff_MC =  SFL_MC* (1 - SFtau_MC) + SFl_MC * SFtau_MC;
+		double Eff_Data =  passSingle * SFL_Data * (1 - passCross * SFtau_Data) + passCross * SFl_Data * SFtau_Data;
+		double Eff_MC   =  passSingle * SFL_MC * (1 - passCross * SFtau_MC) + passCross * SFl_MC * SFtau_MC;
 		
 		trigSF = Eff_Data / Eff_MC;
 
-		double SFtau_Data_vtight = tauTrgSFvtight->getETauEfficiencyData(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
-		double SFtau_MC_vtight = tauTrgSFvtight->getETauEfficiencyMC(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
-		
-		double Eff_Data_vtight =  SFL_Data * (1 - SFtau_Data_vtight) + SFl_Data * SFtau_Data_vtight;
-		double Eff_MC_vtight =  SFL_MC* (1 - SFtau_MC_vtight) + SFl_MC * SFtau_MC_vtight;
+		double SFtau_Data_vtight = tauTrgSF_etau_vtight->getTriggerEfficiencyData(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
+		double SFtau_MC_vtight = tauTrgSF_etau_vtight->getTriggerEfficiencyMC(tlv_secondLepton.Pt(),tlv_secondLepton.Eta(),tlv_secondLepton.Phi(),DM2);
+
+		double Eff_Data_vtight =  passSingle * SFL_Data * (1 - passCross * SFtau_Data_vtight) + passCross * SFl_Data * SFtau_Data_vtight;
+		double Eff_MC_vtight   =  passSingle * SFL_MC * (1 - passCross * SFtau_MC_vtight) + passCross * SFl_MC * SFtau_MC_vtight;
 
 		trigSF_vtight = Eff_Data_vtight / Eff_MC_vtight;
 
 		//trig SF for analysis only with cross-trigger
 		double SFl = eTauTrgSF->get_ScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta());
-		double SFtau = tauTrgSF->getETauScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi()); 
+		double SFtau = tauTrgSF_etau->getTriggerScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi(),DM2);
 		trigSF_cross = SFl*SFtau;
-		double SFtau_vtight = tauTrgSFvtight->getETauScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi());
+		double SFtau_vtight = tauTrgSF_etau_vtight->getTriggerScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi(),DM2);
 		trigSF_cross_vtight = SFl*SFtau_vtight;
 
 	      }else{ //eta region covered only by single lepton trigger
@@ -3001,12 +3062,16 @@ int main (int argc, char** argv)
 	  // TauTau Channel
 	  else if (pType == 2 && isMC)
 	    {
-	      double SF1 = tauTrgSF->getDiTauScaleFactor( tlv_firstLepton.Pt(), tlv_firstLepton.Eta(), tlv_firstLepton.Phi() );
-	      double SF2 = tauTrgSF->getDiTauScaleFactor( tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi() );
+	      //double SF1 = tauTrgSF->getDiTauScaleFactor( tlv_firstLepton.Pt(), tlv_firstLepton.Eta(), tlv_firstLepton.Phi() );
+	      //double SF2 = tauTrgSF->getDiTauScaleFactor( tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi() );
+	      double SF1 = tauTrgSF_ditau->getTriggerScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta(), tlv_firstLepton.Phi(),DM1);
+	      double SF2 = tauTrgSF_ditau->getTriggerScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi(),DM2);
 	      trigSF = SF1 * SF2;
 
-	      double SF1_vtight = tauTrgSFvtight->getDiTauScaleFactor( tlv_firstLepton.Pt(), tlv_firstLepton.Eta(), tlv_firstLepton.Phi() );
-	      double SF2_vtight = tauTrgSFvtight->getDiTauScaleFactor( tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi() );
+	      //double SF1_vtight = tauTrgSFvtight->getDiTauScaleFactor( tlv_firstLepton.Pt(), tlv_firstLepton.Eta(), tlv_firstLepton.Phi() );
+	      //double SF2_vtight = tauTrgSFvtight->getDiTauScaleFactor( tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi() );
+	      double SF1_vtight = tauTrgSF_ditau_vtight->getTriggerScaleFactor(tlv_firstLepton.Pt(), tlv_firstLepton.Eta(), tlv_firstLepton.Phi(),DM1);
+	      double SF2_vtight = tauTrgSF_ditau_vtight->getTriggerScaleFactor(tlv_secondLepton.Pt(), tlv_secondLepton.Eta(), tlv_secondLepton.Phi(),DM2);
 	      trigSF_vtight = SF1_vtight * SF2_vtight;
 	    }
 	  
@@ -3125,6 +3190,19 @@ int main (int argc, char** argv)
          theBigTree.jets_pz->at (iJet),
          theBigTree.jets_e->at (iJet)
         ) ;
+
+        if (DEBUG)
+        {
+          cout << "------- Jet PU ID  DEBUG---------" << endl;
+          cout << "iJet: " << iJet << "  -- pT/Eta/Phi: " << tlv_jet.Pt() << "/" << tlv_jet.Eta() << "/" << tlv_jet.Phi() << endl;
+          cout << "discr: " << theBigTree.jets_PUJetID->at(iJet) << " --  discrUpdated: " << theBigTree.jets_PUJetIDupdated->at(iJet) << endl;
+          cout << "discrWP: " << theBigTree.jets_PUJetIDupdated_WP->at(iJet) << " -- bitwise: " << std::bitset<5>(theBigTree.jets_PUJetIDupdated_WP->at(iJet)) << endl;
+          cout << "Pass Loose : " << CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 2) << endl;
+          cout << "Pass Medium: " << CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 1) << endl;
+          cout << "Pass Tight : " << CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 0) << endl;
+          cout << "---------------------------------" << endl;
+        }
+
         if (tlv_jet.Pt () < 20.) continue ;
         if (tlv_jet.DeltaR (tlv_firstLepton) < lepCleaningCone) continue ;
         if (tlv_jet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
@@ -3136,9 +3214,11 @@ int main (int argc, char** argv)
         if (ajetHadFlav == 4) ++theSmallTree.m_njetsCHadFlav;
 
         if (TMath::Abs(tlv_jet.Eta()) > 2.4) continue; // 2.4 for b-tag
+        if ( !(CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 2)) ) continue; // PU jet ID loose for all b-jet candidates
+
         // n bjets candidates
         if (tlv_jet.Pt () > 20)  ++theSmallTree.m_nbjets20 ;
-	if (tlv_jet.Pt () > 50)   ++theSmallTree.m_nbjets50 ;
+        if (tlv_jet.Pt () > 50)   ++theSmallTree.m_nbjets50 ;
        
 	
         //float sortPar = (bChoiceFlag == 1 ) ? theBigTree.bCSVscore->at (iJet) : tlv_jet.Pt() ;
@@ -3204,11 +3284,10 @@ int main (int argc, char** argv)
             if (ijet.DeltaR (tlv_secondLepton) < lepCleaningCone) continue ;
             if(ijet.Pt() < 30.) continue;
             if(fabs(ijet.Eta()) > 5.) continue; // keeping the whole HF acceptance for the time being
-	    if(cleanJets) // removing low pt jets in noisy area, recommended by HTT
-	      {
-		if (ijet.Pt () < 50. && fabs(ijet.Eta()) < 3.139 && fabs(ijet.Eta()) > 2.65) continue;
-	      }
-	    
+            if(cleanJets) // removing low pt jets in noisy area, recommended by HTT
+            {
+              if (ijet.Pt () < 50. && fabs(ijet.Eta()) < 3.139 && fabs(ijet.Eta()) > 2.65 && !(CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 2)) ) continue;
+            }
 
 	    for (unsigned int kJet = iJet+1 ;   (kJet < theBigTree.jets_px->size ()) && (theSmallTree.m_njets < maxNjetsSaved) ;  ++kJet)
             {
@@ -3229,7 +3308,7 @@ int main (int argc, char** argv)
               if(fabs(kjet.Eta()) > 5.) continue;
 	      if(cleanJets) // removing low pt jets in noisy area, recommended by HTT
 		{
-		  if (kjet.Pt () < 50. && fabs(kjet.Eta()) < 3.139 && fabs(kjet.Eta()) > 2.65) continue;
+		  if (kjet.Pt () < 50. && fabs(kjet.Eta()) < 3.139 && fabs(kjet.Eta()) > 2.65 && !(CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 2)) ) continue;
 		}
 	      TLorentzVector jetPair = ijet+kjet;
 
@@ -3466,7 +3545,7 @@ int main (int argc, char** argv)
 
 	  if(cleanJets) // removing low pt jets in noisy area, recommended by HTT
 	    {
-	      if (tlv_jet.Pt () < 50. && fabs(tlv_jet.Eta()) < 3.139 && fabs(tlv_jet.Eta()) > 2.65) continue;
+	      if (tlv_jet.Pt () < 50. && fabs(tlv_jet.Eta()) < 3.139 && fabs(tlv_jet.Eta()) > 2.65 && !(CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 2)) ) continue;
 	    }
           // use these jets for HT
           if (tlv_jet.Pt () > 20)
@@ -4043,7 +4122,7 @@ int main (int argc, char** argv)
 	  
 	  if(cleanJets) // removing low pt jets in noisy area, recommended by HTT
 	    {
-	      if (tlv_dummyJet.Pt () < 50. && fabs(tlv_dummyJet.Eta()) < 3.139 && fabs(tlv_dummyJet.Eta()) > 2.65) continue;
+	      if (tlv_dummyJet.Pt () < 50. && fabs(tlv_dummyJet.Eta()) < 3.139 && fabs(tlv_dummyJet.Eta()) > 2.65 && !(CheckBit(theBigTree.jets_PUJetIDupdated_WP->at(iJet), 2)) ) continue;
 	    }
           // remove jets that overlap with the tau selected in the leg 1 and 2
           if (tlv_firstLepton.DeltaR(tlv_dummyJet) < lepCleaningCone){

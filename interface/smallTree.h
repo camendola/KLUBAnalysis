@@ -23,7 +23,6 @@ struct smallTree
   int clearVars ()
     {
       m_MC_weight = -1. ;
-      m_PUReweight = -1. ;
       m_bTagweightL = -1. ;
       m_bTagweightM = -1. ;
       m_bTagweightT = -1. ;
