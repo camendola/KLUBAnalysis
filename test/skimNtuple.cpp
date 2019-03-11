@@ -2554,7 +2554,7 @@ int main (int argc, char** argv)
 	  if (lep2HasTES) {
 	    idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
 	    idAndIsoSF_leg2_vtight = 0.86; // TauPOG recommendation for 2017 data (vtight WP)
-	    if(theSmallTree.m_dau2_decayMode == 0) idAndIsoSF_leg2_decayMode = 0.89;
+	    if(theSmallTree.m_dau2_decayMode == 0) idAndIsoSF_leg2_decayMode = 0.89; 
 	    if(theSmallTree.m_dau2_decayMode == 1) idAndIsoSF_leg2_decayMode = 0.94;
 	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.83;
 	    isFakeJet2 = false;
@@ -2593,7 +2593,7 @@ int main (int argc, char** argv)
 	  if (lep2HasTES){
 	    idAndIsoSF_leg2 = 0.89; // TauPOG recommendation for 2017 data
 	    idAndIsoSF_leg2_vtight = 0.86; // https://indico.cern.ch/event/776359/contributions/3229380/attachments/1759348/2853860/tauID.pdf
-	    if(theSmallTree.m_dau2_decayMode == 0)  idAndIsoSF_leg2_decayMode = 0.89;
+	    if(theSmallTree.m_dau2_decayMode == 0)  idAndIsoSF_leg2_decayMode = 0.89; 
 	    if(theSmallTree.m_dau2_decayMode == 1)  idAndIsoSF_leg2_decayMode = 0.94;
 	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.83;
 	    isFakeJet2 = false;
@@ -2627,17 +2627,17 @@ int main (int argc, char** argv)
 	  if (lep1HasTES) {
 	    idAndIsoSF_leg1 = 0.89;
 	    idAndIsoSF_leg1_vtight = 0.86;
-	    if(theSmallTree.m_dau1_decayMode == 0)  idAndIsoSF_leg2_decayMode = 0.96;
-	    if(theSmallTree.m_dau1_decayMode == 1)  idAndIsoSF_leg2_decayMode = 1.03;
-	    if(theSmallTree.m_dau1_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.92;
+	    if(theSmallTree.m_dau1_decayMode == 0)  idAndIsoSF_leg1_decayMode = 0.97; //computed on 11 March in deltaR < 2, m_vis > 55, with DYscale_MM and DY_LO
+	    if(theSmallTree.m_dau1_decayMode == 1)  idAndIsoSF_leg1_decayMode = 1.04;
+	    if(theSmallTree.m_dau1_decayMode == 10) idAndIsoSF_leg1_decayMode = 0.90;
 	    isFakeJet1 = false;
 	  }
 	  if (lep2HasTES) {
 	    idAndIsoSF_leg2 = 0.89;
 	    idAndIsoSF_leg2_vtight = 0.86;
-	    if(theSmallTree.m_dau2_decayMode == 0)  idAndIsoSF_leg2_decayMode = 0.96;
-	    if(theSmallTree.m_dau2_decayMode == 1)  idAndIsoSF_leg2_decayMode = 1.03;
-	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.92;
+	    if(theSmallTree.m_dau2_decayMode == 0)  idAndIsoSF_leg2_decayMode = 0.97; //computed on 11 March in deltaR < 2, m_vis > 55, with DYscale_MM and DY_LO
+	    if(theSmallTree.m_dau2_decayMode == 1)  idAndIsoSF_leg2_decayMode = 1.04;
+	    if(theSmallTree.m_dau2_decayMode == 10) idAndIsoSF_leg2_decayMode = 0.90;
 	    isFakeJet2 = false;
 	  }
 	  idAndIsoSF = idAndIsoSF_leg1 * idAndIsoSF_leg2;
@@ -3270,9 +3270,8 @@ int main (int argc, char** argv)
 
         // n bjets candidates
         if (tlv_jet.Pt () > 20)  ++theSmallTree.m_nbjets20 ;
-        if (tlv_jet.Pt () > 50)   ++theSmallTree.m_nbjets50 ;
+        if (tlv_jet.Pt () > 50)  ++theSmallTree.m_nbjets50 ;
        
-	
         //float sortPar = (bChoiceFlag == 1 ) ? theBigTree.bCSVscore->at (iJet) : tlv_jet.Pt() ;
         float sortPar = (bChoiceFlag == 1 ) ? theBigTree.bDeepCSV_probb->at(iJet) + theBigTree.bDeepCSV_probbb->at(iJet)  : tlv_jet.Pt() ;
         if (bChoiceFlag != 1 && bChoiceFlag != 2) cout << "** WARNING : bChoiceFlag not known :" << bChoiceFlag << endl;
