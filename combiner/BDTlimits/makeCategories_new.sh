@@ -1,7 +1,9 @@
 #!/bin/bash
-# make cards with all vars/selections
 
-export OUTSTRING="2019_06_04"
+# make cards with all vars/selections
+echo "*** CREATION of CARDS per CHANNEL/CATEGORY/GRIDPOINT ***"
+
+export OUTSTRING="2019_06_06_test2"
 
 export STRINGLEPTONS="$1"
 
@@ -17,11 +19,9 @@ export NAMESAMPLE="ggHH"
 
 export RESONANT=$2
 
-#export LEPTONS="MuTau ETau TauTau"
-#export LEPTONS="ETau"
-export LEPTONS="TauTau"
-
-export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner"
+#export CHANNELS="MuTau ETau TauTau"
+#export CHANNELS="ETau"
+export CHANNELS="TauTau"
 
 if [ "${RESONANT}" != "-r" ]
     then
@@ -34,7 +34,8 @@ if [ "${RESONANT}" != "-r" ]
     #    do
     #    export LAMBDAS="$LAMBDAS ${il}"
     #done
-    export GRIDPOINTS="0 1"
+    #export GRIDPOINTS="0 1"
+    export GRIDPOINTS="1"
 else
     export VARIABLE="HHKin_mass_raw"
     export NAMESAMPLE="Radion"
@@ -47,10 +48,10 @@ fi
 export QUANTILES="0.025 0.16 0.5 0.84 0.975 -1.0"
 export SOURCE="/gwpool/users/brivio/Hhh_1718/syncFeb2018/May2019/CMSSW_9_0_0/src/KLUBAnalysis"
 
-#create all the cards 3 categories x 3 channels
+#create all the cards 3 categories x 3 channels x n gridPoints
 for ibase in $SELECTIONS
 do
-    for c in $LEPTONS
+    for c in $CHANNELS
     do
         if [ "${c}" == "MuTau" ]
             then
@@ -88,15 +89,69 @@ do
 
         python chcardMaker.py -f ${SOURCE}/analysis_${c}_${tag}/wrapped/analyzedOutPlotter_TauTau_BDTtest.root -o "_${OUTSTRING}" -c ${c} -i ${SOURCE}/analysis_${c}_${tag}/mainCfg_${c}.cfg -s ${BASE} -r ${RESONANT} -u 0 -t 0 --lambda "ggHH" --selection $ibase -v ${VARIABLE} -g ${GRIDPOINT}
 
-#done
-#for base in $SELECTIONSTAU
-#do
-    #python cardMaker.py -i ${SOURCE}/analysis_TauTau_26Gen/mainCfg_TauTau.cfg   -f ${SOURCE}/analysis_TauTau_26Gen/analyzedOutPlotter.root -o $BASE -c TauTau --dir "_$OUTSTRING" -t 0 # -r #-S /home/llr/cms/cadamuro/FittedHHKinFit/outPlotter_fit_sigs_TauTau.root
 
         done # close GRIPOINTS  loop
-    done     # close LEPTONS    loop
+    done     # close CHANNELS   loop
 done         # close SELECTIONS loop
 
 echo " "
 echo "CREATED ALL CARDS"
+echo " "
+echo "*** START LIMIT per CHANNEL/CATEGORY/GRIDPOINT ***"
+
+export CF="$CMSSW_BASE/src/KLUBAnalysis/combiner/BDTlimits"
+
+for i in $GRIDPOINTS
+do
+    echo "doing gridpoint: ${i}"
+    #MAKE LIMIT FOR individual CHANNEL/categories [9 x mass points]
+    for ibase in $SELECTIONS
+    do
+        echo "  doing selection: ${ibase}"
+        for c in $CHANNELS
+        do
+            echo "    doing channel: ${c}"
+            #if [ -a "hh_3_L${i}_13TeV.txt" ]
+            #	then
+            #	combineCards.py -S "hh_3_L${i}_13TeV.txt" >> comb.txt
+            #fi
+            if [ "${c}" == "MuTau" ]
+            then
+                export chanNum="2"
+                echo "${c} ${chanNum}"
+                export BASE="$ibase"
+            fi
+            if [ "${c}" == "ETau" ]
+            then
+                export chanNum="1"
+                echo "${c} ${chanNum}"
+                export BASE="$ibase"
+            fi
+            if [ "${c}" == "TauTau" ]
+            then
+                export chanNum="3"
+                echo "${c} ${chanNum}"
+                export BASE=${ibase/${STRINGLEPTONS}/}
+            fi
+
+            #cd ${CF}/cards_${c}_$OUTSTRING/${NAMESAMPLE}${i}${BASE}${VARIABLE}
+            cd ${CF}/cards_${c}_$OUTSTRING/${NAMESAMPLE}${BASE}${VARIABLE}_${i}
+            pwd
+
+            rm comb.*
+
+            #combineCards.py -S hh_${chanNum}_*L${i}_13TeV.txt >> comb.txt
+            combineCards.py -S hh_*.txt >> comb.txt
+            #combineCards.py hh_${chanNum}_C1_L${i}_13TeV.txt hh_${chanNum}_C2_L${i}_13TeV.txt hh_${chanNum}_C3_L${i}_13TeV.txt >> comb.txt
+
+            text2workspace.py -m ${i} comb.txt -o comb.root ;
+
+            ln -ns ../../prepareHybrid.py .
+            ln -ns ../../prepareGOF.py .
+            ln -ns ../../prepareAsymptotic.py .
+            python prepareAsymptotic.py -m ${i} -n ${NAMESAMPLE}_$i
+            cd ${CF}
+        done
+    done
+done
 
