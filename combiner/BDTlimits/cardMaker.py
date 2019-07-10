@@ -3,13 +3,14 @@ import sys, pwd, commands, optparse
 import os
 import re
 import math
+import string
 from scipy.special import erf
 from ROOT import *
 import ROOT
-from array import array
+import CombineHarvester.CombineTools.ch as ch
 from configReader import *
 from systReader import *
-import CombineHarvester.CombineTools.ch as ch
+
 
 #cercare di automatizzare il modo in cui vengono letti i fondi
 
@@ -60,6 +61,7 @@ class cardMaker:
 
     def set2D(self,is2D):
         self.is2D = is2D
+
     def setfileName(self,filename):
         self.filename = filename
 
@@ -177,7 +179,7 @@ class cardMaker:
         #systRead.writeOneLine(proc,systName+" shape ")
 
 
-
+    # FRA DEBUG: FIXME!! this does not work for now! --> breaks the DataCard Parsing
     def AddBinByBinSyst(self,w,pname,PdfName,template,ral_variableList,ras_variableSet,threshold=-1) :
         if not opt.binbybin : return
         tBkgIntegral = template.Integral()
@@ -279,7 +281,7 @@ class cardMaker:
 
 
     def makeCardsAndWorkspace(self, theHHLambda, theCat, theChannel, theOutputDir, theInputs):
-        
+
         self.theChannel = theChannel
         self.theCat = theCat
         dname=dc.outputdir
@@ -337,17 +339,12 @@ class cardMaker:
             var2 = theInputs.AllVars[theInputs.varY]
 
         #Getting Signal
-        print theInputs.AllVars
-        print theInputs.varX
+        print "theInputs.AllVars:", theInputs.AllVars
+        print "theInputs.varX   :", theInputs.varX
         #print theInputs.AllVars[theInputs.varX],var2,theHHLambda,theInputs.selectionLevel
         nameString = "{2}_{3}_SR_{0}{1}".format(theInputs.AllVars[theInputs.varX],var2,theHHLambda,theInputs.selectionLevel)
-        print nameString
+        print "nameString:", nameString
         templateSIG = inputSigFile.Get(nameString)
-        
-        ###FIXME TEST
-        #if not self.isResonant:  
-        #templateSIG.Scale(1.0/100.0)
-        ###END TEST
 
         if self.is2D==1: 
             if "TH2" in templateSIG.ClassName() : templateSIG = templateSIG.ProjectionX()
@@ -374,14 +371,12 @@ class cardMaker:
         tobeRemoved = []
 
         for isample in  theInputs.background:
-            #print isample
-            #nameTemplate = "OS_bkg_{0}{1}_OS_{2}_{3}".format(theInputs.AllVars[theInputs.varX],var2,theInputs.selectionLevel,isample)
             nameTemplate = "{3}_{2}_SR_{0}{1}".format(theInputs.AllVars[theInputs.varX],var2,theInputs.selectionLevel,isample)
             #if isample in theInputs.additional :
             #    #print "ADDITIONAL ",isample
             #    index = theInputs.additional.index(isample)
             #    nameTemplate = theInputs.additionalName[index]
-            print nameTemplate
+            print "nameTemplate:", nameTemplate
             template = inputFile.Get(nameTemplate).Clone()
             template.Scale(self.scale)
             if template.Integral()>0:
@@ -396,32 +391,21 @@ class cardMaker:
                     template.Scale(1.0/template.Integral())
                 theRates.append( template.Integral() ) #*self.lumi
                 totalRate = totalRate + theRates[len(theRates)-1]
-                print template.Integral()
-
-                #if "QCD" in nameTemplate:
-                #    template.Scale(0.5)
-                
-
-                #template.Scale(1/template.Integral())
-                templatesBKG.append(template)       
+                #print template.Integral()
+                templatesBKG.append(template)
             else:
                 tobeRemoved.append(isample)
+
         #protection against empty BKGs
         for isample in tobeRemoved:
             theInputs.background.remove(isample)
 
-        #self.FullRate = 
-            #rate_bkgTT_Shape = templateBKG_TT.Integral("width")*self.lumi
 
-        #theRates=[rate_signal_Shape,rate_bkgTT_Shape,rate_bkgDY_Shape,rate_bkgTWantitop_Shape,rate_bkgTWtop_Shape]
         ## -------------------------- SIGNAL SHAPE VARIABLES ---------------------- ##
         binsy = 0
-        #print theInputs.AllvarX[theInputs.varX]
         x_name = theInputs.AllVars[theInputs.varX]
-        #x = ROOT.RooRealVar(x_name,x_name,float(theInputs.AllvarX[theInputs.varX]),float(theInputs.AllvarY[theInputs.varX]))
         x = ROOT.RooRealVar(x_name,x_name,templateSIG.GetXaxis().GetXmin(),templateSIG.GetXaxis().GetXmax())#float(theInputs.AllvarY[theInputs.varX]))
         x.setVal(250)
-        #x.setBins(binsx)#theInputs.AllBins[theInputs.varX])
         ral_variableList = ROOT.RooArgList(x)
         ras_variableSet  = ROOT.RooArgSet(x)
 
@@ -449,11 +433,13 @@ class cardMaker:
         TemplateName = "SIG_TempDataHist_{0:.0f}_{1:.0f}_{2:.0f}_{3}".format(theChannel,theCat,self.sqrts,theHHLambda)
         SIG_TempDataHist = ROOT.RooDataHist(TemplateName,TemplateName,ral_variableList,templateSIG)
         #PdfName = "SIG_TemplatePdf_{0:.0f}_{1:.0f}_{2:.0f}".format(theChannel,self.sqrts,theHHLambda)
-        SIG_TemplatePdf = ROOT.RooHistPdf("ggHH_hbbhtt","ggHH_hbbhtt",ras_variableSet,SIG_TempDataHist)
+        #SIG_TemplatePdf = ROOT.RooHistPdf("ggHH_hbbhtt","ggHH_hbbhtt",ras_variableSet,SIG_TempDataHist)
+        SIG_TemplatePdf = ROOT.RooHistPdf("GGFHH","GGFHH",ras_variableSet,SIG_TempDataHist)
         print templateSIG.Integral()
 
         nameString = "OS_sig_{0}{1}_tauup_OS_{3}_{2}".format(theInputs.AllVars[theInputs.varX],var2,theHHLambda,theInputs.selectionLevel)
-        if self.addTES : self.AddTESShapeSyst(w,"CMS_HHbbtt_scale_tau",self.filename,nameString,"ggHH_hbbhtt",ral_variableList,ras_variableSet)
+        #if self.addTES : self.AddTESShapeSyst(w,"CMS_HHbbtt_scale_tau",self.filename,nameString,"ggHH_hbbhtt",ral_variableList,ras_variableSet)
+        if self.addTES : self.AddTESShapeSyst(w,"CMS_HHbbtt_scale_tau",self.filename,nameString,"GGFHH",ral_variableList,ras_variableSet)
 
         ##Up
         #TemplateName = "SIG_JESUP_TempDataHist_{0:.0f}_{1:.0f}_{2:.0f}".format(theChannel,self.sqrts,theHHLambda)
@@ -473,7 +459,7 @@ class cardMaker:
         #MorphList_sig.add(SIG_JESDOWN_TemplatePdf)
 
         #SIGpdf = ROOT.VerticalInterpPdf("SIG","SIG",MorphList_sig,morphVarList_sig)
-        SIGpdf =SIG_TemplatePdf
+        SIGpdf = SIG_TemplatePdf
         rdhB = []
         rhpB = []
         self.binsysts = []
@@ -492,14 +478,13 @@ class cardMaker:
                     #print ix, iy
                     if templatesBKG[ibkg].GetBinContent(ix,iy)<=0 : 
                         templatesBKG[ibkg].SetBinContent(ix,iy,0.000001)
-                        #print templatesBKG[ibkg].GetBinContent(ix,iy)
-            #templatesBKG[ibkg].Scale(1,"width") 
+                        #print templatesBKG[ibkg].GetBinContent(ix,iy) # for 2D
+
             templatesBKG[ibkg].Scale(tBkgIntegral/templatesBKG[ibkg].Integral(""))
 
             self.AddBinByBinSyst(w,"CMS_HHbbtt_lowStat_{0}".format(ibkg),PdfName,templatesBKG[ibkg],ral_variableList,ras_variableSet, 0.1)
             rdhB.append(ROOT.RooDataHist(TemplateName,TemplateName,ral_variableList,templatesBKG[ibkg]))
             rhpB.append(ROOT.RooHistPdf(PdfName,PdfName,ras_variableSet,rdhB[ibkg]))
-
             if not self.addTES or theInputs.background[ibkg] == "QCD":
                 if not self.normalize :
                     rdhB[ibkg].SetNameTitle(PdfName,PdfName)
@@ -575,13 +560,8 @@ class cardMaker:
         getattr(w,'import')(rdh_obs,ROOT.RooFit.Rename("data_obs"))
         self.allHistos.append(templateObs.Clone("data_obs"))
         if not self.addTES :
-         getattr(w,'import')(SIG_TemplatePdf,ROOT.RooFit.RecycleConflictNodes())
-         self.allHistos.append(templateSIG.Clone(SIG_TemplatePdf.GetName()))
-        ##FIXME!!!!!!
-        #name_ShapeWS = "cards{3}/{0}/hh_{1}_L{2:.0f}_13TeV.input.root".format(theOutputDir,theChannel,theHHLambda,dname)
-        #name_ShapeDC = "cards{3}/{0}/hh_{1}_L{2:.0f}_13TeV.txt".format(theOutputDir,theChannel,theHHLambda,dname)
-        #string_ShapeWS = "hh_{0}_L{1:.0f}_13TeV.input.root".format(theChannel,theHHLambda)
-        #string_ShapeDC = "hh_{0}_L{1:.0f}_13TeV.txt".format(theChannel,theHHLambda)
+          getattr(w,'import')(SIG_TemplatePdf,ROOT.RooFit.RecycleConflictNodes())
+          self.allHistos.append(templateSIG.Clone(SIG_TemplatePdf.GetName()))
         name_ShapeWS = "cards{4}/{0}/temp_{1}_C{2}_L{3}_13TeV.input.root".format(theOutputDir,theChannel,theCat,theHHLambda,dname)
         name_histoWS = "cards{4}/{0}/hh_{1}_C{2}_L{3}_13TeV.histos.input.root".format(theOutputDir,theChannel,theCat,theHHLambda,dname)
         name_ShapeDC = "cards{4}/{0}/temp_{1}_C{2}_L{3}_13TeV.txt".format(theOutputDir,theChannel,theCat,theHHLambda,dname)
@@ -595,7 +575,7 @@ class cardMaker:
         file = open( name_ShapeDC, "wb")
 
         #channelList=theInputs.background #['sig','bkg_TT','bkg_DY'] 
-        channelName=['ggHH_hbbhtt']#'sig','bkg_TT','bkg_DY','bkg_TWantitop','bkg_TWtop']
+        channelName=['GGFHH']#['ggHH_hbbhtt']#'sig','bkg_TT','bkg_DY','bkg_TWantitop','bkg_TWtop']
         for isample in theInputs.background:
             channelName.append('bkg_'+isample)
         print channelName
@@ -607,7 +587,6 @@ class cardMaker:
         file.write("kmax *\n")
         
         file.write("------------\n")
-        #file.write("shapes * * {0} w:$PROCESS w:$PROCESS_$SYSTEMATIC\n".format(name_ShapeWS))
         file.write("#shapes * * {0} w:$PROCESS w:$PROCESS_$SYSTEMATIC\n".format(string_ShapeWS))
         file.write("shapes * * {0} $PROCESS $PROCESS_$SYSTEMATIC\n".format(string_histoWS))
         if opt.addABCD :
@@ -662,24 +641,25 @@ class cardMaker:
             theInputs.background.append("XXXB")
             theInputs.background.append("XXXC")
             theInputs.background.append("XXXD")
-        syst = systReader("../config/systematics.cfg",[theHHLambda],theInputs.background,file)
-        #syst = systReader("../config/systematics_test.cfg",['Lambda{0}'.format(theOutLambda)],theInputs.background) 
+
+        syst = systReader("../../config/systematics_VBF2017.cfg",[theHHLambda],theInputs.background,file)
+        #syst = systReader("../config/systematics_test.cfg",['Lambda{0}'.format(theOutLambda)],theInputs.background)
         if(theChannel == self.ID_ch_tautau ): 
-            systChannel = systReader("../config/systematics_tautau.cfg",[theHHLambda],theInputs.background,file)
+            systChannel = systReader("../../config/systematics_tautau_VBF2017.cfg",[theHHLambda],theInputs.background,file)
         elif(theChannel == self.ID_ch_mutau ): 
-            systChannel = systReader("../config/systematics_mutau.cfg",[theHHLambda],theInputs.background,file)
-            if(self.isResonant):
-                syst_res=systReader("../config/systematics_resonant.cfg",[theHHLambda],theInputs.background,file)
-            else : syst_res=systReader("../config/systematics_nonresonant.cfg",[theHHLambda],theInputs.background,file)
+            systChannel = systReader("../../config/systematics_mutau_VBF2017.cfg",[theHHLambda],theInputs.background,file)
+            #if(self.isResonant):
+            #    syst_res=systReader("../config/systematics_resonant.cfg",[theHHLambda],theInputs.background,file)
+            #else : syst_res=systReader("../config/systematics_nonresonant.cfg",[theHHLambda],theInputs.background,file)
         elif(theChannel == self.ID_ch_etau ): 
-            systChannel = systReader("../config/systematics_etau.cfg",[theHHLambda],theInputs.background,file)
-            if(self.isResonant):
-                syst_res=systReader("../config/systematics_resonant.cfg",[theHHLambda],theInputs.background,file)
-            else : syst_res=systReader("../config/systematics_nonresonant.cfg",[theHHLambda],theInputs.background,file)
+            systChannel = systReader("../../config/systematics_etau_VBF2017.cfg",[theHHLambda],theInputs.background,file)
+            #if(self.isResonant):
+            #    syst_res=systReader("../config/systematics_resonant.cfg",[theHHLambda],theInputs.background,file)
+            #else : syst_res=systReader("../config/systematics_nonresonant.cfg",[theHHLambda],theInputs.background,file)
         syst.writeSystematics()
         systChannel.writeSystematics()
         if(self.writeThSyst) :
-            syst_th = systReader("../config/syst_th.cfg",[theHHLambda],theInputs.background,file)
+            syst_th = systReader("../../config/syst_th_VBF2017.cfg",[theHHLambda],theInputs.background,file)
             syst_th.writeSystematics()
         if(theChannel == self.ID_ch_mutau or theChannel == self.ID_ch_etau):
             syst_res.writeSystematics()
@@ -727,20 +707,23 @@ class cardMaker:
         for h in self.allHistos :
             h.Write()
         self.allHistos = []
+        #print '----------> MADE CARD!!!'
 
     def harvestCard(self) :
         in_dir = self.cardDir
-        #in_dir = "/grid_mnt/vol__vol_U__u/llr/cms/ortona/diHiggs/CMSSW_7_4_7/src/KLUBAnalysis/combiner/cards_MuTauprova/HHSM2b0jMcutBDTMT2/";
         cmb1 = ch.CombineHarvester()
         cmb1.SetVerbosity(0)
         cmb1.SetFlag('workspaces-use-clone', True)
-        cmb1.ParseDatacard(in_dir + self.cardName, "hhbbtt", "13TeV", opt.channel, opt.category, "125") 
+        #print '----------> PARSING THE CARD...'
+        #cmb1.ParseDatacard(in_dir + self.cardName, "hhbbtt", "13TeV", opt.channel, opt.category, "125")
+        cmb1.ParseDatacard(in_dir + self.cardName, "hhbbtt", "13TeV", opt.channel, opt.category, opt.mass)
+        #print '----------> PARSED THE CARD!!!'
+        #if opt.binbybin:
         bbb = ch.BinByBinFactory()
         bbb.SetAddThreshold(0.1).SetMergeThreshold(0.5).SetFixNorm(True)
-        #bbb.SetAddThreshold(0.1).SetFixNorm(True)
         bbb.MergeBinErrors(cmb1.cp().backgrounds())
-        bbb.AddBinByBin(cmb1.cp().backgrounds(), cmb1)    
-        #cmb1.PrintObs().PrintProcs().PrintSysts()    
+        bbb.AddBinByBin(cmb1.cp().backgrounds(), cmb1)
+        #cmb1.PrintObs().PrintProcs().PrintSysts()
         ch.SetStandardBinNames(cmb1);
         #cmb1.PrintObs().PrintProcs().PrintSysts()    
 
@@ -748,8 +731,9 @@ class cardMaker:
         else : self.cardName.replace("temp","hh")
         rootOut = self.cardName.replace(".txt",".input.root")
         output = TFile.Open(in_dir+rootOut,"RECREATE")
-        cmb1.WriteDatacard(in_dir+self.cardName, in_dir+rootOut)
+        cmb1.WriteDatacard(in_dir+self.cardName, output)
         if opt.addABCD : self.hackTheCard(in_dir+self.cardName,in_dir+self.cardName.replace("temp2","hh"))
+        #print '----------> HARVESTED CARD!!!'
 
     def hackTheCard(self,origName,destName) :
         infile = open(origName)
@@ -762,7 +746,8 @@ class cardMaker:
             f = line.split()
             if line.startswith('imax') :
                 outline = "imax    4 number of bins\n"
-            if line.startswith('shapes') and f[1]  == "ggHH_hbbhtt" :
+            #if line.startswith('shapes') and f[1]  == "ggHH_hbbhtt" :
+            if line.startswith('shapes') and f[1]  == "GGFHH" :
                 outline = line + "shapes * B2 FAKE \n shapes * C2 FAKE \n shapes * D2 FAKE \n"
             if line.startswith('bin') and nbinSub == 0 :
                 outline = f[0]+" "+f[1]+" B2 C2 D2 \n"
@@ -790,22 +775,27 @@ def parseOptions():
     usage = ('usage: %prog [options] datasetList\n'
              + '%prog -h for help')
     parser = optparse.OptionParser(usage)
-    
-    parser.add_option('-d', '--is2D',   dest='is2D',       type='int',    default=1,     help='number of Dimensions (default:1)')
-    parser.add_option('-f', '--filename',   dest='filename',   type='string', default="",  help='input plots')
-    parser.add_option('-S', '--sigfilename',dest='sigfilename',type='string', default="",  help='input signalplots')
-    parser.add_option('-l', '--lambda',   dest='Lambda', type='string', default="",  help='Lambda name')
-    parser.add_option('-c', '--channel',   dest='channel', type='string', default='MuTau',  help='final state')
-    parser.add_option('-b', '--category',   dest='category', type='int', default='999',  help='btag category')
-    parser.add_option('-i', '--config',   dest='config', type='string', default='',  help='config file')
-    parser.add_option('-o', '--selection', dest='overSel', type='string', default='', help='overwrite selection string')
-    parser.add_option('-v', '--variable', dest='overVar', type='string', default='', help='overwrite plot variable (only1D)')
-    parser.add_option('-s', '--scale', dest='scale', type='float', default='1', help='scale templates')
-    parser.add_option('-q', '--dir', dest='outDir', type='string', default='', help='outdput dir')
-    parser.add_option('-t', '--theory', dest='theorySyst', type='int', default=1, help='write theory systematics in the card')
-    parser.add_option('-r', '--resonant', action="store_true", dest='resAnalysis', help='Resonant analysis')
-    parser.add_option('-y', '--binbybin',  action="store_true", dest='binbybin', help='add bin by bins systematics')
-    parser.add_option('-a', '--ABCD',  action="store_true", dest='addABCD', help='compute QCD from ABCD method with combine')
+
+    parser.add_option('-f', '--filename',   dest='filename',   type='string', default="",       help='input plots')
+    parser.add_option('-c', '--channel',    dest='channel',    type='string', default='MuTau',  help='final state')
+    parser.add_option('-i', '--config',     dest='config',     type='string', default='',       help='config file')
+    parser.add_option('-o', '--selection',  dest='overSel',    type='string', default='',       help='overwrite selection string')
+    parser.add_option('-q', '--dir',        dest='outDir',     type='string', default='',       help='outdput dir')
+    parser.add_option('-y', '--binbybin',   action="store_true", dest='binbybin',               help='add bin by bins systematics')
+    parser.add_option('-u', '--shape'    , dest='shapeUnc'    , type='int'     , default=1      , help='1:add 0:disable shape uncertainties')
+    parser.add_option('-g', '--grid'     , dest='gridPoint'   , type='string'  , default=''     , help='Variables name')
+    parser.add_option('-m', '--mass'     , dest='mass'        , type='string'  , default='125'  , help='Mass: 125 GeV for non-resonant or resonance mass')
+    parser.add_option('-l', '--lambda'   , dest='overLambda'  , type='string'  , default=''     , help='use only this signal sample')
+    parser.add_option('-r', '--resonant' , dest='resAnalysis'  , type='int'     , default=0      , help='1:resonant 0:non-resonant analysis')
+    parser.add_option('-t', '--theory',     dest='theorySyst', type='int',    default=1,        help='write theory systematics in the card')
+    parser.add_option('-d', '--is2D',       dest='is2D',       type='int',    default=1,        help='number of Dimensions (default:1)')
+    parser.add_option('-S', '--sigfilename',dest='sigfilename',type='string', default="",       help='input signalplots')
+    parser.add_option('-b', '--category',   dest='category',   type='int',    default='999',    help='btag category')
+    parser.add_option('-v', '--variable',   dest='overVar',    type='string', default='',       help='overwrite plot variable (only1D)')
+    parser.add_option('-s', '--scale',      dest='scale',      type='float',  default='1',      help='scale templates')
+    parser.add_option('-a', '--ABCD',       action="store_true", dest='addABCD',                help='compute QCD from ABCD method with combine')
+
+
 
     # store options and arguments as global variables
     global opt, args
@@ -818,17 +808,18 @@ def parseOptions():
     #    print "you MUST specify an input file [please use -f option]"
     #    sys.exit()
     if opt.category>100:
-        if "0b0j" in opt.overSel : opt.category = 0
-        if "2b0j" in opt.overSel : opt.category = 2
-        elif "1b1j" in opt.overSel : opt.category = 1
-        elif "boosted" in opt.overSel : opt.category = 3
+        if   "0b0j"     in opt.overSel : opt.category = 0
+        if   "baseline" in opt.overSel : opt.category = 0
+        if   "2b0j"     in opt.overSel : opt.category = 2
+        elif "1b1j"     in opt.overSel : opt.category = 1
+        elif "boosted"  in opt.overSel : opt.category = 3
 
 # run as main
 if __name__ == "__main__":
     parseOptions()
     global opt, args
     #(opt, args) = parser.parse_args()
-    dc =cardMaker()
+    dc = cardMaker()
     dc.loadIncludes()
     dc.set2D(opt.is2D)
     dc.scale=opt.scale
@@ -836,31 +827,33 @@ if __name__ == "__main__":
     dc.outputdir="_"+opt.channel+opt.outDir
     if opt.sigfilename=="":
         dc.signalFile = opt.filename
-    else : dc.signalFile = opt.sigfilename
+    else:
+        dc.signalFile = opt.sigfilename
 
     if(opt.config==""):
-        configname = "../config/analysis_"+opt.channel+".cfg"
-    else :
+        configname = "../../config/analysis_"+opt.channel+".cfg"
+    else:
         configname = opt.config
     input = configReader(configname)
-
-    #input = configReader("../config/analysis_TESTMT.cfg")
-    thechannel = 1
-    if opt.channel == "MuTau" : thechannel=2
-    elif opt.channel == "TauTau" : thechannel = 3
-
     input.readInputs()
 
+    thechannel = 1     #"ETau"
+    if   opt.channel == "MuTau"  : thechannel = 2
+    elif opt.channel == "TauTau" : thechannel = 3
+
     if opt.filename == "":
-        filename = "../"+input.inputFolder+"/outPlotter.root"
-    else: filename = opt.filename
+        filename = "../../"+input.inputFolder+"/outPlotter.root"
+    else:
+        filename = opt.filename
     dc.setfileName(filename)
 
     variableAsked = opt.overVar
     if opt.overVar == "" :
-        if opt.resAnalysis : 
-            variableAsked = "HHKin_mass_raw"
-        else : variableAsked = "MT2"
+        variableAsked = opt.gridPoint
+        #if opt.resAnalysis :
+        #    variableAsked = "HHKin_mass_raw"
+        #else : variableAsked = "MT2"
+
     #Optionally overwrite config instructions (for testing purposes)
     if opt.overSel is not "":
         #print "OVERSEL="+opt.overSel
@@ -868,6 +861,8 @@ if __name__ == "__main__":
         for iad in range(len(input.additionalName)) :
             input.additionalName[iad] = re.sub('dijethardisoBtagCutM',opt.overSel,input.additionalName[iad])
             input.additionalName[iad] = re.sub('RunD',"",input.additionalName[iad])
+
+    # FRA: not sure what this does, probably not needed for now
     if opt.is2D == 1 :
         #print "INSIDE OPTVAR"
         for ivx in range(len(input.AllVars)):
@@ -878,21 +873,25 @@ if __name__ == "__main__":
                 input.AllVars[ivx] = variableAsked
                 for iad in range(len(input.additionalName)) :
                     input.additionalName[iad] = re.sub('bH_mass',variableAsked,input.additionalName[iad])
-    if opt.theorySyst > 0: 
-        dc.writeThSyst = True
-    else : dc.writeThSyst = False
 
-    print input.signals
-    if opt.Lambda == "" :
+    if opt.theorySyst > 0:
+        dc.writeThSyst = True
+    else:
+        dc.writeThSyst = False
+
+    if opt.overLambda == "" :
         for signal in input.signals :
             #if "Radion" in signal and not opt.resAnalysis : continue
             #if "lambda" in signal and opt.resAnalysis : continue
             if opt.resAnalysis and ( not "Radion" in signal ) : continue
             if not opt.resAnalysis and ( not "lambda" in signal ) : continue
-            print "starting makeCards for lambda",signal,"channel",thechannel,"sel", opt.overSel,variableAsked, opt.filename
+            #print "starting makeCards for lambda",signal,"channel",thechannel,"sel", opt.overSel,variableAsked, opt.filename
             dc.makeCardsAndWorkspace(signal,opt.category,thechannel,"{0}{1}{2}".format(signal,opt.overSel,variableAsked),input)
-            if not opt.binbybin : dc.harvestCard()
-    else : 
-        print opt.Lambda
-        dc.makeCardsAndWorkspace(opt.Lambda,opt.category,thechannel,"{0}{1}{2}".format(opt.Lambda,opt.overSel,variableAsked),input)
-        if not opt.binbybin : dc.harvestCard()
+            #if not opt.binbybin : dc.harvestCard()
+            dc.harvestCard()
+    else :
+        #print opt.overLambda
+        dc.makeCardsAndWorkspace(opt.overLambda,opt.category,thechannel,"{0}{1}{2}".format(opt.overLambda,opt.overSel,variableAsked),input)
+        #if not opt.binbybin : dc.harvestCard()
+        dc.harvestCard()
+

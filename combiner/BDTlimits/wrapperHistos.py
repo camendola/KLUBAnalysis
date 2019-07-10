@@ -1,4 +1,4 @@
-import sys, pwd, commands, optparse
+import sys, pwd, commands, optparse, os
 from ROOT import *
 
 def parseOptions():
@@ -7,10 +7,10 @@ def parseOptions():
              + '%prog -h for help')
     parser = optparse.OptionParser(usage)
     
-    parser.add_option('-f', '--filename',   dest='filename',   type='string', default="",  help='input plots')
-    parser.add_option('-t', '--twoDalso',  action="store_true", dest='twoD', help='store also 2D histos')
-    parser.add_option('-o', '--outfile',   dest='outName',   type='string', default="w",  help='output suffix')
-    parser.add_option('-c', '--channel',   dest='channel',   type='string', default="TauTau",  help='channel')
+    parser.add_option('-i', '--inputdir',  dest='inputdir'    , type='string', default=""      , help='input plots')
+    parser.add_option('-t', '--twoDalso',  action="store_true", dest='twoD'  , help='store also 2D histos')
+    parser.add_option('-o', '--outfile',   dest='outName'     , type='string', default="w"     , help='output suffix')
+    parser.add_option('-c', '--channel',   dest='channel'     , type='string', default="TauTau", help='channel')
 
     # store options and arguments as global variables
     global opt, args
@@ -26,7 +26,8 @@ systNames=[]
 yieldFolder="/gwpool/users/brivio/Hhh_1718/syncFeb2018/May2019/CMSSW_9_0_0/src/KLUBAnalysis/combiner/BDTlimits/GetScaleYieldSyst"
 parseOptions()
 print "Running"
-inFile = TFile.Open(opt.filename)
+os.system('mkdir '+opt.inputdir+'/wrapped/')
+inFile = TFile.Open(opt.inputdir+'/analyzedOutPlotter.root')
 ih = 0
 toth = len (inFile.GetListOfKeys())
 for key in inFile.GetListOfKeys() :
@@ -101,7 +102,9 @@ for key in inFile.GetListOfKeys() :
 		listHistos.append(template.Clone())
 
 #outFile = TFile.Open("analyzedOutPlotter_{0}.root".format(opt.outName),"RECREATE")
-outFile = TFile.Open("/gwpool/users/brivio/Hhh_1718/syncFeb2018/May2019/CMSSW_9_0_0/src/KLUBAnalysis/analysis_TauTau_18Dec2018_limits/wrapped/analyzedOutPlotter_{0}.root".format(opt.outName),"RECREATE")
+#outFile = TFile.Open("/gwpool/users/brivio/Hhh_1718/syncFeb2018/May2019/CMSSW_9_0_0/src/KLUBAnalysis/analysis_{0}_18Dec2018_limits/wrapped/analyzedOutPlotter_{0}_{1}.root".format(opt.channel,opt.outName),"RECREATE")
+outFile = TFile.Open("{0}/wrapped/analyzedOutPlotter_{1}_{2}.root".format(opt.inputdir,opt.channel,opt.outName),"RECREATE")
+
 outFile.cd()
 for h in listHistos :
 	h.Write()

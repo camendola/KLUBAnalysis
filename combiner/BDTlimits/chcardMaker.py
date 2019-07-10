@@ -24,10 +24,10 @@ def parseOptions():
     parser.add_option('-l', '--lambda'   , dest='overLambda'  , type='string'  , default=''     , help='use only this signal sample')
     parser.add_option('-r', '--resonant' , dest='isResonant'  , type='int'     , default=0      , help='1:resonant 0:non-resonant analysis')
     parser.add_option('-y', '--binbybin' , action="store_true", dest='binbybin'                 , help='add bin by bins systematics')
-    parser.add_option('-t', '--theory'   , action="store_true", dest='theory'                   , help='add theory systematics')
+    parser.add_option('-t', '--theory'   , dest='theory'      , type='int'     , default=0      ,help='add theory systematics')
     parser.add_option('-u', '--shape'    , dest='shapeUnc'    , type='int'     , default=1      , help='1:add 0:disable shape uncertainties')
-    parser.add_option('-v', '--variable' , dest='variable'    , type='string'  , default=''     , help='variable to be used')
-    parser.add_option('-g', '--grid'     , dest='gridPoint'   , type='string'  , default=''     , help='Non-resonant nodes or resonant mass points')
+    parser.add_option('-g', '--grid'     , dest='gridPoint'   , type='string'  , default=''     , help='Variables name')
+    parser.add_option('-m', '--mass'     , dest='mass'        , type='string'  , default='125'  , help='Mass: 125 GeV for non-resonant or resonance mass')
 
     # store options and arguments as global variables
     global opt, args
@@ -68,7 +68,7 @@ def hackTheCard(origName,destName) :
             outline = line.replace("*","D{0}".format(self.theChannel))
         file.write(outline)
 
-def  writeCard(input,theLambda,select,variable,region=-1) :
+def  writeCard(input,theLambda,select,variable,mass,region=-1) :
     print "writing cards"
     variables =[]
     if variable!='':
@@ -146,15 +146,18 @@ def  writeCard(input,theLambda,select,variable,region=-1) :
     if allQCDs[0]>0 and allQCDs[1]>0 and allQCDs[2]>0 and allQCDs[3]>0 : allQCD = True
     for i in range(4) : print allQCDs[i]
     #add processes to CH
-    #masses->125 
+    #masses->125 or resonance mass
     #analyses->Res/non-Res(HHKin_fit,MT2)
     #eras->13TeV 
     #channels->mutau/tautau/etau 
     #bin->bjet categories
     #print signals, signals[0]
-    cmb1.AddObservations([theLambda.replace(lambdaName,"")], variables, ['13TeV'], [opt.channel], categories)
-    cmb1.AddProcesses([theLambda.replace(lambdaName,"")], variables, ['13TeV'], [opt.channel], backgrounds, categories, False)
-    cmb1.AddProcesses([theLambda.replace(lambdaName,"")], variables, ['13TeV'], [opt.channel], [lambdaName], categories, True) #signals[0]
+    #cmb1.AddObservations([theLambda.replace(lambdaName,"")], variables, ['13TeV'], [opt.channel], categories)
+    #cmb1.AddProcesses([theLambda.replace(lambdaName,"")], variables, ['13TeV'], [opt.channel], backgrounds, categories, False)
+    #cmb1.AddProcesses([theLambda.replace(lambdaName,"")], variables, ['13TeV'], [opt.channel], [lambdaName], categories, True) #signals[0]
+    cmb1.AddObservations([mass], variables, ['13TeV'], [opt.channel], categories)
+    cmb1.AddProcesses   ([mass], variables, ['13TeV'], [opt.channel], backgrounds, categories, False)
+    cmb1.AddProcesses   ([mass], variables, ['13TeV'], [opt.channel], [lambdaName], categories, True) #signals[0]
 
     if region < 0 :
 
@@ -173,7 +176,8 @@ def  writeCard(input,theLambda,select,variable,region=-1) :
             syst.addSystFile("../../config/systematics_mutau_VBF2017.cfg")
         elif(opt.channel == "ETau" ):
             syst.addSystFile("../../config/systematics_etau_VBF2017.cfg")
-        if opt.theory : syst.addSystFile("../../config/syst_th_VBF2017.cfg")
+        if opt.theory > 0 :
+            syst.addSystFile("../../config/syst_th_VBF2017.cfg")
         syst.writeSystematics()
 
         for isy in range(len(syst.SystNames)) :
@@ -310,11 +314,13 @@ ROOT.gSystem.AddIncludePath("-Iinclude/")
 ROOT.gSystem.Load("libRooFit")
 ROOT.gSystem.Load("libHiggsAnalysisCombinedLimit.so")
 
-print " ### STARTING chcardMaker.py ###"
+print "      ### STARTING chcardMaker.py ###"
 
 parseOptions()
-if(opt.config==""): configname = "../../config/analysis_"+opt.channel+".cfg"
-else: configname = opt.config
+if(opt.config==""):
+    configname = "../../config/analysis_"+opt.channel+".cfg"
+else:
+    configname = opt.config
 input = configReader(configname)
 input.readInputs()
 
@@ -323,7 +329,8 @@ if opt.isResonant:
 else:
 	#lambdaName="ggHH_bbtt"
 	#lambdaName="HH_SM"
-	lambdaName="ggHH"
+	#lambdaName="ggHH"
+	lambdaName="GGFHH"
 
 if opt.overSel == "" :
 	allSel = ["s1b1jresolvedMcut", "s2b0jresolvedMcut", "sboostedLLMcut"]
@@ -337,15 +344,15 @@ for il in range(len(input.signals)) :
 	input.signals[il] = input.signals[il].replace("lambdarew","ggHH_bbtt")	
 	input.signals[il] = input.signals[il].replace("bidimrew","ggHH_bbtt")	
 for theLambda in input.signals:
-	if not lambdaName in theLambda :
-		print "continuing"
-		continue
-	for sel in allSel : 
-		#if not "lambda" in theLambda and not "Radion" in theLambda : continue
-		#		if opt.isResonant :
-		#			if not "Radion" in theLambda : continue
-		#		else :
-		#			if not "ggHH_bbtt" in theLambda : continue
-		print "sel: ", sel
-		for ireg in range(-1,3) :
-			writeCard(input,theLambda,sel,opt.variable+'_'+opt.gridPoint,ireg)
+    if not lambdaName in theLambda :
+        print "continuing"
+        continue
+    for sel in allSel :
+        #if not "lambda" in theLambda and not "Radion" in theLambda : continue
+        #		if opt.isResonant :
+        #			if not "Radion" in theLambda : continue
+        #		else :
+        #			if not "ggHH_bbtt" in theLambda : continue
+        print "sel: ", sel
+        for ireg in range(-1,3) :
+            writeCard(input,theLambda,sel,opt.gridPoint,opt.mass,ireg)

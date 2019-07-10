@@ -38,11 +38,17 @@ if __name__ == "__main__":
     #if (float(opt.n)>0) :    
         #scriptFile.write('combine -M HybridNew --frequentist -m 125.0 --testStat LHC %s/comb.root  -H ProfileLikelihood -n forLim_%s --expectedFromGrid=%s &> out_%s.log \n' % (jobsDir,opt.n,opt.n,opt.n))
     #scriptFile.write('combine -M Asymptotic %s/comb.root -m %d -n %s_forLim_blind --run=blind &> out_Asym_%s.log \n' % (jobsDir,opt.m,opt.n,opt.n))
-    scriptFile.write('combine -M Asymptotic %s/comb.root -m %d -n %s_forLim &> out_Asym_%s.log \n' % (jobsDir,opt.m,opt.n,opt.n))
-    scriptFile.write('combine -M Asymptotic %s/comb.root -m %d -n %s_forLim_noTH --freezeNuisances QCDscale_ggHH,pdf_ggHH,HH_BR_Hbb,HH_BR_Htt &> out_Asym_%s_noTH.log \n' % (jobsDir,opt.m,opt.n,opt.n))
+    #scriptFile.write('combine -M Asymptotic %s/comb.root -m %d -n %s_forLim &> out_Asym_%s.log \n' % (jobsDir,opt.m,opt.n,opt.n))
+    #scriptFile.write('combine -M Asymptotic %s/comb.root -m %d -n %s_forLim_noTH --freezeNuisances QCDscale_ggHH,pdf_ggHH,HH_BR_Hbb,HH_BR_Htt &> out_Asym_%s_noTH.log \n' % (jobsDir,opt.m,opt.n,opt.n))
+
+    scriptFile.write('combine -M AsymptoticLimits %s/comb.root -m %d -n %s_forLim_blind --run=blind &> out_Asym_%s_blind.log \n' % (jobsDir,opt.m,opt.n,opt.n))
+    scriptFile.write('combine -M AsymptoticLimits %s/comb.root -m %d -n %s_forLim &> out_Asym_%s.log \n' % (jobsDir,opt.m,opt.n,opt.n))
+    scriptFile.write('combine -M AsymptoticLimits %s/comb.root -m %d -n %s_forLim_noTH --freezeParameters QCDscale_ggHH,pdf_ggHH,HH_BR_Hbb,HH_BR_Htt &> out_Asym_%s_noTH.log \n' % (jobsDir,opt.m,opt.n,opt.n))
+
     scriptFile.write('echo "All done for job %s" \n'%opt.n)
     scriptFile.close()
     os.system('chmod u+rwx %s/runJob_Asym_%s.sh'%(jobsDir,opt.n))
     #os.system("/opt/exp_soft/cms/t3/t3submit -q cms \'%s/runJob_Asym_%s.sh\'"%(jobsDir,opt.n))
     #os.system("/opt/exp_soft/cms/t3/t3submit_new -short \'%s/runJob_Asym_%s.sh\'"%(jobsDir,opt.n))
-    os.system("/usr/bin/qsub -q shortcms \'%s/runJob_Asym_%s.sh\'"%(jobsDir,opt.n))
+    #os.system("/usr/bin/qsub -q shortcms \'%s/runJob_Asym_%s.sh\'"%(jobsDir,opt.n))
+    os.system("/usr/bin/qsub -q longcms \'%s/runJob_Asym_%s.sh\'"%(jobsDir,opt.n))
