@@ -52,7 +52,7 @@ CF = SOURCE + "/combiner/BDTlimits"
 QUANTILES = [0.025, 0.16, 0.5, 0.84, 0.975, -1.0]
 
 # Output directory tag
-OUTSTRING = "2019_07_08_combTest"
+OUTSTRING = "2019_07_12_Resonant"
 
 # Input directory tag
 tag = "19June2019_limits"
@@ -87,6 +87,10 @@ else:
     HM_masses  = [450, 500, 550, 600, 650, 700, 750, 800, 850, 900]
     VHM_masses = [1000, 1250, 1500, 1750, 2000, 2500, 3000] # not used for now
 
+    LM_masses  = [280]
+    MM_masses  = [400]
+    HM_masses  = [650]
+
     HYPOTHESES = LM_masses + MM_masses + HM_masses   # names for the directories
     MHYPOTHESES = [str(hypo) for hypo in HYPOTHESES] # actual masses (mass of the resonances for the resonant case)
 
@@ -102,18 +106,17 @@ else:
         GRIDPOINTS.append(VARIABLE+str(mass))
 
     if (opt.SPIN == 0):
-        NAMESAMPLE="Radion"
+        NAMESAMPLE = "GGFHH_Radion"
     else:
-        NAMESAMPLE="Graviton"
+        NAMESAMPLE = "GGFHH_Graviton"
 
 # Printing all configurables
-print "Channels   : ", CHANNELS
-print "Categories : ", SELECTIONS
-print "NameSample : ", NAMESAMPLE
-print "GridPoints : ", GRIDPOINTS
-print "Hypotheses : ", HYPOTHESES
-print "MHypotheses: ", MHYPOTHESES
-
+print "Channels    : ", CHANNELS
+print "Categories  : ", SELECTIONS
+print "NameSample  : ", NAMESAMPLE
+print "GridPoints  : ", GRIDPOINTS
+print "Hypotheses  : ", HYPOTHESES
+print "MHypotheses : ", MHYPOTHESES
 
 ### END OF CONFIGURABLES SECTION ###
 
@@ -133,12 +136,9 @@ for BASE in SELECTIONS:
             # -- with CARDMAKER.PY / no QCD plots --
             #command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/outPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
 
-            # -- with CARDMAKER.PY / with QCD plots and BBBuncertainties -- (NOT WORKING)
-            #command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/analyzedOutPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a -y --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
+            # -- with CARDMAKER.PY / with QCD plots and BBBuncertainties --
+            command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/analyzedOutPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a -y --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
 
-            # -- with CARDMAKER.PY / with QCD plots and no BBBuncertainties--
-            command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/analyzedOutPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
-            
             os.system(command_mkcard)
 
 print " "
@@ -154,10 +154,9 @@ for BASE in SELECTIONS:
     for c in CHANNELS:
         print "    Doing channel:", c
 
-        for i,GRIDPOINT in enumerate(GRIDPOINTS):
-            print "      Doing gridpoint:", GRIDPOINT, " - Hypotesis:", str(HYPOTHESES[i])
+        for j,GRIDPOINT in enumerate(GRIDPOINTS):
+            print "      Doing gridpoint:", GRIDPOINT, " - Hypotesis:", str(HYPOTHESES[j])
 
-            #import pdb; pdb.set_trace()
             command_cd = CF+'/cards_'+c+'_'+OUTSTRING+'/'+NAMESAMPLE+BASE+GRIDPOINT
             os.chdir(command_cd)
             os.system('pwd')
@@ -165,14 +164,14 @@ for BASE in SELECTIONS:
             command_combineCards = 'combineCards.py -S hh_*.txt >> comb.txt'
             os.system(command_combineCards)
 
-            command_text2Workspace = 'text2workspace.py -m '+MHYPOTHESES[i]+' comb.txt -o comb.root'           # which mass should I use for non-resonant case?
+            command_text2Workspace = 'text2workspace.py -m '+MHYPOTHESES[j]+' comb.txt -o comb.root'
             os.system(command_text2Workspace)
 
             os.system('ln -ns ../../prepareHybrid.py .')
             os.system('ln -ns ../../prepareGOF.py .')
             os.system('ln -ns ../../prepareAsymptotic.py .')
 
-            command_prepareAsymp = 'python prepareAsymptotic.py -m '+MHYPOTHESES[i]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[i]) # which mass should I use for non-resonant case?
+            command_prepareAsymp = 'python prepareAsymptotic.py -m '+MHYPOTHESES[j]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[j])
             os.system(command_prepareAsymp)
 
             os.chdir(CF)
@@ -187,8 +186,8 @@ if not doCombination:
 print "* * * * START LIMIT CALCULATION per COMBINATIONS * * * *"
 print " "
 # CATEGORY COMBINATION
-for i,GRIDPOINT in enumerate(GRIDPOINTS):
-    print "- Doing gridpoint:", GRIDPOINT, " - Hypotesis:", str(HYPOTHESES[i])
+for k,GRIDPOINT in enumerate(GRIDPOINTS):
+    print "- Doing gridpoint:", GRIDPOINT, " - Hypotesis:", str(HYPOTHESES[k]), " - Mass:", MHYPOTHESES[k]
 
     os.chdir(CF)
     command_mkdir = 'mkdir -p cards_Combined_'+OUTSTRING+'/'+NAMESAMPLE+GRIDPOINT
@@ -223,45 +222,43 @@ for i,GRIDPOINT in enumerate(GRIDPOINTS):
 
         os.chdir('cards_Combined_'+OUTSTRING+'/'+NAMESAMPLE+BASE+GRIDPOINT)
 
-        if (glob.glob('hh_*_C1_L'+NAMESAMPLE+'_13TeV.txt')):
-            os.system('combineCards.py -S hh_*_C1_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt')
+        if (glob.glob('hh_*_C1_*_13TeV.txt')):
+            os.system('combineCards.py -S hh_*_C1_*_13Te*.txt >> comb.txt')
 
-        if (glob.glob('hh_*_C2_L'+NAMESAMPLE+'_13TeV.txt')):
-            os.system('combineCards.py -S hh_*_C2_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt')
+        if (glob.glob('hh_*_C2_*_13TeV.txt')):
+            os.system('combineCards.py -S hh_*_C2_*_13Te*.txt >> comb.txt')
 
-        if (glob.glob('hh_*_C3_L'+NAMESAMPLE+'_13TeV.txt')):
-            os.system('combineCards.py -S hh_*_C3_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt')
+        if (glob.glob('hh_*_C3_*_13TeV.txt')):
+            os.system('combineCards.py -S hh_*_C3_*_13Te*.txt >> comb.txt')
 
-        command_text2workspace = 'text2workspace.py -m '+MHYPOTHESES[i]+' comb.txt -o comb.root'                         # which mass should I use for non-resonant case?
-        os.system(command_text2Workspace)
+        command_text2workspace2 = 'text2workspace.py -m '+MHYPOTHESES[k]+' comb.txt -o comb.root'
+        os.system(command_text2workspace2)
 
         os.system('ln -ns ../../prepareHybrid.py .')
         os.system('ln -ns ../../prepareGOF.py .')
         os.system('ln -ns ../../prepareAsymptotic.py .')
 
-        command_prepareAsymp = 'python prepareAsymptotic.py -m '+MHYPOTHESES[i]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[i]) # which mass should I use for non-resonant case?
+        command_prepareAsymp = 'python prepareAsymptotic.py -m '+MHYPOTHESES[k]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[k])
         os.system(command_prepareAsymp)
 
         os.chdir(CF)
-        
 
-	# limit on the combination of the categories
+    # limit on the combination of the categories
     os.chdir('cards_Combined_'+OUTSTRING+'/'+NAMESAMPLE+GRIDPOINT)
     os.system('rm comb.*')
 
-    #command_combineCards2 = 'combineCards.py -S hh_*_C1_L'+NAMESAMPLE+'_13Te*.txt hh_*_C2_L'+NAMESAMPLE+'_13Te*.txt hh_*_C3_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt'
-    command_combineCards2 = 'combineCards.py -S hh_*_C1_L'+NAMESAMPLE+'_13Te*.txt hh_*_C2_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt'
+    command_combineCards2 = 'combineCards.py -S hh_*_C*_*_13Te*.txt >> comb.txt'
     os.system(command_combineCards2)
 
-    command_text2workspace2 = 'text2workspace.py -m '+MHYPOTHESES[i]+' comb.txt -o comb.root' # which mass should I use for non-resonant case?
-    os.system(command_text2workspace2)
+    command_text2workspace3 = 'text2workspace.py -m '+MHYPOTHESES[k]+' comb.txt -o comb.root'
+    os.system(command_text2workspace3)
 
     os.system('ln -ns ../../prepareHybrid.py .')
     os.system('ln -ns ../../prepareGOF.py .')
     os.system('ln -ns ../../prepareAsymptotic.py .')
     os.system('ln -ns ../../prepareImpacts.py .')
     
-    command_prepareAsymp2 = 'python prepareAsymptotic.py -m '+MHYPOTHESES[i]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[i]) # which mass should I use for non-resonant case?
+    command_prepareAsymp2 = 'python prepareAsymptotic.py -m '+MHYPOTHESES[k]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[k])
     os.system(command_prepareAsymp2)
 
     os.chdir(CF)
@@ -272,18 +269,17 @@ for i,GRIDPOINT in enumerate(GRIDPOINTS):
         os.chdir('cards_'+c+'_'+OUTSTRING+'/'+NAMESAMPLE+GRIDPOINT)
         os.system('rm comb.*')
 
-        #command_combineCards3 = 'combineCards.py -S hh_*_C1_L'+NAMESAMPLE+'_13Te*.txt hh_*_C2_L'+NAMESAMPLE+'_13Te*.txt hh_*_C3_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt'
-        command_combineCards3 = 'combineCards.py -S hh_*_C1_L'+NAMESAMPLE+'_13Te*.txt hh_*_C2_L'+NAMESAMPLE+'_13Te*.txt >> comb.txt'
+        command_combineCards3 = 'combineCards.py -S hh_*_C*_*_13Te*.txt >> comb.txt'
         os.system(command_combineCards3)
 
-        command_text2workspace3 = 'text2workspace.py -m '+MHYPOTHESES[i]+' comb.txt -o comb.root' # which mass should I use for non-resonant case?
-        os.system(command_text2workspace3)
+        command_text2workspace4 = 'text2workspace.py -m '+MHYPOTHESES[k]+' comb.txt -o comb.root'
+        os.system(command_text2workspace4)
 
         os.system('ln -ns ../../prepareHybrid.py .')
         os.system('ln -ns ../../prepareGOF.py .')
         os.system('ln -ns ../../prepareAsymptotic.py .')
         
-        command_prepareAsymp3 = 'python prepareAsymptotic.py -m '+MHYPOTHESES[i]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[i]) # which mass should I use for non-resonant case?
+        command_prepareAsymp3 = 'python prepareAsymptotic.py -m '+MHYPOTHESES[k]+' -n '+NAMESAMPLE+'_'+str(HYPOTHESES[k])
         os.system(command_prepareAsymp3)
 
         os.chdir(CF)

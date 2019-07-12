@@ -181,6 +181,7 @@ class cardMaker:
 
     # FRA DEBUG: FIXME!! this does not work for now! --> breaks the DataCard Parsing
     def AddBinByBinSyst(self,w,pname,PdfName,template,ral_variableList,ras_variableSet,threshold=-1) :
+        return # FRA DEBUG: returns nothing since it does not work right now
         if not opt.binbybin : return
         tBkgIntegral = template.Integral()
         #Protection: do NOT apply if <=1 populated bins, where populated means must contain at least 1% of the histogram
@@ -269,6 +270,7 @@ class cardMaker:
                 qcdbinDown = ROOT.RooDataHist(histName+"Down",histName+"Down",ral_variableList,templateDown.Clone())
                 qcdbinpdfUp  = ROOT.RooHistPdf(PdfName+"_"+histName+"Up",PdfName+"_"+histName+"Up",ras_variableSet,qcdbinUp)
                 qcdbinpdfDown  = ROOT.RooHistPdf(PdfName+"_"+histName+"Down",PdfName+"_"+histName+"Down",ras_variableSet,qcdbinDown)
+
                 if not self.normalize :
                     qcdbinUp.SetNameTitle(PdfName+"_"+histName+"Up",PdfName+"_"+histName+"Up")
                     qcdbinDown.SetNameTitle(PdfName+"_"+histName+"Down",PdfName+"_"+histName+"Down")
@@ -282,6 +284,7 @@ class cardMaker:
 
     def makeCardsAndWorkspace(self, theHHLambda, theCat, theChannel, theOutputDir, theInputs):
 
+        theHHLambda = theHHLambda + opt.mass
         self.theChannel = theChannel
         self.theCat = theCat
         dname=dc.outputdir
@@ -292,16 +295,11 @@ class cardMaker:
         if(theChannel) == 1:
             theDataSample = "DsingleEle" #"DsingleTauPromptReco"
 
-        #theOutLambda = theHHLambda#str(int(theHHLambda))
-        #if abs(theHHLambda - int(theHHLambda) )>0.01 : 
-        #    theOutLambda = str(int(theHHLambda))+"dot"+ str(int(100*abs(theHHLambda - int(theHHLambda) )))
-        #if theHHLambda <0 : 
-        #    theOutLambda = "m"+str(abs(int(theHHLambda)))
-
-        #theHHLambda = 20 ##FIXME, waiting for the other samples
         if(self.is2D==2):dname="2D"
+
         cmd = 'mkdir -p cards{0}/{1}'.format(dname,theOutputDir)
         status, output = commands.getstatusoutput(cmd)    
+
         ## ----- SETTING AND DECLARATIONS ----
         DEBUG = False
         self.lumi = theInputs.lumi
@@ -434,12 +432,12 @@ class cardMaker:
         SIG_TempDataHist = ROOT.RooDataHist(TemplateName,TemplateName,ral_variableList,templateSIG)
         #PdfName = "SIG_TemplatePdf_{0:.0f}_{1:.0f}_{2:.0f}".format(theChannel,self.sqrts,theHHLambda)
         #SIG_TemplatePdf = ROOT.RooHistPdf("ggHH_hbbhtt","ggHH_hbbhtt",ras_variableSet,SIG_TempDataHist)
-        SIG_TemplatePdf = ROOT.RooHistPdf("GGFHH","GGFHH",ras_variableSet,SIG_TempDataHist)
+        SIG_TemplatePdf = ROOT.RooHistPdf(opt.overLambda,opt.overLambda,ras_variableSet,SIG_TempDataHist)
         print templateSIG.Integral()
 
         nameString = "OS_sig_{0}{1}_tauup_OS_{3}_{2}".format(theInputs.AllVars[theInputs.varX],var2,theHHLambda,theInputs.selectionLevel)
         #if self.addTES : self.AddTESShapeSyst(w,"CMS_HHbbtt_scale_tau",self.filename,nameString,"ggHH_hbbhtt",ral_variableList,ras_variableSet)
-        if self.addTES : self.AddTESShapeSyst(w,"CMS_HHbbtt_scale_tau",self.filename,nameString,"GGFHH",ral_variableList,ras_variableSet)
+        if self.addTES : self.AddTESShapeSyst(w,"CMS_HHbbtt_scale_tau",self.filename,nameString,opt.overLambda,ral_variableList,ras_variableSet)
 
         ##Up
         #TemplateName = "SIG_JESUP_TempDataHist_{0:.0f}_{1:.0f}_{2:.0f}".format(theChannel,self.sqrts,theHHLambda)
@@ -575,7 +573,7 @@ class cardMaker:
         file = open( name_ShapeDC, "wb")
 
         #channelList=theInputs.background #['sig','bkg_TT','bkg_DY'] 
-        channelName=['GGFHH']#['ggHH_hbbhtt']#'sig','bkg_TT','bkg_DY','bkg_TWantitop','bkg_TWtop']
+        channelName=[opt.overLambda] #['GGFHH']#['ggHH_hbbhtt']#'sig','bkg_TT','bkg_DY','bkg_TWantitop','bkg_TWtop']
         for isample in theInputs.background:
             channelName.append('bkg_'+isample)
         print channelName
@@ -648,11 +646,13 @@ class cardMaker:
             systChannel = systReader("../../config/systematics_tautau_VBF2017.cfg",[theHHLambda],theInputs.background,file)
         elif(theChannel == self.ID_ch_mutau ): 
             systChannel = systReader("../../config/systematics_mutau_VBF2017.cfg",[theHHLambda],theInputs.background,file)
+            # FRA DEBUG: need to understand what are these!!
             #if(self.isResonant):
             #    syst_res=systReader("../config/systematics_resonant.cfg",[theHHLambda],theInputs.background,file)
             #else : syst_res=systReader("../config/systematics_nonresonant.cfg",[theHHLambda],theInputs.background,file)
         elif(theChannel == self.ID_ch_etau ): 
             systChannel = systReader("../../config/systematics_etau_VBF2017.cfg",[theHHLambda],theInputs.background,file)
+            # FRA DEBUG: need to understand what are these!!
             #if(self.isResonant):
             #    syst_res=systReader("../config/systematics_resonant.cfg",[theHHLambda],theInputs.background,file)
             #else : syst_res=systReader("../config/systematics_nonresonant.cfg",[theHHLambda],theInputs.background,file)
@@ -661,8 +661,9 @@ class cardMaker:
         if(self.writeThSyst) :
             syst_th = systReader("../../config/syst_th_VBF2017.cfg",[theHHLambda],theInputs.background,file)
             syst_th.writeSystematics()
-        if(theChannel == self.ID_ch_mutau or theChannel == self.ID_ch_etau):
-            syst_res.writeSystematics()
+        # FRA DEBUG: need to understand what are these!!
+        #if(theChannel == self.ID_ch_mutau or theChannel == self.ID_ch_etau):
+        #    syst_res.writeSystematics()
 
         if opt.binbybin :
             for iqcd in range(len(self.binsysts)) :
@@ -718,12 +719,12 @@ class cardMaker:
         #cmb1.ParseDatacard(in_dir + self.cardName, "hhbbtt", "13TeV", opt.channel, opt.category, "125")
         cmb1.ParseDatacard(in_dir + self.cardName, "hhbbtt", "13TeV", opt.channel, opt.category, opt.mass)
         #print '----------> PARSED THE CARD!!!'
-        #if opt.binbybin:
-        bbb = ch.BinByBinFactory()
-        bbb.SetAddThreshold(0.1).SetMergeThreshold(0.5).SetFixNorm(True)
-        bbb.MergeBinErrors(cmb1.cp().backgrounds())
-        bbb.AddBinByBin(cmb1.cp().backgrounds(), cmb1)
-        #cmb1.PrintObs().PrintProcs().PrintSysts()
+        if opt.binbybin:
+            bbb = ch.BinByBinFactory()
+            bbb.SetAddThreshold(0.1).SetMergeThreshold(0.5).SetFixNorm(True)
+            bbb.MergeBinErrors(cmb1.cp().backgrounds())
+            bbb.AddBinByBin(cmb1.cp().backgrounds(), cmb1)
+
         ch.SetStandardBinNames(cmb1);
         #cmb1.PrintObs().PrintProcs().PrintSysts()    
 
@@ -747,7 +748,7 @@ class cardMaker:
             if line.startswith('imax') :
                 outline = "imax    4 number of bins\n"
             #if line.startswith('shapes') and f[1]  == "ggHH_hbbhtt" :
-            if line.startswith('shapes') and f[1]  == "GGFHH" :
+            if line.startswith('shapes') and f[1]  == opt.overLambda :
                 outline = line + "shapes * B2 FAKE \n shapes * C2 FAKE \n shapes * D2 FAKE \n"
             if line.startswith('bin') and nbinSub == 0 :
                 outline = f[0]+" "+f[1]+" B2 C2 D2 \n"
@@ -879,6 +880,17 @@ if __name__ == "__main__":
     else:
         dc.writeThSyst = False
 
+    if opt.resAnalysis:
+        for signal in input.signals:
+            if signal == opt.overLambda+opt.mass:
+                #dc.makeCardsAndWorkspace(signal,opt.category,thechannel,"{0}{1}{2}".format(signal,opt.overSel,variableAsked),input)
+                dc.makeCardsAndWorkspace(opt.overLambda,opt.category,thechannel,"{0}{1}{2}".format(opt.overLambda,opt.overSel,variableAsked),input)
+                dc.harvestCard()
+    else:
+        dc.makeCardsAndWorkspace(opt.overLambda,opt.category,thechannel,"{0}{1}{2}".format(opt.overLambda,opt.overSel,variableAsked),input)
+        dc.harvestCard()
+
+    '''
     if opt.overLambda == "" :
         for signal in input.signals :
             #if "Radion" in signal and not opt.resAnalysis : continue
@@ -894,4 +906,5 @@ if __name__ == "__main__":
         dc.makeCardsAndWorkspace(opt.overLambda,opt.category,thechannel,"{0}{1}{2}".format(opt.overLambda,opt.overSel,variableAsked),input)
         #if not opt.binbybin : dc.harvestCard()
         dc.harvestCard()
+    '''
 
