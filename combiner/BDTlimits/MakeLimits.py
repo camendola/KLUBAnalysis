@@ -52,7 +52,7 @@ CF = SOURCE + "/combiner/BDTlimits"
 QUANTILES = [0.025, 0.16, 0.5, 0.84, 0.975, -1.0]
 
 # Output directory tag
-OUTSTRING = "2019_07_12_Resonant"
+OUTSTRING = "2019_07_12_nonResonant"
 
 # Input directory tag
 tag = "19June2019_limits"
@@ -65,7 +65,7 @@ SELECTIONS = ["s1b1jresolved", "s2b0jresolved", "sboostedLL"]
 
 # Channels
 #CHANNELS = ["MuTau", "ETau", "TauTau"]
-CHANNELS=["TauTau"]
+CHANNELS=["MuTau", "TauTau"]
 
 
 # Build the correct variables if doing resonant/non-resonant and create the GridPoints/Hypotheses list
@@ -74,7 +74,7 @@ CHANNELS=["TauTau"]
 
 if (opt.RESONANT == 0):
     VARIABLE = "BDToutSM_kl"
-    LAMBDAS = [1] #(0, 1, 2.45, 5, 30)
+    LAMBDAS = [0, 1, 5, 30] #(0, 1, 2.45, 5, 30) #FRA DEBUG: need to fix the cases where lambda isn't integer
 
     HYPOTHESES  = LAMBDAS
     GRIDPOINTS  = [VARIABLE+"_"+str(l) for l in LAMBDAS] # names for the directories

@@ -284,7 +284,8 @@ class cardMaker:
 
     def makeCardsAndWorkspace(self, theHHLambda, theCat, theChannel, theOutputDir, theInputs):
 
-        theHHLambda = theHHLambda + opt.mass
+        if opt.resAnalysis:
+            theHHLambda = theHHLambda + opt.mass
         self.theChannel = theChannel
         self.theCat = theCat
         dname=dc.outputdir
