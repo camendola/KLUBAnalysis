@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import re, optparse, sys
-import os.path
+import os
 from math import *
 from ROOT import *
 
@@ -26,8 +26,9 @@ def parseOptions():
         print "ERROR!! you chose resonant analysis but didn't provide a valid spin option, please choose between 0 (Radion) or 2 (Graviton)"
         sys.exit()
 
-# Configurables
-inputDir = "/gwpool/users/brivio/Hhh_1718/syncFeb2018/May2019/CMSSW_9_0_0/src/KLUBAnalysis/combiner/BDTlimits"
+# Working directory path
+CMSSW_BASE = os.environ["CMSSW_BASE"]
+inputDir = CMSSW_BASE+"/src/KLUBAnalysis/combiner/BDTlimits"
 
 ## Parsing Options
 parseOptions()
@@ -42,6 +43,9 @@ if opt.addobs : addObserved = True
 
 if opt.cats : plotByCategory = True
 else : plotByCategory = False
+
+
+### CONFIGURABLES SECTION ###
 
 #channels = ["ETau","MuTau","TauTau","Combined"] #"Combined"
 #channelsName = ["bb e#tau_{h} channel","bb #mu#tau_{h} channel","bb #tau_{h}#tau_{h} channel","bb #mu#tau_{h} + bb e#tau_{h} + bb #tau_{h}#tau_{h}"]
@@ -88,6 +92,7 @@ else:
         defaultNames.append(defaultVar+"_"+str(mass))
 
 categories = ["s2b0jresolved","s1b1jresolved","sboostedLL"]
+### END CONFIGURABLES SECTION ###
 
 pointNumbers=[]
 
