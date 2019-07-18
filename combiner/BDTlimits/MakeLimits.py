@@ -36,27 +36,25 @@ else:
     sys.exit()
 
 
+# Working directory for limit calculation
+CMSSW_BASE = os.environ["CMSSW_BASE"]
+SOURCE = CMSSW_BASE+"/src/KLUBAnalysis"
+CF = SOURCE + "/combiner/BDTlimits"
+
+# Quantiles for limit calculation
+QUANTILES = [0.025, 0.16, 0.5, 0.84, 0.975, -1.0]
+
 
 ### CONFIGURABLES SECTION ###
 
 # Do the combinations or not
 doCombination = True
 
-# Select the correct path to the current working directory
-SOURCE = "/gwpool/users/brivio/Hhh_1718/syncFeb2018/May2019/CMSSW_9_0_0/src/KLUBAnalysis"
-
-# Working directory for limit calculation
-CF = SOURCE + "/combiner/BDTlimits"
-
-# Quantiles for limit calculation
-QUANTILES = [0.025, 0.16, 0.5, 0.84, 0.975, -1.0]
-
 # Output directory tag
 OUTSTRING = "2019_07_12_nonResonant"
 
 # Input directory tag
-tag = "19June2019_limits"
-nametag = "comb_limits"
+intag = "19June2019_limits"
 
 # Selections
 #SELECTIONS = ["baseline", "s1b1jresolved", "s2b0jresolved", "sboostedLL"]
@@ -131,13 +129,14 @@ for BASE in SELECTIONS:
             print "      Doing gridpoint:", GRIDPOINT
 
             # -- with CHCARDMAKER.PY --
-            #command_mkcard = 'python chcardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/wrapped/analyzedOutPlotter_'+c+'_'+nametag+'.root -o _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -s '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
+            #nametag = "comb_limits"
+            #command_mkcard = 'python chcardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+intag+'/wrapped/analyzedOutPlotter_'+c+'_'+nametag+'.root -o _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+intag+'/mainCfg_'+c+'.cfg -s '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
 
             # -- with CARDMAKER.PY / no QCD plots --
-            #command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/outPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
+            #command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+intag+'/outPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+intag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
 
             # -- with CARDMAKER.PY / with QCD plots and BBBuncertainties --
-            command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+tag+'/analyzedOutPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+tag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a -y --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
+            command_mkcard = 'python cardMaker.py -f '+SOURCE+'/analysis_'+c+'_'+intag+'/analyzedOutPlotter.root -q _'+OUTSTRING+' -c '+c+' -i '+SOURCE+'/analysis_'+c+'_'+intag+'/mainCfg_'+c+'.cfg -o '+BASE+' -r '+str(opt.RESONANT)+' -u 0 -t 1 -a -y --lambda '+NAMESAMPLE+' -g '+GRIDPOINT+' -m '+MHYPOTHESES[i]
 
             os.system(command_mkcard)
 
