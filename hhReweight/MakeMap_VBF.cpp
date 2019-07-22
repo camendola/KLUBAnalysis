@@ -12,7 +12,7 @@
 
 using namespace std;
 
-//c++ -lm -o MakeMap MakeMap.cpp `root-config --glibs --cflags`
+//c++ -lm -o MakeMap_VBF MakeMap_VBF.cpp `root-config --glibs --cflags`
 
 // open input txt file and append all the files it contains to TChain
 void appendFromFileList (TChain* chain, TString filename)
@@ -45,7 +45,8 @@ int main ()
     // TString filename = "/home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/Files80X_22Giu/lesshhV2nonresonant.txt";
     // TString filename = "/home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/Files80X_25Nov2016/filelist_allNonRes.txt";
     // TString filename = "/home/llr/cms/cadamuro/HH2016/CMSSW_7_4_7/src/KLUBAnalysis/inputFiles/Files_7Feb2016/allNonResNodes.txt";
-    TString filename = "/gwpool/users/brivio/Hhh_1718/syncFeb2018/CMSSW_9_0_0/src/KLUBAnalysis/inputFiles/Files_January2019/finals/signals/allNonResClonesBench/lista_tot.txt";
+    //TString filename = "/gwpool/users/brivio/Hhh_1718/syncFeb2018/CMSSW_9_0_0/src/KLUBAnalysis/inputFiles/Files_January2019/finals/signals/allNonResClonesBench/lista_tot.txt";
+    TString filename = "/gwpool/users/brivio/Hhh_1718/syncFeb2018/CMSSW_9_0_0/src/KLUBAnalysis/inputFiles/Files_January2019/finals/signals/allNonResClonesBench_VBF/lista_tot.txt";
 
     TChain* ch = new TChain ("HTauTauTree/HTauTauTree");
     appendFromFileList (ch, filename);
@@ -109,7 +110,7 @@ int main ()
     // TH1F* hMap1D = new TH1F ("allHHNodeMap1D", "allHHNodeMap1D", nbins_mHH, binning_mHH);
 
     // new binning for dynamic reweight -- again these weird Xanda binnings
-    TFile* fOut = new TFile ("outMap_5Dbinning.root", "recreate");
+    TFile* fOut = new TFile ("outMap_5Dbinning_VBF.root", "recreate");
     double binning_mHH [56] = { 250,260,270,280,290,300,310,320,330,340,
                                 350,360,370,380,390,400,410,420,430,440, 
                                 450,460,470,480,490,
