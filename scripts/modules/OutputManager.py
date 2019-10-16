@@ -407,15 +407,20 @@ class OutputManager:
     # - target_kl  : vector of kl target values (float or int)
     # - target_cv  : vector of cv target values (float or int)
     # - target_c2v : vector of c2v target values (float or int)
+    # - target_xs  : target value of the output xs (float)
+    #                use target_xs = -1 if you want the output normalized to (integratedLumi + weights + correct xs + ...)
+    #                if not specified in the config, defaults to target_xs = -1
+    #
     # Output:
     # - one histogram for each target couplings combination and for each variable/selection (SignalRegion only)
-    def makeVBFrew(self, inputSigs, target_kl, target_cv, target_c2v):
+    def makeVBFrew(self, inputSigs, target_kl, target_cv, target_c2v, target_xs):
 
         print "-- VBF reweighting --"
         print "Input samples:", inputSigs
         print "Target kl    :", target_kl
         print "Target cv    :", target_cv
         print "Target c2v   :", target_c2v
+        print "Target Cross Section:", target_xs, "[pb]"
 
         totIterations = len(target_kl) * len(target_cv) * len(target_c2v) * len(self.variables) * len(self.sel_def)
         nIteration = 0
@@ -457,7 +462,7 @@ class OutputManager:
                     for c2v in target_c2v:
                         for kl in target_kl:
 
-                            modeled_xs, modeled_histo = VBFreweighter.modelSignal(cv,c2v,kl)
+                            modeled_xs, modeled_histo = VBFreweighter.modelSignal(cv,c2v,kl,target_xs)
 
                             newName = makeHistoName(modeled_histo.GetName(), sel+'_SR', var)
                             modeled_histo.SetNameTitle(newName,newName)

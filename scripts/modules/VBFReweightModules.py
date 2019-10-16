@@ -15,8 +15,8 @@ import sys
 import ROOT
 
 # General function to rescale any histogram to a specific value
-def scaleTo(hIn, xs):
-    hIn.Scale(xs/hIn.Integral())
+def scaleTo(hIn, val):
+    hIn.Scale(val)
 
 
 # General function to build a sympy.Matrix from a list of "inputSample"
@@ -146,7 +146,7 @@ class VBFReweight:
 
 
     # Returns the modeled cross section and histogram given the target couplings
-    def modelSignal(self,t_cv,t_c2v,t_kl):
+    def modelSignal(self,t_cv,t_c2v,t_kl,target_xs):
 
         # Eval the final cross section
         total_xs = self.modeled_cross_section[0].evalf(subs={
@@ -173,7 +173,11 @@ class VBFReweight:
 
         # Normalize each histo to his coefficient * xs
         for i,sample in enumerate(self.sample_list):
-            scaleTo(hists[i], eval_coeffs[i] * sample.val_xs)
+            if target_xs == -1:
+                scaleTo(hists[i], eval_coeffs[i])
+            else:
+                import pdb; pdb.set_trace()
+                scaleTo(hists[i], eval_coeffs[i] * target_xs / sample.val_xs)
 
         # Get the final histogram by adding the six hists
         for i,histo in enumerate(hists):
